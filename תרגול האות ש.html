@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0069)file:///Users/lilachcaspary/Downloads/letter_shin_practice%20(6).html -->
+<!-- saved from url=(0069)file:///Users/lilachcaspary/Downloads/letter_shin_practice%20(8).html -->
 <html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -487,6 +487,8 @@
   </div>
 </div>
 
+<div id="err-box" style="display:block;background:#fee;color:#c00;padding:8px;font-size:0.8rem;text-align:center;min-height:4px;"></div>
+
 <div class="stages">
   <button class="stage-btn active" onclick="setStage(1,this)">שלב א׳ – הברה</button>
   <button class="stage-btn" onclick="setStage(2,this)">שלב ב׳ – מילים</button>
@@ -586,6 +588,11 @@
 </div>
 
 <script>
+window.onerror = function(msg, src, line, col, err) {
+  const box = document.getElementById('err-box');
+  if (box) box.textContent = (err ? err.message : msg) + ' (line ' + line + ')';
+  return false;
+};
 // ── DATA ──────────────────────────────────────────────────────
 const words = {
   1: {
@@ -1041,6 +1048,12 @@ function tttEndGame(result) {
 // ── STATE ─────────────────────────────────────────────────────
 let stage=1, pos='start', score=0;
 
+// הקלטות מטפל
+let therapistRecordings = {}; // { 'שְׁ': base64, 'שָׁ': base64, ... }
+let isRecordingMode = false;
+let currentRecorder = null;
+let currentRecordingKey = null;
+
 // iOS Safari speech fix
 let _iosUnlocked = false;
 function ensureSpeech() {
@@ -1057,15 +1070,15 @@ document.addEventListener('click', ensureSpeech, { once: true });
 
 function speakSyl(text, lang) {
   if (!window.speechSynthesis) return;
-  // iOS Safari: must speak directly in user gesture, no cancel before speak
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.resume();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang;
-  u.pitch = 1.4;
-  u.rate = 0.75;
-  u.volume = 1;
-  window.speechSynthesis.speak(u);
+  try {
+    window.speechSynthesis.resume();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang;
+    u.pitch = 1.4;
+    u.rate = 0.75;
+    u.volume = 1;
+    window.speechSynthesis.speak(u);
+  } catch(e) {}
 }
 
 function setStage(s,btn){
@@ -1093,6 +1106,127 @@ const handSyls = [
 ];
 let handIdx=0, tapCount=0;
 const TAPS_PER_SYL=5;
+
+// ---- הקלטות מטפל ----
+function saveRecordings() {
+  try { localStorage.setItem('therapistRec', JSON.stringify(therapistRecordings)); } catch(e) {}
+}
+function loadRecordings() {
+  try {
+    const s = localStorage.getItem('therapistRec');
+    if (s) therapistRecordings = JSON.parse(s);
+  } catch(e) {}
+}
+loadRecordings();
+
+async function startRecording(key) {
+  if (currentRecorder) stopRecording();
+  currentRecordingKey = key;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [];
+    currentRecorder = new MediaRecorder(stream);
+    currentRecorder.ondataavailable = e => chunks.push(e.data);
+    currentRecorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'audio/webm' });
+      const reader = new FileReader();
+      reader.onload = () => {
+        therapistRecordings[key] = reader.result;
+        saveRecordings();
+        updateRecordingUI();
+        stream.getTracks().forEach(t => t.stop());
+      };
+      reader.readAsDataURL(blob);
+    };
+    currentRecorder.start();
+    updateRecordingUI();
+  } catch(e) {
+    alert('לא ניתן לגשת למיקרופון');
+  }
+}
+
+function stopRecording() {
+  if (currentRecorder && currentRecorder.state !== 'inactive') {
+    currentRecorder.stop();
+    currentRecorder = null;
+  }
+}
+
+function playTherapistRecording(key) {
+  const src = therapistRecordings[key];
+  if (!src) return false;
+  const audio = new Audio(src);
+  audio.play();
+  return true;
+}
+
+function updateRecordingUI() {
+  if (!isRecordingMode) return;
+  handSyls.forEach(s => {
+    const btn = document.getElementById('rec-btn-' + s.name);
+    const status = document.getElementById('rec-status-' + s.name);
+    if (!btn || !status) return;
+    const isRec = currentRecordingKey === s.name && currentRecorder;
+    btn.textContent = isRec ? '⏹ עצור' : (therapistRecordings[s.syl] ? '🔴 הקלט שוב' : '🎙 הקלט');
+    btn.style.background = isRec ? '#e53935' : (therapistRecordings[s.syl] ? '#a78bfa' : '#4f8ef7');
+    status.textContent = therapistRecordings[s.syl] ? '✓ מוקלט' : '';
+  });
+}
+
+function renderRecordingPanel(main) {
+  main.innerHTML = `
+    <div style="padding:20px; max-width:500px; margin:0 auto; direction:rtl;">
+      <h2 style="color:#4f8ef7; font-family:'Fredoka One'; text-align:center; margin-bottom:6px;">🎙 מצב מטפל</h2>
+      <p style="text-align:center; color:#777; margin-bottom:20px; font-size:0.9rem;">הקליטי את ההברות — הן ישמעו בשיעור</p>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        ${handSyls.map(s => `
+          <div style="display:flex; align-items:center; gap:12px; background:white; border-radius:16px; padding:12px 16px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+            <span style="font-size:2rem; min-width:50px; text-align:center;">${s.syl}</span>
+            <button id="rec-btn-${s.name}" onclick="toggleRecord('${s.name}','${s.syl}')"
+              style="background:#4f8ef7; color:white; border:none; border-radius:50px; padding:8px 18px;
+              font-family:'Fredoka One'; font-size:1rem; cursor:pointer; touch-action:manipulation;">
+              🎙 הקלט
+            </button>
+            ${therapistRecordings[s.syl] ? `
+            <button onclick="playTherapistRecording('${s.syl}')"
+              style="background:#34d399; color:white; border:none; border-radius:50px; padding:8px 14px;
+              font-family:'Fredoka One'; font-size:1rem; cursor:pointer; touch-action:manipulation;">
+              ▶ האזן
+            </button>` : ''}
+            <span id="rec-status-${s.name}" style="color:#34d399; font-size:0.9rem;"></span>
+          </div>
+        `).join('')}
+      </div>
+      <button onclick="closeRecordingPanel()" 
+        style="margin-top:24px; width:100%; background:linear-gradient(135deg,#4f8ef7,#a78bfa);
+        color:white; border:none; border-radius:50px; padding:14px; font-family:'Fredoka One';
+        font-size:1.1rem; cursor:pointer; touch-action:manipulation;">
+        ✓ סיום — חזרה לשיעור
+      </button>
+    </div>`;
+  updateRecordingUI();
+}
+
+function toggleRecord(name, syl) {
+  if (currentRecorder && currentRecordingKey === name) {
+    stopRecording();
+  } else {
+    startRecording(syl);
+  }
+}
+
+function closeRecordingPanel() {
+  isRecordingMode = false;
+  stopRecording();
+  const main = document.getElementById('main');
+  if (main) renderHandGame(main);
+}
+
+function openRecordingPanel() {
+  isRecordingMode = true;
+  const main = document.getElementById('main');
+  renderRecordingPanel(main);
+}
 
 function renderHandGame(main){
   handIdx=0; tapCount=0;
@@ -1130,18 +1264,9 @@ function buildHandGameHTML(){
 }
 
 function tapHand(e){
+  if (handIdx >= handSyls.length) return;
   tapCount++;
   playDrum();
-
-  // Speak the syllable
-  if(window.speechSynthesis){
-    const sylData = handSyls[handIdx];
-    const isShe = sylData.name === 'סגול';
-    const isSho = sylData.name === 'חולם';
-    const spokenText = isShe ? 'sheh' : isSho ? 'sho' : sylData.syl;
-    const spokenLang = (isShe || isSho) ? 'en-US' : 'he-IL';
-    speakSyl(spokenText, spokenLang);
-  }
 
   // Animate specific finger based on which tap (cycles thumb→index→middle→ring→pinky)
   const fingerIds = ['f-thumb','f-index','f-middle','f-ring','f-pinky'];
@@ -1166,7 +1291,7 @@ function tapHand(e){
   if(tapCount >= TAPS_PER_SYL){
     handIdx++;
     tapCount=0;
-    setTimeout(()=>{
+    setTimeout(()=>{ 
       playClap();
       const area = document.getElementById('hand-game-area');
       if(area) area.innerHTML = buildHandGameHTML();
@@ -1598,15 +1723,16 @@ function playYey(){
 }
 
 function speakYey(){
-  if(!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.resume();
-  const u = new SpeechSynthesisUtterance('wow!');
-  u.lang = 'en-US';
-  u.pitch = 1.6;
-  u.rate = 0.85;
-  u.volume = 1;
-  window.speechSynthesis.speak(u);
+  try {
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.resume();
+    const u = new SpeechSynthesisUtterance('wow!');
+    u.lang = 'en-US';
+    u.pitch = 1.6;
+    u.rate = 0.85;
+    u.volume = 1;
+    window.speechSynthesis.speak(u);
+  } catch(e) {}
 }
 
 function showYeyBurst(){
