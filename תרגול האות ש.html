@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0070)file:///Users/lilachcaspary/Downloads/letter_shin_practice%20(21).html -->
+<!-- saved from url=(0070)file:///Users/lilachcaspary/Downloads/letter_shin_practice%20(22).html -->
 <html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1077,6 +1077,7 @@ function speakSyl(text, lang) {
 
 function setStage(s,btn){
   stage=s;
+  if(s===2){ pos='start'; wordCardIdx=0; document.querySelectorAll('.pos-btn').forEach((b,i)=>b.classList.toggle('active',i===0)); }
   document.querySelectorAll('.stage-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('pos-bar').style.display=(s===1||s===3||s===4)?'none':'flex';
