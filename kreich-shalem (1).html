@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>כריך הרגשות 🥪</title>
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Varela Round', Arial, sans-serif;
+    background: #FFF8EE;
+    min-height: 100vh;
+    padding: 24px 16px 50px;
+    direction: rtl;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── HEADER ── */
+  .header { text-align: center; margin-bottom: 28px; }
+  .header h1 { font-size: 2.3rem; color: #3D2007; }
+  .header p  { font-size: 1rem; color: #A0704A; margin-top: 5px; }
+
+  /* ══════════════════════════════
+     SCREEN 1 — SANDWICH STEPS
+  ══════════════════════════════ */
+  .steps {
+    max-width: 480px;
+    margin: 0 auto 28px;
+    display: flex;
+    flex-direction: column;
+  }
+  .connector {
+    width: 4px; height: 22px;
+    background: #E8C97A;
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+  .step-card {
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.09);
+    display: flex;
+    align-items: stretch;
+    transition: transform 0.18s;
+  }
+  .step-card:hover { transform: scale(1.02); }
+  .band { width: 14px; flex-shrink: 0; }
+  .step-inner {
+    flex: 1;
+    padding: 16px 16px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: white;
+  }
+  .step-num {
+    font-size: 1.3rem; font-weight: 900;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: white;
+  }
+  .step-pic  { font-size: 3rem; flex-shrink: 0; line-height: 1; }
+  .step-text { flex: 1; }
+  .step-title { font-size: 1.15rem; font-weight: bold; color: #3D2007; margin-bottom: 3px; }
+  .step-desc  { font-size: 0.88rem; color: #6B4A25; line-height: 1.4; }
+
+  .s1 .band{background:#F5C842} .s1 .step-num{background:#F5C842;color:#3D2007}
+  .s2 .band{background:#F4A350} .s2 .step-num{background:#F4A350}
+  .s3 .band{background:#F47B5A} .s3 .step-num{background:#F47B5A}
+  .s4 .band{background:#E05A6A} .s4 .step-num{background:#E05A6A}
+  .s5 .band{background:#8DC87A} .s5 .step-num{background:#8DC87A;color:#1E4D11}
+  .s6 .band{background:#5AADE0} .s6 .step-num{background:#5AADE0;color:#0D3D66}
+  .s7 .band{background:#F5C842} .s7 .step-num{background:#F5C842;color:#3D2007}
+
+  .btn-start-activity {
+    display: block;
+    max-width: 480px;
+    margin: 0 auto;
+    background: linear-gradient(135deg,#F5C842,#F4A350);
+    color: #3D2007;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 40px;
+    font-family: 'Varela Round', Arial, sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(244,163,80,0.4);
+    transition: transform 0.15s;
+  }
+  .btn-start-activity:hover { transform: scale(1.03); }
+
+  /* ══════════════════════════════
+     SCREEN 2 — ACTIVITY (BITES)
+  ══════════════════════════════ */
+  .progress-wrap { max-width: 480px; margin: 0 auto 28px; }
+  .progress-label { font-size: 0.85rem; color: #A0704A; margin-bottom: 6px; text-align: center; }
+  .progress-track { background: #F0DEB8; border-radius: 20px; height: 14px; overflow: hidden; }
+  .progress-fill  { height: 100%; background: linear-gradient(to left,#F5C842,#F4A350); border-radius: 20px; transition: width 0.5s ease; }
+  .progress-dots  { display: flex; justify-content: space-between; margin-top: 6px; padding: 0 2px; }
+  .dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #F0DEB8; border: 2px solid #DBA820;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: #A07040; font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+  }
+  .dot.done   { background: #F5C842; color: #3D2007; }
+  .dot.active { background: #F4A350; color: white; border-color: #E08020; }
+
+  .main-card {
+    max-width: 480px; margin: 0 auto;
+    background: white; border-radius: 30px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.11);
+    overflow: hidden;
+  }
+  .card-band {
+    padding: 18px 22px 14px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .step-badge {
+    font-size: 1rem; font-weight: 900;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    display: flex; align-items: center; justify-content: center;
+    color: white; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+  .step-emoji-big { font-size: 2.6rem; flex-shrink: 0; }
+  .step-info { flex: 1; }
+  .step-title-big   { font-size: 1.3rem; font-weight: bold; color: white; }
+  .step-subtitle-big{ font-size: 0.88rem; color: rgba(255,255,255,0.85); margin-top: 2px; }
+
+  .bite-area {
+    padding: 20px 22px 24px;
+    text-align: center;
+    border-top: 2px dashed #F0DEB8;
+  }
+  .bite-prompt { font-size: 0.95rem; color: #A0704A; margin-bottom: 16px; }
+  .bite-prompt span { font-size: 1.05rem; font-weight: bold; color: #3D2007; display: block; margin-top: 4px; }
+
+  .face-card {
+    display: inline-block;
+    background: white; border-radius: 22px;
+    padding: 16px 20px 12px;
+    border: 3px solid;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    margin-bottom: 12px;
+    animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  }
+  @keyframes popIn {
+    0%   { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .face-card svg  { display: block; margin: 0 auto 8px; }
+  .face-name { font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 3px; }
+  .face-tag  {
+    display: inline-block; font-size: 0.78rem; font-weight: bold;
+    padding: 3px 12px; border-radius: 20px; color: white; margin-bottom: 6px;
+  }
+  .face-desc { font-size: 0.82rem; color: #7A5030; display: block; line-height: 1.4; }
+
+  .action-bubble {
+    background: #FFFBEF; border: 2px solid #F5C842;
+    border-radius: 16px; padding: 12px 16px;
+    font-size: 0.95rem; color: #5A3A10; line-height: 1.5;
+    margin-bottom: 20px; text-align: right;
+  }
+  .action-bubble::before { content: "✨ עכשיו תורך! "; font-weight: bold; color: #C08000; }
+
+  .btn-next {
+    background: linear-gradient(135deg,#F5C842,#F4A350);
+    color: #3D2007; border: none; border-radius: 50px;
+    padding: 14px 36px;
+    font-family: 'Varela Round', Arial, sans-serif;
+    font-size: 1.1rem; font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(244,163,80,0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: block; margin: 0 auto;
+  }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(244,163,80,0.5); }
+
+  /* emotion colors */
+  .emo-happy  { border-color: #F5C842; }
+  .emo-happy  .face-name { color: #C08000; }
+  .emo-happy  .face-tag  { background: #F5C842; color: #3D2007; }
+  .emo-happy  .card-band { background: linear-gradient(135deg,#F5C842,#F4A350); }
+
+  .emo-sad    { border-color: #89B4F0; }
+  .emo-sad    .face-name { color: #2A5EBF; }
+  .emo-sad    .face-tag  { background: #89B4F0; }
+  .emo-sad    .card-band { background: linear-gradient(135deg,#89B4F0,#5A8FD8); }
+
+  .emo-angry  { border-color: #F4826A; }
+  .emo-angry  .face-name { color: #C03010; }
+  .emo-angry  .face-tag  { background: #F4826A; }
+  .emo-angry  .card-band { background: linear-gradient(135deg,#F4826A,#D05040); }
+
+  .emo-scared { border-color: #C3A3E8; }
+  .emo-scared .face-name { color: #6B30C0; }
+  .emo-scared .face-tag  { background: #C3A3E8; }
+  .emo-scared .card-band { background: linear-gradient(135deg,#C3A3E8,#9B70D0); }
+
+  .emo-calm   { border-color: #8DC87A; }
+  .emo-calm   .face-name { color: #2A7020; }
+  .emo-calm   .face-tag  { background: #8DC87A; color: #1E4D11; }
+  .emo-calm   .card-band { background: linear-gradient(135deg,#8DC87A,#5AA840); }
+
+  /* ══════════════════════════════
+     SCREEN 3 — DONE
+  ══════════════════════════════ */
+  .done-wrap { max-width: 480px; margin: 0 auto; text-align: center; }
+  .trophy { font-size: 5rem; display: block; margin-bottom: 12px; animation: bounce 1s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .done-wrap h2 { font-size: 2rem; color: #3D2007; margin-bottom: 8px; }
+  .done-wrap p  { font-size: 1rem; color: #A0704A; margin-bottom: 24px; line-height: 1.6; }
+  .btn-gold {
+    background: linear-gradient(135deg,#F5C842,#F4A350);
+    color: #3D2007; border: none; border-radius: 50px;
+    padding: 14px 36px;
+    font-family: 'Varela Round', Arial, sans-serif;
+    font-size: 1.1rem; font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(244,163,80,0.4);
+    transition: transform 0.15s;
+    display: block; margin: 0 auto 14px;
+  }
+  .btn-gold:hover { transform: scale(1.04); }
+  .btn-dark {
+    background: #3D2007; color: white; border: none; border-radius: 50px;
+    padding: 13px 36px;
+    font-family: 'Varela Round', Arial, sans-serif;
+    font-size: 1rem; cursor: pointer;
+    transition: transform 0.15s;
+    display: block; margin: 0 auto;
+  }
+  .btn-dark:hover { transform: scale(1.03); }
+
+  /* ══════════════════════════════
+     SCREEN 4 — CAMERA
+  ══════════════════════════════ */
+  .camera-wrap { max-width: 480px; margin: 0 auto; }
+  .camera-wrap h2 { font-size: 2rem; color: #3D2007; text-align: center; margin-bottom: 4px; }
+  .cam-sub { font-size: 1rem; color: #A0704A; text-align: center; margin-bottom: 18px; }
+
+  .camera-box {
+    background: white; border-radius: 28px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.11);
+    overflow: hidden; margin-bottom: 18px;
+  }
+  .viewfinder {
+    position: relative; width: 100%;
+    background: #1a1a2e; aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  #cameraVideo  { width:100%; height:100%; object-fit:cover; display:none; }
+  #photoPreview { width:100%; height:100%; object-fit:cover; display:none; }
+  .cam-placeholder { text-align: center; color: rgba(255,255,255,0.5); }
+  .cam-placeholder .cam-icon { font-size: 4rem; display: block; margin-bottom: 8px; }
+  .cam-placeholder p { font-size: 0.9rem; }
+
+  .frame-corner {
+    position: absolute; width: 32px; height: 32px;
+    border-color: #F5C842; border-style: solid; opacity: 0.8;
+  }
+  .fc-tl { top:12px;   right:12px; border-width:3px 0 0 3px; border-radius:4px 0 0 0; }
+  .fc-tr { top:12px;   left:12px;  border-width:3px 3px 0 0; border-radius:0 4px 0 0; }
+  .fc-bl { bottom:12px;right:12px; border-width:0 0 3px 3px; border-radius:0 0 0 4px; }
+  .fc-br { bottom:12px;left:12px;  border-width:0 3px 3px 0; border-radius:0 0 4px 0; }
+  .sticker-overlay {
+    position:absolute; bottom:10px; right:12px;
+    background:rgba(245,200,66,0.92); border-radius:12px;
+    padding:5px 12px; font-size:0.82rem; font-weight:bold;
+    color:#3D2007; display:none;
+  }
+
+  .cam-controls {
+    padding: 16px 20px 20px;
+    display: flex; gap: 12px;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .btn-cam {
+    border: none; border-radius: 50px;
+    padding: 12px 24px;
+    font-family: 'Varela Round', Arial, sans-serif;
+    font-size: 1rem; font-weight: bold; cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .btn-cam:hover { transform: translateY(-2px); }
+  .btn-cam-open  { background:linear-gradient(135deg,#F5C842,#F4A350); color:#3D2007; padding:14px 32px; font-size:1.1rem; }
+  .btn-cam-snap  { background:linear-gradient(135deg,#F5C842,#F4A350); color:#3D2007; font-size:1.6rem; width:64px;height:64px;border-radius:50%!important;padding:0!important; display:none; }
+  .btn-cam-retake{ background:#F0DEB8; color:#3D2007; display:none; }
+  .btn-cam-save  { background:#3D2007; color:white; display:none; }
+
+  .gallery-title { font-size:1.1rem; font-weight:bold; color:#3D2007; margin-bottom:10px; text-align:center; }
+  .gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:20px; }
+  .gallery-item { position:relative; aspect-ratio:1; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); animation:popIn 0.3s ease; }
+  .gallery-item img { width:100%;height:100%;object-fit:cover; }
+  .gallery-item .del-btn {
+    position:absolute;top:4px;left:4px;
+    background:rgba(0,0,0,0.55);color:white;border:none;
+    border-radius:50%;width:22px;height:22px;font-size:0.75rem;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+
+  .btn-back {
+    background:transparent; color:#A0704A;
+    border:2px solid #F0DEB8; border-radius:50px;
+    padding:10px 24px;
+    font-family:'Varela Round',Arial,sans-serif;
+    font-size:0.95rem; cursor:pointer;
+    display:block; margin:0 auto;
+    transition:background 0.15s;
+  }
+  .btn-back:hover { background:#F0DEB8; }
+
+  /* ── FOOTER ── */
+  .footer { text-align:center; margin-top:40px; font-size:0.75rem; color:#C0A080; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     SCREEN 1 — שלבי הכנת כריך
+══════════════════════════════════ -->
+<div id="screen1" class="screen active">
+  <div class="header">
+    <h1>🥪 איך מכינים כריך?</h1>
+    <p>שלב אחרי שלב — לילדים</p>
+  </div>
+
+  <div class="steps">
+    <div class="step-card s1">
+      <div class="band"></div>
+      <div class="step-inner">
+        <div class="step-num">1</div>
+        <div class="step-pic">🙌</div>
+        <div class="step-text">
+          <div class="step-title">שוטפים ידיים</div>
+          <div class="step-desc">סבון + מים = ידיים נקיות!</div>
+        </div>
+      </div>
+    </div>
+    <div class="connector"></div>
+
+    <div class="step-card s2">
+      <div class="band"></div>
+      <div class="step-inner">
+        <div class="step-num">2</div>
+        <div class="step-pic">🍞</div>
+        <div class="step-text">
+          <div class="step-title">לוקחים שתי פרוסות לחם</div>
+          <div class="step-desc">מניחים אותן על הצלחת</div>
+        </div>
+      </div>
+    </div>
+    <div class="connector"></div>
+
+    <div class="step-card s3">
+      <div class="band"></div>
+      <div class="step-inner">
+        <div class="step-num">3</div>
+        <div class="step-pic">🧈</div>
+        <div class="step-text">
+          <div class="step-title">מורחים</div>
+          <div class="step-desc">חמאה, גבינה, חומוס — מה שאוהבים!</div>
+        </div>
+      </div>
+    </div>
+    <div class="connector"></div>
+
+    <div class="step-card s4">
+      <div class="band"></div>
+      <div class="step-inner">
+        <div class="step-num">4</div>
+        <div class="step-pic">🧀</div>
+        <div class="step-text">
+          <div class="step-title">שמים מילוי</div>
+          <div class="step-desc">גבינה, ירקות, ביצה — לבחירתך!</div>
+        </div>
+      </div>
+    </div>
+    <div class="connector"></div>
+
+    <div class="step-card s5">
+      <div class="band"></div>
+      <div class="step-inner">
+        <div class="step-num">5</div>
+        <div class="step-pic">🫲</div>
+        <div class="step-text">
+          <div class="step-title">סוגרים את הכריך</div>
+          <div class="step-desc">שמים את הפרוסה השנייה מלמעלה</div>
+        </div>
+      </div>
+    </div>
+    <div class="connector"></div>
+
+    <div class="step-card s6">
+      <div class="band"></div>
+      <div class="step-inner">
+        <div class="step-num">6</div>
+        <div class="step-pic">🔪</div>
+        <div class="step-text">
+          <div class="step-title">חותכים (עם עזרת מבוגר)</div>
+          <div class="step-desc">לשניים או לשלושה חלקים</div>
+        </div>
+      </div>
+    </div>
+    <div class="connector"></div>
+
+    <div class="step-card s7">
+      <div class="band"></div>
+      <div class="step-inner">
+        <div class="step-num">7</div>
+        <div class="step-pic">🍽️</div>
+        <div class="step-text">
+          <div class="step-title">שמים על הצלחת</div>
+          <div class="step-desc">הכריך מוכן — בתאבון! 🎉</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <button class="btn-start-activity" onclick="goTo('screen2'); renderActivity();">
+    🎮 בואו נשחק ביס הרגשות! ➜
+  </button>
+
+  <p class="footer">עורכת לילך כספרי — קלינאית תקשורת</p>
+</div>
+
+
+<!-- ══════════════════════════════════
+     SCREEN 2 — פעילות ביס הרגשות
+══════════════════════════════════ -->
+<div id="screen2" class="screen">
+  <div class="header">
+    <h1>😄 ביס הרגשות</h1>
+    <p>בכל שלב — ביס רגשות חדש!</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label" id="progressLabel">שלב 1 מתוך 7</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+    <div class="progress-dots" id="progressDots"></div>
+  </div>
+
+  <div class="main-card" id="mainCard">
+    <div class="card-band" id="cardBand">
+      <div class="step-badge" id="stepBadge">1</div>
+      <div class="step-emoji-big" id="stepEmoji">🙌</div>
+      <div class="step-info">
+        <div class="step-title-big" id="stepTitle"></div>
+        <div class="step-subtitle-big" id="stepSubtitle"></div>
+      </div>
+    </div>
+    <div class="bite-area">
+      <div class="bite-prompt">וגם... <span id="bitePromptText"></span></div>
+      <div class="face-card" id="faceCard"></div>
+      <div class="action-bubble" id="actionBubble"></div>
+      <button class="btn-next" id="btnNext" onclick="nextStep()">הלאה ➜</button>
+    </div>
+  </div>
+
+  <p class="footer">עורכת לילך כספרי — קלינאית תקשורת</p>
+</div>
+
+
+<!-- ══════════════════════════════════
+     SCREEN 3 — סיום
+══════════════════════════════════ -->
+<div id="screen3" class="screen">
+  <div class="done-wrap">
+    <span class="trophy">🏆</span>
+    <h2>הכריך מוכן!</h2>
+    <p>כל הכבוד!<br>הכנת כריך <strong>ותרגלת 7 רגשות!</strong><br>אתה אלוף הביסים! 🥪❤️</p>
+    <button class="btn-gold" onclick="goTo('screen4')">📸 צלם את הכריך שלך!</button>
+    <button class="btn-dark" onclick="restartActivity()">🔄 שחק שוב</button>
+  </div>
+  <p class="footer">עורכת לילך כספרי — קלינאית תקשורת</p>
+</div>
+
+
+<!-- ══════════════════════════════════
+     SCREEN 4 — מצלמה
+══════════════════════════════════ -->
+<div id="screen4" class="screen">
+  <div class="camera-wrap">
+    <h2>📸 הכריך שלי!</h2>
+    <p class="cam-sub">צלם את הכריך שהכנת</p>
+
+    <div class="camera-box">
+      <div class="viewfinder" id="viewfinder">
+        <video id="cameraVideo" autoplay playsinline></video>
+        <img id="photoPreview" alt="תמונה"/>
+        <div class="cam-placeholder" id="camPlaceholder">
+          <span class="cam-icon">🥪</span>
+          <p>לחץ "פתח מצלמה"<br>ותצלם את הכריך!</p>
+        </div>
+        <div class="frame-corner fc-tl"></div>
+        <div class="frame-corner fc-tr"></div>
+        <div class="frame-corner fc-bl"></div>
+        <div class="frame-corner fc-br"></div>
+        <div class="sticker-overlay" id="stickerOverlay">🥪 הכריך שלי!</div>
+      </div>
+      <div class="cam-controls">
+        <button class="btn-cam btn-cam-open"   id="btnStartCam" onclick="startCamera()">📷 פתח מצלמה</button>
+        <label  class="btn-cam btn-cam-open" id="btnUpload" style="cursor:pointer">
+          🖼️ העלה תמונה
+          <input type="file" accept="image/*" capture="environment" style="display:none" onchange="loadFromFile(this)">
+        </label>
+        <button class="btn-cam btn-cam-snap"   id="btnSnap"     onclick="takePhoto()">📸</button>
+        <button class="btn-cam btn-cam-retake" id="btnRetake"   onclick="retakePhoto()">🔄 צלם שוב</button>
+        <button class="btn-cam btn-cam-save"   id="btnSave"     onclick="savePhoto()">💾 שמור תמונה</button>
+      </div>
+    </div>
+
+    <canvas id="photoCanvas" style="display:none"></canvas>
+
+    <div id="galleryWrap" style="display:none">
+      <p class="gallery-title">🖼️ הכריכים שצילמתי</p>
+      <div class="gallery" id="gallery"></div>
+    </div>
+
+    <button class="btn-back" onclick="goTo('screen3'); stopCamera();">← חזרה</button>
+  </div>
+  <p class="footer">עורכת לילך כספרי — קלינאית תקשורת</p>
+</div>
+
+
+<!-- ══════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════ -->
+<script>
+/* ── navigation ── */
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ── activity data ── */
+const steps = [
+  { emoji:"🙌", title:"שוטפים ידיים",           subtitle:"סבון + מים = ידיים נקיות!",
+    emo:"happy",  emoName:"😄 שמח",   biteTag:"ביס גדול!",       bitePrompt:"תראה לי ביס שמח!",
+    action:"פתח את הפה כמה שיותר גדול — כשאתה שמח הפה פשוט נפתח לבד!", desc:"הלב שמח — נוגסים בפה מלא!", drawFace:drawHappy },
+  { emoji:"🍞", title:"לוקחים שתי פרוסות לחם",  subtitle:"מניחים אותן על הצלחת",
+    emo:"sad",    emoName:"😢 עצוב",  biteTag:"ביס קטן",          bitePrompt:"תראה לי ביס עצוב!",
+    action:"נגוס לאט וקטן קטן — כשעצובים אין כוח לפתוח את הפה.", desc:"אין כוח לנגוס, הפה כמעט סגור", drawFace:drawSad },
+  { emoji:"🧈", title:"מורחים",                  subtitle:"חמאה, גבינה, חומוס — מה שאוהבים!",
+    emo:"calm",   emoName:"😌 רגוע",  biteTag:"ביס רגוע",         bitePrompt:"תראה לי ביס רגוע!",
+    action:"נשום עמוק ואז נגוס לאט לאט — ממש בשקט ובנחת.", desc:"ביס איטי ושקט, בדיוק כמו המריחה.", drawFace:drawCalm },
+  { emoji:"🧀", title:"שמים מילוי",              subtitle:"גבינה, ירקות, ביצה — לבחירתך!",
+    emo:"happy",  emoName:"😄 שמח",   biteTag:"ביס גדול!",        bitePrompt:"תראה לי ביס שמח גדול!",
+    action:"פתח את הפה לרווחה — הביס הכי גדול שיש!", desc:"שמחים עם המילוי האהוב!", drawFace:drawHappy },
+  { emoji:"🫲", title:"סוגרים את הכריך",         subtitle:"שמים את הפרוסה השנייה מלמעלה",
+    emo:"scared", emoName:"😨 מפחד", biteTag:"ביס זעיר",           bitePrompt:"תראה לי ביס מפחד!",
+    action:"פתח את הפה קטן קטן — כשמפחדים הגוף מתכווץ!", desc:"הגוף קפוא, הפה בקושי נפתח...", drawFace:drawScared },
+  { emoji:"🔪", title:"חותכים (עם עזרת מבוגר)",  subtitle:"לשניים או לשלושה חלקים",
+    emo:"angry",  emoName:"😠 כועס",  biteTag:"ביס חד!",           bitePrompt:"תראה לי ביס כועס!",
+    action:"נגוס חזק וחד — כשכועסים יש הרבה כוח בפנים!", desc:"שיניים חדות, ביס נמרץ!", drawFace:drawAngry },
+  { emoji:"🍽️",title:"הכריך מוכן!",             subtitle:"שמים על הצלחת — בתאבון!",
+    emo:"sad",    emoName:"😢 עצוב",  biteTag:"ביס קטן",           bitePrompt:"ביס עצוב אחרון!",
+    action:"נגוס לאט וקטן — כי עצוב שהפעילות נגמרת...", desc:"עצוב שנגמר, אבל היה כיף!", drawFace:drawSad }
+];
+
+let current = 0;
+
+function drawHappy(el) { el.innerHTML = `
+  <circle cx="65" cy="52" r="48" fill="#FFF9DC" stroke="#F5C842" stroke-width="3"/>
+  <circle cx="46" cy="40" r="6" fill="#3D2007"/><circle cx="84" cy="40" r="6" fill="#3D2007"/>
+  <circle cx="49" cy="37" r="2" fill="white"/><circle cx="87" cy="37" r="2" fill="white"/>
+  <path d="M 28 60 Q 65 110 102 60" fill="#C03010" stroke="#3D2007" stroke-width="2"/>
+  <path d="M 28 60 Q 65 57 102 60" fill="white" stroke="#DDD" stroke-width="1"/>
+  <ellipse cx="65" cy="88" rx="20" ry="10" fill="#FF8080"/>
+  <ellipse cx="30" cy="58" rx="10" ry="7" fill="#FFAAAA" opacity="0.4"/>
+  <ellipse cx="100" cy="58" rx="10" ry="7" fill="#FFAAAA" opacity="0.4"/>`; }
+
+function drawSad(el) { el.innerHTML = `
+  <circle cx="65" cy="52" r="48" fill="#EEF4FF" stroke="#89B4F0" stroke-width="3"/>
+  <ellipse cx="46" cy="42" rx="6" ry="7" fill="#3D2007"/><ellipse cx="84" cy="42" rx="6" ry="7" fill="#3D2007"/>
+  <path d="M 38 30 Q 46 35 54 31" fill="none" stroke="#3D2007" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 76 31 Q 84 35 92 30" fill="none" stroke="#3D2007" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 46 50 Q 43 58 46 62 Q 49 58 46 50" fill="#89B4F0"/>
+  <path d="M 50 76 Q 65 70 80 76" fill="none" stroke="#3D2007" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 55 74 Q 65 72 75 74 Q 65 79 55 74" fill="#C03010" stroke="#3D2007" stroke-width="1"/>`; }
+
+function drawCalm(el) { el.innerHTML = `
+  <circle cx="65" cy="52" r="48" fill="#EDFAE8" stroke="#8DC87A" stroke-width="3"/>
+  <path d="M 38 42 Q 46 38 54 42" fill="none" stroke="#3D2007" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 76 42 Q 84 38 92 42" fill="none" stroke="#3D2007" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="46" cy="46" rx="7" ry="5" fill="#3D2007"/><ellipse cx="84" cy="46" rx="7" ry="5" fill="#3D2007"/>
+  <path d="M 46 70 Q 65 82 84 70" fill="#C03010" stroke="#3D2007" stroke-width="2"/>
+  <path d="M 46 70 Q 65 68 84 70" fill="white" stroke="#DDD" stroke-width="1"/>
+  <ellipse cx="65" cy="78" rx="14" ry="7" fill="#FF9090"/>`; }
+
+function drawScared(el) { el.innerHTML = `
+  <circle cx="65" cy="52" r="48" fill="#F5EFFF" stroke="#C3A3E8" stroke-width="3"/>
+  <circle cx="46" cy="43" r="10" fill="white" stroke="#C3A3E8" stroke-width="2"/>
+  <circle cx="84" cy="43" r="10" fill="white" stroke="#C3A3E8" stroke-width="2"/>
+  <circle cx="47" cy="44" r="6" fill="#3D2007"/><circle cx="85" cy="44" r="6" fill="#3D2007"/>
+  <circle cx="49" cy="42" r="2" fill="white"/><circle cx="87" cy="42" r="2" fill="white"/>
+  <path d="M 36 28 Q 46 22 56 27" fill="none" stroke="#3D2007" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 74 27 Q 84 22 94 28" fill="none" stroke="#3D2007" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="65" cy="76" rx="8" ry="6" fill="#C03010" stroke="#3D2007" stroke-width="1.5"/>
+  <path d="M 57 74 Q 65 72 73 74" fill="white" stroke="#DDD" stroke-width="1"/>
+  <path d="M 98 28 Q 95 34 98 38 Q 101 34 98 28" fill="#89B4F0"/>`; }
+
+function drawAngry(el) { el.innerHTML = `
+  <circle cx="65" cy="52" r="48" fill="#FFF0EE" stroke="#F4826A" stroke-width="3"/>
+  <path d="M 36 33 L 56 40" stroke="#3D2007" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 94 33 L 74 40" stroke="#3D2007" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="46" cy="44" rx="7" ry="5" fill="#3D2007"/><ellipse cx="84" cy="44" rx="7" ry="5" fill="#3D2007"/>
+  <path d="M 30 65 Q 65 100 100 65" fill="#8B0000" stroke="#3D2007" stroke-width="2"/>
+  <path d="M 30 65 L 40 60 L 50 66 L 60 59 L 70 66 L 80 59 L 90 66 L 100 65" fill="white" stroke="#CCC" stroke-width="1"/>
+  <path d="M 38 80 L 48 86 L 58 79 L 68 86 L 78 80 L 88 86 L 96 80" fill="white" stroke="#CCC" stroke-width="1"/>
+  <path d="M 55 20 L 58 25 L 55 30" fill="none" stroke="#F4826A" stroke-width="2" stroke-linecap="round"/>`; }
+
+function renderActivity() {
+  current = 0;
+  renderStep();
+}
+
+function renderStep() {
+  const s = steps[current];
+  const band = document.getElementById('cardBand');
+  band.className = `card-band emo-${s.emo}`;
+  document.getElementById('stepBadge').textContent   = current + 1;
+  document.getElementById('stepEmoji').textContent   = s.emoji;
+  document.getElementById('stepTitle').textContent   = s.title;
+  document.getElementById('stepSubtitle').textContent= s.subtitle;
+  document.getElementById('bitePromptText').textContent = s.bitePrompt;
+  document.getElementById('actionBubble').textContent   = s.action;
+
+  const fc = document.getElementById('faceCard');
+  fc.className = `face-card emo-${s.emo}`;
+  fc.innerHTML = `<svg width="120" height="100" viewBox="0 0 130 110"></svg>
+    <span class="face-name">${s.emoName}</span>
+    <span class="face-tag">${s.biteTag}</span>
+    <span class="face-desc">${s.desc}</span>`;
+  s.drawFace(fc.querySelector('svg'));
+
+  document.getElementById('btnNext').textContent = current < steps.length - 1 ? 'הלאה ➜' : '🎉 סיימנו!';
+  const pct = Math.round(((current + 1) / steps.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `שלב ${current + 1} מתוך ${steps.length}`;
+  const dotsEl = document.getElementById('progressDots');
+  dotsEl.innerHTML = '';
+  steps.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i < current ? ' done' : i === current ? ' active' : '');
+    d.textContent = i + 1;
+    dotsEl.appendChild(d);
+  });
+}
+
+function nextStep() {
+  if (current < steps.length - 1) { current++; renderStep(); }
+  else { goTo('screen3'); }
+}
+
+function restartActivity() {
+  goTo('screen2');
+  renderActivity();
+}
+
+/* ── camera ── */
+let stream = null;
+const photos = [];
+
+async function startCamera() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal:'environment' }, width:{ideal:1280}, height:{ideal:960} }
+    });
+    const v = document.getElementById('cameraVideo');
+    v.srcObject = stream; v.style.display = 'block';
+    document.getElementById('camPlaceholder').style.display = 'none';
+    document.getElementById('photoPreview').style.display = 'none';
+    document.getElementById('stickerOverlay').style.display = 'none';
+    document.getElementById('btnStartCam').style.display = 'none';
+    document.getElementById('btnUpload').style.display = 'none';
+    document.getElementById('btnSnap').style.display = 'flex';
+    document.getElementById('btnRetake').style.display = 'none';
+    document.getElementById('btnSave').style.display = 'none';
+  } catch(e) {
+    alert('המצלמה לא זמינה כאן — נסה להעלות תמונה מהגלריה 📷');
+  }
+}
+
+function loadFromFile(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.getElementById('photoCanvas');
+      c.width = img.width; c.height = img.height;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      // sticker
+      const tw=200, th=38;
+      ctx.fillStyle='rgba(245,200,66,0.88)';
+      ctx.beginPath(); ctx.roundRect(c.width-tw-14, c.height-th-14, tw, th, 10); ctx.fill();
+      ctx.fillStyle='#3D2007';
+      ctx.font=`bold ${Math.round(c.width*0.025)}px Arial`;
+      ctx.textAlign='right';
+      ctx.fillText('🥪 הכריך שלי!', c.width-20, c.height-22);
+      const url = c.toDataURL('image/jpeg', 0.92);
+      const p = document.getElementById('photoPreview');
+      p.src=url; p.style.display='block';
+      document.getElementById('camPlaceholder').style.display='none';
+      document.getElementById('stickerOverlay').style.display='block';
+      document.getElementById('btnStartCam').style.display='none';
+      document.getElementById('btnUpload').style.display='none';
+      document.getElementById('btnRetake').style.display='inline-block';
+      document.getElementById('btnSave').style.display='inline-block';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function stopCamera() {
+  if (stream) { stream.getTracks().forEach(t=>t.stop()); stream = null; }
+  const v = document.getElementById('cameraVideo');
+  if (v) { v.style.display = 'none'; }
+  const btnStartCam = document.getElementById('btnStartCam');
+  if (btnStartCam) btnStartCam.style.display = 'inline-block';
+  const btnSnap = document.getElementById('btnSnap');
+  if (btnSnap) btnSnap.style.display = 'none';
+}
+
+function takePhoto() {
+  const v = document.getElementById('cameraVideo');
+  const c = document.getElementById('photoCanvas');
+  c.width = v.videoWidth || 640; c.height = v.videoHeight || 480;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(v,0,0,c.width,c.height);
+  const tw=180,th=34;
+  ctx.fillStyle='rgba(245,200,66,0.88)';
+  ctx.beginPath(); ctx.roundRect(c.width-tw-14,c.height-th-14,tw,th,10); ctx.fill();
+  ctx.fillStyle='#3D2007';
+  ctx.font=`bold ${Math.round(c.width*0.025)}px Varela Round,Arial`;
+  ctx.textAlign='right';
+  ctx.fillText('🥪 הכריך שלי!',c.width-20,c.height-22);
+  const url = c.toDataURL('image/jpeg',0.92);
+  const p = document.getElementById('photoPreview');
+  p.src=url; p.style.display='block';
+  v.style.display='none';
+  document.getElementById('stickerOverlay').style.display='block';
+  document.getElementById('btnSnap').style.display='none';
+  document.getElementById('btnRetake').style.display='inline-block';
+  document.getElementById('btnSave').style.display='inline-block';
+  stopCamera();
+}
+
+function retakePhoto() {
+  document.getElementById('photoPreview').style.display='none';
+  document.getElementById('stickerOverlay').style.display='none';
+  document.getElementById('btnRetake').style.display='none';
+  document.getElementById('btnSave').style.display='none';
+  document.getElementById('btnStartCam').style.display='inline-block';
+  document.getElementById('btnUpload').style.display='inline-block';
+  document.getElementById('camPlaceholder').style.display='flex';
+  startCamera();
+}
+
+function savePhoto() {
+  const url = document.getElementById('photoCanvas').toDataURL('image/jpeg',0.92);
+  photos.unshift(url);
+  renderGallery();
+  const a=document.createElement('a'); a.href=url; a.download=`kreich-${Date.now()}.jpg`; a.click();
+  document.getElementById('photoPreview').style.display='none';
+  document.getElementById('stickerOverlay').style.display='none';
+  document.getElementById('btnRetake').style.display='none';
+  document.getElementById('btnSave').style.display='none';
+  document.getElementById('btnStartCam').style.display='inline-block';
+  document.getElementById('btnUpload').style.display='inline-block';
+  document.getElementById('camPlaceholder').style.display='flex';
+}
+
+function renderGallery() {
+  const wrap=document.getElementById('galleryWrap');
+  const grid=document.getElementById('gallery');
+  if (!photos.length){wrap.style.display='none';return;}
+  wrap.style.display='block'; grid.innerHTML='';
+  photos.forEach((src,i)=>{
+    const item=document.createElement('div'); item.className='gallery-item';
+    item.innerHTML=`<img src="${src}" alt="כריך ${i+1}"><button class="del-btn" onclick="deletePhoto(${i})">✕</button>`;
+    grid.appendChild(item);
+  });
+}
+
+function deletePhoto(i){ photos.splice(i,1); renderGallery(); }
+</script>
+</body>
+</html>
