@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///Users/lilachcaspary/Downloads/pesach_phonology%20(2).html -->
+<!-- saved from url=(0048)file:///Users/lilachcaspary/Downloads/index.html -->
 <html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -477,7 +477,7 @@
 <div class="confetti" id="confetti">🎉</div>
 
 <!-- HOME -->
-<div class="home-screen" id="homeScreen">
+<div class="home-screen hidden" id="homeScreen">
   <div class="menu">
     <button class="menu-btn" onclick="startGame(2)">
       <span class="icon">🥁</span>
@@ -560,7 +560,7 @@
 </div>
 
 <!-- GAME 3: FIRST SOUND -->
-<div class="game-screen" id="game3">
+<div class="game-screen active" id="game3">
   <button class="back-btn" onclick="goHome()">← חזרה</button>
   <div class="game-title" style="color:var(--blue)">🔤 במה מתחילה?</div>
   <div class="game-subtitle">בחרו את התמונה שמתחילה באות המסומנת</div>
@@ -569,13 +569,13 @@
     <div class="progress-bar-wrap" style="flex:1">
       <div class="progress-fill" id="prog3" style="width:0%"></div>
     </div>
-    <span id="qnum3" style="font-size:0.85rem;color:#888">שאלה 1/6</span>
+    <span id="qnum3" style="font-size:0.85rem;color:#888">שאלה 1/9</span>
   </div>
   <div class="first-sound-card">
     <div class="question">מצאו מילה שמתחילה ב—</div>
     <div class="sound-big" id="firstSoundLetter">מ</div>
   </div>
-  <div class="images-grid" id="firstSoundOptions"></div>
+  <div class="images-grid" id="firstSoundOptions"><div class="img-option"><span class="emoji">🪑</span><span class="label">כיסא</span></div><div class="img-option"><span class="emoji">🍷</span><span class="label">יין</span></div><div class="img-option"><span class="emoji">🫓</span><span class="label">מצה</span></div></div>
   <div class="feedback-box" id="fb3"></div>
   <button class="next-btn" id="next3" onclick="nextQuestion(3)" style="display:none">הבא ←</button>
 </div>
