@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 משחקי מילים לפסח 🌸</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Rubik:wght@400;600;700&display=swap');
+
+  :root {
+    --gold: #F5C842;
+    --blue: #2E86AB;
+    --red: #E63946;
+    --green: #57CC99;
+    --purple: #9B5DE5;
+    --orange: #FF6B35;
+    --bg: #FFF9F0;
+    --card: #FFFFFF;
+    --text: #1A1A2E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Rubik', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  .header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '🌾🌷🌾🌷🌾🌷🌾🌷🌾🌷🌾';
+    position: absolute;
+    top: 5px; left: 0; right: 0;
+    font-size: 18px;
+    opacity: 0.4;
+    letter-spacing: 4px;
+  }
+
+  .header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: var(--gold);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    position: relative;
+  }
+
+  .header p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1rem;
+    margin-top: 5px;
+  }
+
+  /* MENU */
+  .menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 25px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .menu-btn {
+    background: white;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    padding: 18px 12px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+    font-family: 'Rubik', sans-serif;
+  }
+
+  .menu-btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+  .menu-btn .icon { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+  .menu-btn .title { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .menu-btn .sub { font-size: 0.75rem; color: #888; margin-top: 3px; }
+
+  .menu-btn:nth-child(1) { border-color: var(--blue); }
+  .menu-btn:nth-child(2) { border-color: var(--red); }
+  .menu-btn:nth-child(3) { border-color: var(--green); }
+  .menu-btn:nth-child(4) { border-color: var(--purple); }
+  .menu-btn:nth-child(5) { border-color: var(--orange); }
+
+  /* GAME SCREEN */
+  .game-screen {
+    display: none;
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .game-screen.active { display: block; }
+
+  .back-btn {
+    background: none;
+    border: 2px solid var(--blue);
+    color: var(--blue);
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    transition: all 0.2s;
+  }
+
+  .back-btn:hover { background: var(--blue); color: white; }
+
+  .game-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+  }
+
+  .game-subtitle {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+  }
+
+  .score-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 10px 18px;
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .score-badge {
+    background: var(--gold);
+    color: white;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+
+  /* GAME 1 - Rhyming */
+  .word-card-big {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 35px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 30px rgba(102,126,234,0.4);
+  }
+
+  .word-card-big .emoji { font-size: 4rem; margin-bottom: 12px; }
+  .word-card-big .word { font-family: 'Fredoka One', cursive; font-size: 3rem; }
+  .word-card-big .hint { font-size: 0.9rem; opacity: 0.8; margin-top: 8px; }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .option-btn {
+    background: white;
+    border: 3px solid #E8E8E8;
+    border-radius: 16px;
+    padding: 18px;
+    cursor: pointer;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    text-align: center;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+
+  .option-btn:hover { transform: scale(1.04); border-color: var(--blue); }
+  .option-btn.correct { background: var(--green); border-color: var(--green); color: white; }
+  .option-btn.wrong { background: var(--red); border-color: var(--red); color: white; }
+  .option-btn .opt-emoji { display: block; font-size: 2rem; margin-bottom: 6px; }
+
+  /* GAME 2 - Syllables */
+  .syllable-word {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 35px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(245,87,108,0.4);
+  }
+
+  .syllable-word .emoji { font-size: 4rem; margin-bottom: 12px; }
+  .syllable-word .word { font-family: 'Fredoka One', cursive; font-size: 2.8rem; }
+
+  .syllable-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .syllable-btn {
+    width: 65px; height: 65px;
+    border-radius: 50%;
+    border: 3px solid var(--orange);
+    background: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: var(--orange);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+  }
+
+  .syllable-btn:hover { background: var(--orange); color: white; transform: scale(1.1); }
+
+  .syllable-display {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    min-height: 50px;
+  }
+
+  .syl-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: 2px solid #ccc;
+    transition: background 0.2s, transform 0.2s;
+  }
+    background: var(--gold);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    padding: 8px 16px;
+    border-radius: 30px;
+    animation: popIn 0.2s;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  /* GAME 3 - First Sound */
+  .first-sound-card {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(79,172,254,0.4);
+  }
+
+  .first-sound-card .question { font-size: 1rem; opacity: 0.9; margin-bottom: 10px; }
+  .first-sound-card .sound-big { font-family: 'Fredoka One', cursive; font-size: 5rem; }
+
+  .images-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .img-option {
+    background: white;
+    border: 3px solid #E8E8E8;
+    border-radius: 16px;
+    padding: 18px 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+
+  .img-option:hover { transform: scale(1.04); border-color: var(--blue); }
+  .img-option.correct { background: #E8FFF5; border-color: var(--green); }
+  .img-option.wrong { background: #FFE8E8; border-color: var(--red); }
+  .img-option .emoji { font-size: 4.5rem; display: block; }
+
+  /* GAME 4 - Word Count */
+  .sentence-card {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(67,233,123,0.4);
+  }
+
+  .sentence-card .sentence-text {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    line-height: 1.4;
+  }
+
+  .tap-area {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 3px dashed var(--green);
+  }
+
+  .tap-area:active { transform: scale(0.97); }
+  .tap-area .tap-icon { font-size: 3rem; display: block; margin-bottom: 8px; }
+  .tap-area .tap-label { font-weight: 700; color: var(--green); }
+
+  .word-dots {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    min-height: 40px;
+  }
+
+  .word-dot {
+    width: 40px; height: 40px;
+    background: var(--purple);
+    border-radius: 50%;
+    animation: popIn 0.2s;
+  }
+
+  /* GAME 5 - Last Sound */
+  .last-sound-card {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(250,112,154,0.4);
+  }
+
+  .last-sound-card .emoji { font-size: 4rem; margin-bottom: 10px; }
+  .last-sound-card .word { font-family: 'Fredoka One', cursive; font-size: 3rem; }
+
+  .letter-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .letter-btn {
+    width: 65px; height: 65px;
+    border-radius: 16px;
+    border: 3px solid #E8E8E8;
+    background: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+
+  .letter-btn:hover { transform: scale(1.1); border-color: var(--purple); }
+  .letter-btn.correct { background: var(--green); border-color: var(--green); color: white; }
+  .letter-btn.wrong { background: var(--red); border-color: var(--red); color: white; }
+
+  /* Feedback */
+  .feedback-box {
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    animation: popIn 0.3s;
+    display: none;
+  }
+
+  .feedback-box.show { display: block; }
+  .feedback-box.good { background: #E8FFF5; color: #1B5E20; border: 2px solid var(--green); }
+  .feedback-box.bad { background: #FFE8E8; color: #B71C1C; border: 2px solid var(--red); }
+
+  .next-btn {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+    color: white;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 50px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 5px 20px rgba(46,134,171,0.4);
+    transition: transform 0.2s;
+  }
+
+  .next-btn:hover { transform: scale(1.05); }
+
+  /* Stars animation */
+  .stars-container {
+    text-align: center;
+    font-size: 2rem;
+    animation: sparkle 0.5s;
+  }
+
+  @keyframes sparkle {
+    0% { transform: scale(0) rotate(-20deg); }
+    60% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  /* Progress */
+  .progress-bar-wrap {
+    background: #E8E8E8;
+    border-radius: 20px;
+    height: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--blue));
+    border-radius: 20px;
+    transition: width 0.4s;
+  }
+
+  .confetti {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .confetti.show {
+    opacity: 1;
+    animation: celebrate 1.5s ease-out forwards;
+  }
+
+  @keyframes celebrate {
+    0% { transform: scale(0.5); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  .home-screen { display: block; }
+  .home-screen.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌸 משחקי מילים לפסח 🌸</h1>
+  <p>משחקים עם מילים של חג הפסח</p>
+  <p style="margin-top:6px;font-size:0.8rem;color:rgba(255,255,255,0.7);">עורכת: לילך כספרי — קלינאית תקשורת</p>
+</div>
+
+<div class="confetti" id="confetti">🎉</div>
+
+<!-- HOME -->
+<div class="home-screen" id="homeScreen">
+  <div class="menu">
+    <button class="menu-btn" onclick="startGame(2)">
+      <span class="icon">🥁</span>
+      <span class="title">כמה תתי-הברות?</span>
+      <span class="sub">ספרו את תתי-ההברות במילה</span>
+    </button>
+    <button class="menu-btn" onclick="startGame(3)">
+      <span class="icon" style="font-family:'Fredoka One',cursive;">א</span>
+      <span class="title">במה מתחילה?</span>
+      <span class="sub">זיהוי צליל ראשון</span>
+    </button>
+    <button class="menu-btn" onclick="startGame(4)">
+      <span class="icon">👁️</span>
+      <span class="title">מצא את האות!</span>
+      <span class="sub">זיהוי חזותי של אותיות</span>
+    </button>
+    <button class="menu-btn" onclick="startGame(5)">
+      <span class="icon" style="font-family:'Fredoka One',cursive;">ת</span>
+      <span class="title">במה נגמרת?</span>
+      <span class="sub">זיהוי צליל אחרון</span>
+    </button>
+    <button class="menu-btn" onclick="startGame(6)">
+      <span class="icon">🎵</span>
+      <span class="title">שיר פסח!</span>
+      <span class="sub">השלימו את המילה החסרה</span>
+    </button>
+    <button class="menu-btn" onclick="startGame(7)">
+      <span class="icon" style="font-family:'Fredoka One',cursive;font-size:1.8rem;">אבג</span>
+      <span class="title">תפזורת מילים!</span>
+      <span class="sub">מצאו מילות פסח ברשת</span>
+    </button>
+    <button class="menu-btn" onclick="startGame(8)">
+      <span class="icon">🃏</span>
+      <span class="title">משחק ההתאמה!</span>
+      <span class="sub">מצאו זוגות תמונה + אות — 2 שחקנים</span>
+    </button>
+  </div>
+</div>
+
+<!-- GAME 8: 2-PLAYER MATCHING -->
+<div class="game-screen" id="game8">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--purple)">🃏 משחק ההתאמה!</div>
+
+  <!-- INTRO SCREEN -->
+  <div id="g8intro" style="text-align:center;padding:16px 0;">
+    <div style="font-size:3rem;margin-bottom:8px;">👫</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--blue);margin-bottom:20px;">שני שחקנים — כל אחד דקה אחת!</div>
+    <div style="background:white;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
+      <div style="font-size:1.5rem;">👤</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;margin:6px 0;">שם שחקן 1:</div>
+      <input id="p1name" type="text" placeholder="שם..." style="font-family:'Fredoka One',cursive;font-size:1.1rem;border:2px solid var(--blue);border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;" />
+    </div>
+    <div style="background:white;border-radius:20px;padding:16px;margin-bottom:20px;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
+      <div style="font-size:1.5rem;">👤</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;margin:6px 0;">שם שחקן 2:</div>
+      <input id="p2name" type="text" placeholder="שם..." style="font-family:'Fredoka One',cursive;font-size:1.1rem;border:2px solid var(--purple);border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;" />
+    </div>
+    <button class="next-btn" onclick="startG8Player(1)" style="display:inline-block;">התחילו! ▶</button>
+  </div>
+
+  <!-- READY SCREEN (between turns) -->
+  <div id="g8ready" style="display:none;text-align:center;padding:20px 0;">
+    <div style="font-size:3rem;margin-bottom:12px;">⏳</div>
+    <div id="g8readyText" style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--blue);margin-bottom:20px;"></div>
+    <button class="next-btn" onclick="beginTurn()" style="display:inline-block;">התחל תור! ▶</button>
+  </div>
+
+  <!-- GAME BOARD -->
+  <div id="g8board" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div id="g8playerLabel" style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--purple);"></div>
+      <div id="g8timer" style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--red);min-width:48px;text-align:center;">60</div>
+      <div id="g8pairsLabel" style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--green);">✅ 0</div>
+    </div>
+    <div id="memGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin:0 auto;"></div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="g8result" style="display:none;text-align:center;padding:16px 0;">
+    <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
+    <div id="g8resultText" style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--blue);margin-bottom:16px;line-height:1.6;"></div>
+    <button class="next-btn" onclick="initMemory()" style="display:inline-block;">🔄 משחק חדש</button>
+  </div>
+
+  <div class="feedback-box" id="fb8"></div>
+</div>
+<div class="game-screen" id="game1">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--purple)">🎵 מי חורז?</div>
+  <div class="game-subtitle">בחרו את המילה שחורזת עם המילה שלמעלה</div>
+  <div class="score-bar">
+    <div class="score-badge" id="score1">⭐ 0</div>
+    <div class="progress-bar-wrap" style="flex:1">
+      <div class="progress-fill" id="prog1" style="width:0%"></div>
+    </div>
+    <span id="qnum1" style="font-size:0.85rem;color:#888">שאלה 1/6</span>
+  </div>
+  <div class="word-card-big" id="rhymeCard">
+    <div class="emoji" id="rhymeEmoji">🍷</div>
+    <div class="word" id="rhymeWord">יין</div>
+    <div class="hint">מי חורז עם "<span id="rhymeWordHint">יין</span>"?</div>
+  </div>
+  <div class="options-grid" id="rhymeOptions"></div>
+  <div class="feedback-box" id="fb1"></div>
+  <button class="next-btn" id="next1" onclick="nextQuestion(1)" style="display:none">הבא ←</button>
+</div>
+
+<!-- GAME 2: SYLLABLES -->
+<div class="game-screen" id="game2">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--red)">🥁 כמה תתי-הברות?</div>
+  <div class="game-subtitle">הקישו על המספר הנכון של תתי-ההברות במילה</div>
+  <div class="score-bar">
+    <div class="score-badge" id="score2">⭐ 0</div>
+    <div class="progress-bar-wrap" style="flex:1">
+      <div class="progress-fill" id="prog2" style="width:0%"></div>
+    </div>
+    <span id="qnum2" style="font-size:0.85rem;color:#888">שאלה 1/6</span>
+  </div>
+  <div class="syllable-word" id="sylCard">
+    <div class="emoji" id="sylEmoji">🫓</div>
+    <div class="word" id="sylWord">מַצָּה</div>
+  </div>
+  <div id="sylDots" style="display:flex;justify-content:center;gap:12px;margin:10px 0 4px;"></div>
+  <div class="syllable-display" id="sylDisplay"></div>
+  <div class="syllable-buttons">
+    <button class="syllable-btn" onclick="answerSyl(1)">1</button>
+    <button class="syllable-btn" onclick="answerSyl(2)">2</button>
+    <button class="syllable-btn" onclick="answerSyl(3)">3</button>
+    <button class="syllable-btn" onclick="answerSyl(4)">4</button>
+  </div>
+  <div class="feedback-box" id="fb2"></div>
+  <button class="next-btn" id="next2" onclick="nextQuestion(2)" style="display:none">הבא ←</button>
+</div>
+
+<!-- GAME 3: FIRST SOUND -->
+<div class="game-screen" id="game3">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--blue)">🔤 במה מתחילה?</div>
+  <div class="game-subtitle">בחרו את התמונה שמתחילה באות המסומנת</div>
+  <div class="score-bar">
+    <div class="score-badge" id="score3">⭐ 0</div>
+    <div class="progress-bar-wrap" style="flex:1">
+      <div class="progress-fill" id="prog3" style="width:0%"></div>
+    </div>
+    <span id="qnum3" style="font-size:0.85rem;color:#888">שאלה 1/6</span>
+  </div>
+  <div class="first-sound-card">
+    <div class="question">מצאו מילה שמתחילה ב—</div>
+    <div class="sound-big" id="firstSoundLetter">מ</div>
+  </div>
+  <div class="images-grid" id="firstSoundOptions"></div>
+  <div class="feedback-box" id="fb3"></div>
+  <button class="next-btn" id="next3" onclick="nextQuestion(3)" style="display:none">הבא ←</button>
+</div>
+
+<!-- GAME 4: LETTER RECOGNITION -->
+<div class="game-screen" id="game4">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--green)">👁️ מצא את האות!</div>
+  <div class="game-subtitle" id="g4subtitle">מצאו את כל האותיות התואמות ולחצו עליהן</div>
+  <div class="score-bar">
+    <div class="score-badge" id="score4">⭐ 0</div>
+    <div class="progress-bar-wrap" style="flex:1">
+      <div class="progress-fill" id="prog4" style="width:0%"></div>
+    </div>
+    <span id="qnum4" style="font-size:0.85rem;color:#888">שאלה 1/8</span>
+  </div>
+
+  <!-- Target card -->
+  <div style="background:linear-gradient(135deg,#43e97b,#38f9d7);border-radius:24px;padding:22px;text-align:center;margin-bottom:18px;box-shadow:0 8px 30px rgba(67,233,123,0.35);">
+    <div style="color:white;font-size:0.9rem;margin-bottom:6px;" id="g4instruction">מצאו את האות:</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
+      <div id="targetLetterDisplay" style="font-family:'Fredoka One',cursive;font-size:5rem;color:white;line-height:1;text-shadow:2px 2px 0 rgba(0,0,0,0.18)">א</div>
+      <div id="targetImageDisplay" style="display:none;background:rgba(255,255,255,0.25);border-radius:16px;padding:10px 16px;text-align:center;">
+        <div id="targetEmoji" style="font-size:2.8rem;"></div>
+        <div id="targetWord" style="font-family:'Fredoka One',cursive;color:white;font-size:1rem;margin-top:4px;"></div>
+      </div>
+    </div>
+    <div id="letterHint" style="color:rgba(255,255,255,0.9);font-size:0.82rem;margin-top:10px;"></div>
+  </div>
+
+  <!-- Letter grid -->
+  <div id="letterGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px;"></div>
+
+  <div style="text-align:center;margin-bottom:12px;">
+    <button style="background:var(--green);color:white;border:none;padding:12px 30px;border-radius:50px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:1.1rem;box-shadow:0 4px 15px rgba(87,204,153,0.4);" onclick="checkLetterGame()">בדוק ✓</button>
+  </div>
+  <div class="feedback-box" id="fb4"></div>
+  <button class="next-btn" id="next4" onclick="nextQuestion(4)" style="display:none">הבא ←</button>
+</div>
+
+<!-- GAME 5: LAST SOUND -->
+<div class="game-screen" id="game5">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--orange)">🔚 במה נגמרת?</div>
+  <div class="game-subtitle">בחרו את האות שבה המילה מסתיימת</div>
+  <div class="score-bar">
+    <div class="score-badge" id="score5">⭐ 0</div>
+    <div class="progress-bar-wrap" style="flex:1">
+      <div class="progress-fill" id="prog5" style="width:0%"></div>
+    </div>
+    <span id="qnum5" style="font-size:0.85rem;color:#888">שאלה 1/6</span>
+  </div>
+  <div class="last-sound-card" id="lastCard">
+    <div class="emoji" id="lastEmoji" style="font-size:5rem;">🥗</div>
+  </div>
+  <div class="letter-options" id="letterOptions"></div>
+  <div class="feedback-box" id="fb5"></div>
+  <button class="next-btn" id="next5" onclick="nextQuestion(5)" style="display:none">הבא ←</button>
+</div>
+
+<!-- GAME 6: SONG FILL-IN -->
+<div class="game-screen" id="game6">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--purple)">🎵 שיר פסח!</div>
+  <div class="game-subtitle">בחרו את המילה החסרה בשיר</div>
+  <div class="score-bar">
+    <div class="score-badge" id="score6">⭐ 0</div>
+    <div class="progress-bar-wrap" style="flex:1">
+      <div class="progress-fill" id="prog6" style="width:0%"></div>
+    </div>
+    <span id="qnum6" style="font-size:0.85rem;color:#888">שאלה 1/8</span>
+  </div>
+  <div id="songCard" style="background:white;border-radius:24px;padding:24px 20px;margin:16px 0;box-shadow:0 4px 20px rgba(0,0,0,0.08);text-align:center;">
+    <div id="songEmoji" style="font-size:3rem;margin-bottom:12px;">🎵</div>
+    <div id="songLine" style="font-size:1.3rem;font-weight:700;line-height:1.8;color:#333;direction:rtl;"></div>
+  </div>
+  <div id="songOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;"></div>
+  <div class="feedback-box" id="fb6"></div>
+  <button class="next-btn" id="next6" onclick="nextQuestion(6)" style="display:none">הבא ←</button>
+</div>
+
+<!-- GAME 7: WORD SEARCH -->
+<div class="game-screen" id="game7">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--orange)">🔤 תפזורת מילים!</div>
+  <div class="game-subtitle">מצאו את מילות הפסח ברשת האותיות</div>
+
+  <div id="wordList" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;justify-content:center;direction:rtl;"></div>
+
+  <div style="background:white;border-radius:20px;padding:12px;box-shadow:0 4px 15px rgba(0,0,0,0.08);text-align:center;">
+    <div id="wsGrid" style="display:inline-grid;gap:3px;direction:ltr;"></div>
+  </div>
+
+  <div class="feedback-box" id="fb7"></div>
+  <button class="next-btn" id="next7" onclick="initWordSearch()" style="display:none">משחק חדש 🔄</button>
+</div>
+
+<script>
+// ============ DATA ============
+
+const rhymeData = [
+  { emoji: '🍷', word: 'יַיִן', correct: {emoji:'🔑', word:'מַיִן'}, wrong: [{emoji:'🐟',word:'דָּג'},{emoji:'🍎',word:'תַּפּוּחַ'}] },
+  { emoji: '🫓', word: 'מַצָּה', correct: {emoji:'🌳',word:'עֵצָה'}, wrong: [{emoji:'🐕',word:'כֶּלֶב'},{emoji:'🌙',word:'לַיְלָה'}] },
+  { emoji: '🪑', word: 'כִּסֵּא', correct: {emoji:'🌊',word:'יַמָּה'}, wrong: [{emoji:'⭐',word:'כּוֹכָב'},{emoji:'🦁',word:'אַרְיֵה'}] },
+  { emoji: '🥗', word: 'כַּרְפַּס', correct: {emoji:'🥕',word:'גֶּזֶר'}, wrong: [{emoji:'🎶',word:'שִׁיר'},{emoji:'🌈',word:'קֶשֶׁת'}] },
+  { emoji: '🐑', word: 'כֶּבֶשׂ', correct: {emoji:'🧀',word:'גֶּבֶן'}, wrong: [{emoji:'🌺',word:'פֶּרַח'},{emoji:'🎁',word:'מַתָּנָה'}] },
+  { emoji: '🥗', word: 'חֲזֶרֶת', correct: {emoji:'🌸',word:'בֶּרֶכֶת'}, wrong: [{emoji:'🚂',word:'רַכֶּבֶת'},{emoji:'🏠',word:'בַּיִת'}] },
+];
+
+const sylData = [
+  { emoji:'🔺', word:'פִּירָמִידָה', syllables:['פי','ר','מי','דה'], count:4, display:'פירמידה' },
+  { emoji:'🫓', word:'מַצָּה', syllables:['מ','צה'], count:2, display:'מצה' },
+  { emoji:'🥗', word:'כַּרְפַּס', syllables:['כ','ר','פ','ס'], count:4, display:'כרפס' },
+  { emoji:'📖', word:'הַגָּדָה', syllables:['ה','ג','דה'], count:3, display:'הגדה' },
+  { emoji:'🥬', word:'מָרוֹר', syllables:['מ','רו','ר'], count:3, display:'מרור' },
+  { emoji:'👨‍👩‍👧‍👦', word:'סְעוּדָה', syllables:['ס','עו','דה'], count:3, display:'סעודה' },
+];
+
+const sylData2 = [
+  { emoji:'☀️', word:'שֶׁמֶשׁ', syllables:['ש','מ','ש'], count:3, display:'שמש' },
+  { emoji:'🦋', word:'פַּרְפַּר', syllables:['פ','ר','פ','ר'], count:4, display:'פרפר' },
+  { emoji:'🍕', word:'פִּיצָּה', syllables:['פי','צה'], count:2, display:'פיצה' },
+  { emoji:'🐇', word:'אַרְנָב', syllables:['א','ר','נ','ב'], count:4, display:'ארנב' },
+  { emoji:'👃', word:'אַף', syllables:['א','ף'], count:2, display:'אף' },
+  { emoji:'🍞', word:'לֶחֶם', syllables:['ל','ח','ם'], count:3, display:'לחם' },
+];
+
+const sylData3 = [
+  { emoji:'🌸', word:'פֶּרַח', syllables:['פ','ר','ח'], count:3, display:'פרח' },
+  { emoji:'⏰', word:'שָׁעוֹן', syllables:['ש','עו','ן'], count:3, display:'שעון' },
+  { emoji:'🪑', word:'כִּסֵּא', syllables:['כ','סא'], count:2, display:'כיסא' },
+  { emoji:'🚪', word:'דֶּלֶת', syllables:['ד','ל','ת'], count:3, display:'דלת' },
+  { emoji:'🐕', word:'כֶּלֶב', syllables:['כ','ל','ב'], count:3, display:'כלב' },
+  { emoji:'👜', word:'תִּיק', syllables:['תי','ק'], count:2, display:'תיק' },
+];
+
+let sylRoundIndex = 0;
+
+const firstSoundData = [
+  { letter:'מ', correct:{emoji:'🫓',label:'מצה'}, wrong:[{emoji:'🍷',label:'יין'},{emoji:'🪑',label:'כיסא'}] },
+  { letter:'כ', correct:{emoji:'🥃',label:'כוס'}, wrong:[{emoji:'🌸',label:'פרח'},{emoji:'🐟',label:'דג'}] },
+  { letter:'פ', correct:{emoji:'🦋',label:'פרפר'}, wrong:[{emoji:'🌙',label:'לילה'},{emoji:'🍎',label:'תפוח'}] },
+  { letter:'ס', correct:{emoji:'🍲',label:'סיר'}, wrong:[{emoji:'🎶',label:'שיר'},{emoji:'🌷',label:'פרח'}] },
+  { letter:'ד', correct:{emoji:'🐟',label:'דג'}, wrong:[{emoji:'🍷',label:'יין'},{emoji:'🥗',label:'כרפס'}] },
+  { letter:'א', correct:{emoji:'🐇',label:'ארנב'}, wrong:[{emoji:'🧀',label:'גבינה'},{emoji:'🥕',label:'גזר'}] },
+  { letter:'ח', correct:{emoji:'🐌',label:'חילזון'}, wrong:[{emoji:'🐟',label:'דג'},{emoji:'🫓',label:'מצה'}] },
+  { letter:'מ', correct:{emoji:'🗺️',label:'מפה'}, wrong:[{emoji:'🍷',label:'יין'},{emoji:'🐸',label:'צפרדע'}] },
+  { letter:'י', correct:{emoji:'🍷',label:'יין'}, wrong:[{emoji:'🌸',label:'אביב'},{emoji:'🫓',label:'מצה'}] },
+];
+
+const firstSoundData2 = [
+  { letter:'ח', correct:{emoji:'👕',label:'חולצה'}, wrong:[{emoji:'🍞',label:'לחם'},{emoji:'☀️',label:'שמש'}] },
+  { letter:'ל', correct:{emoji:'🍞',label:'לחם'}, wrong:[{emoji:'🌂',label:'מטריה'},{emoji:'🫒',label:'זית'}] },
+  { letter:'ש', correct:{emoji:'☀️',label:'שמש'}, wrong:[{emoji:'🏠',label:'בית'},{emoji:'🌽',label:'תירס'}] },
+  { letter:'מ', correct:{emoji:'🌂',label:'מטריה'}, wrong:[{emoji:'🐍',label:'נחש'},{emoji:'🍞',label:'לחם'}] },
+  { letter:'ז', correct:{emoji:'🫒',label:'זית'}, wrong:[{emoji:'☀️',label:'שמש'},{emoji:'🏠',label:'בית'}] },
+  { letter:'ב', correct:{emoji:'🏠',label:'בית'}, wrong:[{emoji:'🌽',label:'תירס'},{emoji:'🫒',label:'זית'}] },
+  { letter:'ת', correct:{emoji:'🌽',label:'תירס'}, wrong:[{emoji:'🌂',label:'מטריה'},{emoji:'🐍',label:'נחש'}] },
+  { letter:'מ', correct:{emoji:'🎁',label:'מתנה'}, wrong:[{emoji:'🍞',label:'לחם'},{emoji:'🏠',label:'בית'}] },
+  { letter:'נ', correct:{emoji:'🐍',label:'נחש'}, wrong:[{emoji:'☀️',label:'שמש'},{emoji:'🌽',label:'תירס'}] },
+];
+
+let firstSoundRoundIndex = 0;
+
+// All Hebrew letters (no final forms)
+const hebrewAlphabet = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י','כ','ל','מ','נ','ס','ע','פ','צ','ק','ר','ש','ת'];
+
+// Visually similar letter groups for smart distractors
+const similarLetters = {
+  'א':['ע','ר','ד'], 'ב':['כ','פ','ד'], 'ג':['נ','ז','י'], 'ד':['ר','ה','ו'],
+  'ה':['ח','ד','ת'], 'ו':['ז','י','ר'], 'ז':['ו','י','נ'], 'ח':['ה','ת','נ'],
+  'ט':['מ','ס','צ'], 'י':['ו','ז','ר'], 'כ':['ב','פ','ד'], 'ל':['כ','ו','פ'],
+  'מ':['ס','ט','נ'], 'נ':['ג','ז','כ'], 'ס':['מ','ט','ע'], 'ע':['א','צ','ס'],
+  'פ':['ב','כ','ד'], 'צ':['ע','ס','ט'], 'ק':['ר','פ','ה'], 'ר':['ד','ק','ו'],
+  'ש':['ת','ח','ט'], 'ת':['ה','ח','ש']
+};
+
+// Multiple pesach words per letter (for grid images)
+const pesachWordsByLetter = {
+  'א':[ {emoji:'🦁',word:'אריה'},{emoji:'🚌',word:'אוטובוס'} ],
+  'ב':[ {emoji:'🏠',word:'בית'},{emoji:'🥚',word:'ביצה'} ],
+  'ג':[ {emoji:'🍦',word:'גלידה'},{emoji:'🐪',word:'גמל'} ],
+  'ד':[ {emoji:'🐟',word:'דג'},{emoji:'🍯',word:'דבש'} ],
+  'ה':[ {emoji:'📖',word:'הגדה'},{emoji:'🏔️',word:'הר'} ],
+  'ו':[ {emoji:'🌹',word:'ורד'},{emoji:'🪝',word:'וו'} ],
+  'ז':[ {emoji:'🫒',word:'זית'},{emoji:'🪰',word:'זבוב'} ],
+  'ח':[ {emoji:'🌾',word:'חיטה'},{emoji:'🥛',word:'חלב'} ],
+  'ט':[ {emoji:'🦚',word:'טווס'},{emoji:'🐯',word:'טיגריס'} ],
+  'י':[ {emoji:'👧',word:'ילדה'},{emoji:'🕊️',word:'יונה'} ],
+  'כ':[ {emoji:'🥃',word:'כוס'},{emoji:'🐑',word:'כבש'} ],
+  'ל':[ {emoji:'❤️',word:'לב'},{emoji:'🍋',word:'לימון'} ],
+  'מ':[ {emoji:'🫓',word:'מצה'},{emoji:'💻',word:'מחשב'} ],
+  'נ':[ {emoji:'🕯️',word:'נר'},{emoji:'🐆',word:'נמר'} ],
+  'ס':[ {emoji:'🐴',word:'סוס'},{emoji:'🪜',word:'סולם'} ],
+  'ע':[ {emoji:'🌳',word:'עץ'},{emoji:'🪁',word:'עפיפון'} ],
+  'פ':[ {emoji:'👄',word:'פה'},{emoji:'🌸',word:'פרח'} ],
+  'צ':[ {emoji:'🐢',word:'צב'},{emoji:'🍽️',word:'צלחת'} ],
+  'ק':[ {emoji:'🐒',word:'קוף'},{emoji:'🌈',word:'קשת'} ],
+  'ר':[ {emoji:'🚂',word:'רכבת'},{emoji:'🟥',word:'ריבוע'} ],
+  'ש':[ {emoji:'☀️',word:'שמש'},{emoji:'⏰',word:'שעון'} ],
+  'ת':[ {emoji:'🥁',word:'תוף'},{emoji:'🍓',word:'תות'} ],
+};
+
+// Distractor images: words that do NOT start with the target letter
+const distractorImages = [
+  {emoji:'🍋',word:'לימון',letter:'ל'},{emoji:'🐇',word:'ארנב',letter:'א'},
+  {emoji:'🌺',word:'פרח',letter:'פ'},{emoji:'🧅',word:'בצל',letter:'ב'},
+  {emoji:'🐢',word:'צב',letter:'צ'},{emoji:'🎈',word:'בלון',letter:'ב'},
+  {emoji:'🦋',word:'פרפר',letter:'פ'},{emoji:'🌻',word:'חמנייה',letter:'ח'},
+  {emoji:'🍓',word:'תות',letter:'ת'},{emoji:'🐬',word:'דולפין',letter:'ד'},
+  {emoji:'🦜',word:'תוכי',letter:'ת'},{emoji:'🎃',word:'דלעת',letter:'ד'},
+  {emoji:'🐠',word:'דג',letter:'ד'},
+  {emoji:'🦀',word:'סרטן',letter:'ס'},{emoji:'🐧',word:'פינגווין',letter:'פ'},
+  {emoji:'🦁',word:'עריה',letter:'ע'},{emoji:'🏔️',word:'גבעה',letter:'ג'},
+  {emoji:'🎸',word:'גיטרה',letter:'ג'},{emoji:'🦊',word:'שועל',letter:'ש'},
+  {emoji:'🍇',word:'ענבים',letter:'ע'},{emoji:'🐒',word:'קוף',letter:'ק'},
+  {emoji:'🐱',word:'חתול',letter:'ח'},
+];
+
+const letterRoundPool1 = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י','כ'];
+const letterRoundPool2 = ['ל','מ','נ','ס','ע','פ','צ','ק','ר','ש','ת'];
+let letterRoundIndex = 0;
+
+function buildLetterRounds() {
+  const pool = letterRoundIndex % 2 === 0 ? letterRoundPool1 : letterRoundPool2;
+  const rounds = [];
+  const letters = shuffle([...pool]).slice(0, 8);
+  letters.forEach((target) => {
+    const similar = similarLetters[target] || [];
+    const poolAll = hebrewAlphabet.filter(l => l !== target);
+    const distractorLetters = shuffle([...similar, ...shuffle(poolAll.filter(l=>!similar.includes(l)))]).slice(0,3);
+
+    const targetImgs = shuffle([...(pesachWordsByLetter[target]||[])]);
+    const wrongImgs = shuffle(distractorImages.filter(d=>d.letter!==target));
+
+    const cells = [];
+    const targetLetterCount = 3;
+    const targetImgCount = Math.min(2, targetImgs.length);
+    const correctTotal = targetLetterCount + targetImgCount;
+    const wrongLetterCount = 7;
+    const wrongImgCount = 4;
+
+    for(let i=0;i<targetLetterCount;i++) cells.push({type:'letter',letter:target,isTarget:true});
+    for(let i=0;i<targetImgCount;i++) cells.push({type:'image',emoji:targetImgs[i].emoji,word:targetImgs[i].word,isTarget:true});
+    for(let i=0;i<wrongLetterCount;i++) cells.push({type:'letter',letter:distractorLetters[i%distractorLetters.length],isTarget:false});
+    for(let i=0;i<wrongImgCount;i++) cells.push({type:'image',emoji:wrongImgs[i%wrongImgs.length].emoji,word:wrongImgs[i%wrongImgs.length].word,isTarget:false});
+
+    shuffle(cells);
+    rounds.push({ target, grid: cells, correctTotal, pesach: (pesachWordsByLetter[target]||[])[0] });
+  });
+  return rounds;
+}
+
+let letterRounds = [];
+
+const lastSoundData = [
+  { emoji:'🐴', word:'סוּס', display:'סוס', lastLetter:'ס', options:['ס','ן','ר','ת'] },
+  { emoji:'🔺', word:'פִּירָמִידָה', display:'פירמידה', lastLetter:'ה', options:['ת','ה','א','ס'] },
+  { emoji:'🫓', word:'מַצָּה', display:'מצה', lastLetter:'ה', options:['ת','ה','א','ס'] },
+  { emoji:'🪑', word:'כִּסֵּא', display:'כיסא', lastLetter:'א', options:['ה','ס','א','ן'] },
+  { emoji:'🥗', word:'חֲזֶרֶת', display:'חזרת', lastLetter:'ת', options:['ת','ד','ה','ס'] },
+  { emoji:'🌰', word:'אֱגוֹז', display:'אגוז', lastLetter:'ז', options:['ב','ר','ל','ז'] },
+  { emoji:'🌸', word:'אָבִיב', display:'אביב', lastLetter:'ב', options:['ב','פ','ד','ר'] },
+  { emoji:'🌨️', word:'בָּרָד', display:'ברד', lastLetter:'ד', options:['ד','ר','ת','ב'] },
+  { emoji:'🐸', word:'צְפַרְדֵּעַ', display:'צפרדע', lastLetter:'ע', options:['ע','א','ה','י'] },
+];
+
+const lastSoundData2 = [
+  { emoji:'🐍', word:'נָחָשׁ', display:'נחש', lastLetter:'ש', options:['ש','ס','ת','ב'] },
+  { emoji:'🍽️', word:'צַלַּחַת', display:'צלחת', lastLetter:'ת', options:['ת','ד','ה','ס'] },
+  { emoji:'👕', word:'חוּלְצָה', display:'חולצה', lastLetter:'ה', options:['ה','ת','א','ס'] },
+  { emoji:'🏠', word:'בַּיִת', display:'בית', lastLetter:'ת', options:['ת','ד','ב','ה'] },
+  { emoji:'🐇', word:'אַרְנָב', display:'ארנב', lastLetter:'ב', options:['ב','פ','ד','ר'] },
+  { emoji:'🫑', word:'פִּלְפֵּל', display:'פלפל', lastLetter:'ל', options:['ל','ר','נ','ד'] },
+  { emoji:'⚙️', word:'גַּלְגַּל', display:'גלגל', lastLetter:'ל', options:['ל','ר','כ','ד'] },
+  { emoji:'🍎', word:'תַּפּוּחַ', display:'תפוח', lastLetter:'ח', options:['ח','כ','ה','ת'] },
+  { emoji:'⭕', word:'עִגּוּל', display:'עיגול', lastLetter:'ל', options:['ל','ר','נ','ב'] },
+  { emoji:'🌽', word:'תִּירָס', display:'תירס', lastLetter:'ס', options:['ס','ת','ז','ר'] },
+];
+
+let lastSoundRoundIndex = 0;
+
+// ============ STATE ============
+const state = {
+  1: { q:0, score:0, total:rhymeData.length, answered:false },
+  2: { q:0, score:0, total:sylData.length, answered:false },
+  3: { q:0, score:0, total:firstSoundData.length, answered:false },
+  4: { q:0, score:0, total:8, answered:false },
+  5: { q:0, score:0, total:lastSoundData.length, answered:false },
+  6: { q:0, score:0, total:6, answered:false },
+  7: { q:0, score:0, total:6, answered:false },
+};
+
+// ============ NAVIGATION ============
+function goHome() {
+  document.getElementById('homeScreen').classList.remove('hidden');
+  for(let i=1;i<=8;i++) document.getElementById('game'+i).classList.remove('active');
+}
+
+function startGame(n) {
+  document.getElementById('homeScreen').classList.add('hidden');
+  for(let i=1;i<=8;i++) document.getElementById('game'+i).classList.remove('active');
+  document.getElementById('game'+n).classList.add('active');
+  state[n] = state[n] || {q:0,score:0,total:0,answered:false};
+  state[n].q = 0; state[n].score = 0; state[n].answered = false;
+  if(n===2) { sylRoundIndex++; state[2].total = ([sylData,sylData2,sylData3][sylRoundIndex % 3]).length; }
+  if(n===3) { firstSoundRoundIndex++; state[3].total = (firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2).length; }
+  if(n===4) { letterRounds = []; letterRoundIndex++; state[4].total = 8; }
+  if(n===5) { lastSoundRoundIndex++; state[5].total = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length; }
+  if(n===6) { renderSongQuestion(6); return; }
+  if(n===7) { initWordSearch(); return; }
+  if(n===8) { initMemory(); return; }
+  renderQuestion(n);
+}
+
+// ============ RENDER ============
+function renderQuestion(n) {
+  const s = state[n];
+  updateScoreBar(n);
+  hideFeedback(n);
+  document.getElementById('next'+n).style.display = 'none';
+  s.answered = false;
+  if(n===1) renderRhyme();
+  if(n===2) renderSyl();
+  if(n===3) renderFirstSound();
+  if(n===4) renderLetterGame();
+  if(n===5) renderLastSound();
+}
+
+function updateScoreBar(n) {
+  const s = state[n];
+  document.getElementById('score'+n).textContent = '⭐ '+s.score;
+  const pct = (s.q/s.total)*100;
+  document.getElementById('prog'+n).style.width = pct+'%';
+  document.getElementById('qnum'+n).textContent = 'שאלה '+(s.q+1)+'/'+s.total;
+}
+
+function nextQuestion(n) {
+  state[n].q++;
+  const totals = {1:rhymeData.length,2:([sylData,sylData2,sylData3][sylRoundIndex % 3]).length,3:(firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2).length,4:8,5:(lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length,6:songData.length};
+  if(state[n].q >= (totals[n]||state[n].total)) { showWin(n); return; }
+  if(n===4) { document.getElementById('letterGrid').innerHTML=''; }
+  if(n===6) { renderSongQuestion(6); return; }
+  renderQuestion(n);
+}
+
+function showFeedback(n, correct, extra) {
+  const fb = document.getElementById('fb'+n);
+  fb.classList.remove('good','bad');
+  fb.textContent = correct ? '🎉 כל הכבוד! '+( extra||'') : '🤔 ננסה שוב! '+( extra||'');
+  fb.classList.add(correct?'good':'bad','show');
+  document.getElementById('next'+n).style.display = 'block';
+  if(correct) {
+    showConfetti();
+    state[n].score++;
+    document.getElementById('score'+n).textContent = '⭐ '+state[n].score;
+  }
+}
+
+function hideFeedback(n) {
+  const fb = document.getElementById('fb'+n);
+  fb.classList.remove('show','good','bad');
+}
+
+function showConfetti() {
+  const c = document.getElementById('confetti');
+  c.classList.remove('show');
+  void c.offsetWidth;
+  c.classList.add('show');
+  setTimeout(()=>c.classList.remove('show'),1500);
+}
+
+function showWin(n) {
+  const s = state[n];
+  document.getElementById('game'+n).classList.remove('active');
+  document.getElementById('homeScreen').classList.remove('hidden');
+  setTimeout(()=>{
+    alert('🎊 סיימתם! קיבלתם '+s.score+' מתוך '+s.total+' ⭐\nכל הכבוד!');
+  }, 100);
+}
+
+// ============ GAME 1: RHYME ============
+function renderRhyme() {
+  const d = rhymeData[state[1].q];
+  document.getElementById('rhymeEmoji').textContent = d.emoji;
+  document.getElementById('rhymeWord').textContent = d.word;
+  document.getElementById('rhymeWordHint').textContent = d.word;
+  const opts = shuffle([d.correct, ...d.wrong]);
+  const container = document.getElementById('rhymeOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-emoji">${opt.emoji}</span>${opt.word}`;
+    btn.onclick = () => {
+      if(state[1].answered) return;
+      state[1].answered = true;
+      const correct = opt === d.correct;
+      btn.classList.add(correct?'correct':'wrong');
+      if(!correct) {
+        container.querySelectorAll('button').forEach(b=>{
+          if(b.querySelector('.opt-emoji')?.textContent === d.correct.emoji || b.textContent.includes(d.correct.word)) b.classList.add('correct');
+        });
+      }
+      showFeedback(1, correct, correct?'מצאתם את החרוז!':'החרוז הנכון הוא "'+d.correct.word+'"');
+    };
+    container.appendChild(btn);
+  });
+}
+
+// ============ GAME 2: SYLLABLES ============
+function renderSyl() {
+  const d = ([sylData,sylData2,sylData3][sylRoundIndex % 3])[state[2].q];
+  document.getElementById('sylEmoji').textContent = d.emoji;
+  document.getElementById('sylWord').textContent = d.word;
+  document.getElementById('sylDisplay').innerHTML = '';
+  // Draw 4 empty dots with placeholder labels
+  const dotsEl = document.getElementById('sylDots');
+  dotsEl.innerHTML = '';
+  for(let i=0; i<4; i++) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;';
+    const dot = document.createElement('div');
+    dot.className = 'syl-dot';
+    dot.id = 'dot'+i;
+    const lbl = document.createElement('div');
+    lbl.id = 'dotlbl'+i;
+    lbl.style.cssText = 'font-family:"Fredoka One",cursive;font-size:0.9rem;color:transparent;min-width:20px;text-align:center;';
+    lbl.textContent = '—';
+    wrap.appendChild(dot);
+    wrap.appendChild(lbl);
+    dotsEl.appendChild(wrap);
+  }
+}
+
+function answerSyl(n) {
+  if(state[2].answered) return;
+  state[2].answered = true;
+  const d = ([sylData,sylData2,sylData3][sylRoundIndex % 3])[state[2].q];
+  const correct = n === d.count;
+
+  // Color dots and show syllable labels
+  for(let i=0; i<4; i++) {
+    const dot = document.getElementById('dot'+i);
+    const lbl = document.getElementById('dotlbl'+i);
+    if(!dot || !lbl) continue;
+    dot.style.transition = `background 0.2s ${i*0.1}s, transform 0.2s ${i*0.1}s`;
+    if(i < d.count) {
+      dot.style.background = correct ? 'var(--green)' : 'var(--red)';
+      dot.style.transform = 'scale(1.2)';
+      lbl.textContent = d.syllables[i];
+      lbl.style.color = correct ? 'var(--green)' : 'var(--red)';
+      lbl.style.transition = `color 0.2s ${i*0.1}s`;
+    } else {
+      dot.style.background = '#e0e0e0';
+      lbl.style.color = 'transparent';
+    }
+  }
+
+  // Show syllable chips
+  const display = document.getElementById('sylDisplay');
+  display.innerHTML = '';
+
+  showFeedback(2, correct, correct ? 'ספרתם נכון: '+d.count+' תתי-הברות!' : 'יש '+d.count+' תתי-הברות: '+d.syllables.join('—'));
+}
+
+// ============ GAME 3: FIRST SOUND ============
+function renderFirstSound() {
+  const d = (firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2)[state[3].q];
+  document.getElementById('firstSoundLetter').textContent = d.letter;
+  const opts = shuffle([d.correct, ...d.wrong]);
+  const container = document.getElementById('firstSoundOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'img-option';
+    div.innerHTML = `<span class="emoji">${opt.emoji}</span>`;
+    div.dataset.label = opt.label;
+    div.onclick = () => {
+      if(state[3].answered) return;
+      state[3].answered = true;
+      const correct = opt === d.correct;
+      div.classList.add(correct?'correct':'wrong');
+      if(!correct) {
+        container.querySelectorAll('.img-option').forEach(el=>{
+          if(el.dataset.label === d.correct.label) el.classList.add('correct');
+        });
+      }
+      showFeedback(3, correct, correct?'"'+d.correct.label+'" מתחילה ב—'+d.letter:'המילה שמתחילה ב—'+d.letter+' היא "'+d.correct.label+'"');
+    };
+    container.appendChild(div);
+  });
+}
+
+// ============ GAME 4: LETTER RECOGNITION ============
+function renderLetterGame() {
+  if(letterRounds.length === 0) letterRounds = buildLetterRounds();
+  const d = letterRounds[state[4].q];
+
+  document.getElementById('g4instruction').textContent = 'מצאו את כל הריבועים שמתחילים באות:';
+  document.getElementById('letterHint').textContent =
+    'אות "'+d.target+'" — לחצו על כל האותיות והתמונות שמתחילות בה! (יש '+d.correctTotal+')';
+  document.getElementById('targetLetterDisplay').textContent = d.target;
+
+  if(d.pesach) {
+    document.getElementById('targetImageDisplay').style.display = 'block';
+    document.getElementById('targetEmoji').textContent = d.pesach.emoji;
+    document.getElementById('targetWord').textContent = d.pesach.word;
+  } else {
+    document.getElementById('targetImageDisplay').style.display = 'none';
+  }
+
+  const grid = document.getElementById('letterGrid');
+  grid.innerHTML = '';
+
+  d.grid.forEach((cell, i) => {
+    const btn = document.createElement('button');
+    btn.dataset.index = i;
+    btn.dataset.isTarget = cell.isTarget;
+    btn.dataset.selected = 'false';
+
+    if(cell.type === 'letter') {
+      btn.innerHTML = `<span style="font-family:'Fredoka One',cursive;font-size:2.2rem;">${cell.letter}</span>`;
+    } else {
+      btn.innerHTML = `<span style="font-size:2.4rem;line-height:1;">${cell.emoji}</span>`;
+    }
+
+    btn.style.cssText = `
+      width:100%;aspect-ratio:1;border-radius:16px;border:3px solid #E8E8E8;
+      background:white;cursor:pointer;transition:all 0.15s;
+      box-shadow:0 3px 8px rgba(0,0,0,0.07);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:4px;
+    `;
+    btn.onclick = () => {
+      if(state[4].answered) return;
+      const sel = btn.dataset.selected === 'true';
+      btn.dataset.selected = sel ? 'false' : 'true';
+      btn.style.background = sel ? 'white' : '#FFF3CD';
+      btn.style.borderColor = sel ? '#E8E8E8' : '#F5C842';
+      btn.style.transform = sel ? 'scale(1)' : 'scale(1.08)';
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function checkLetterGame() {
+  if(state[4].answered) return;
+  state[4].answered = true;
+  const d = letterRounds[state[4].q];
+  const btns = document.getElementById('letterGrid').querySelectorAll('button');
+  let allCorrect = true, missed = 0, wrongPicked = 0;
+  btns.forEach(btn => {
+    const isTarget = btn.dataset.isTarget === 'true';
+    const selected = btn.dataset.selected === 'true';
+    if(isTarget && selected) {
+      btn.style.background='#E8FFF5'; btn.style.borderColor='#57CC99'; btn.style.transform='scale(1)';
+    } else if(isTarget && !selected) {
+      btn.style.background='#FFF0C0'; btn.style.borderColor='#F5C842'; allCorrect=false; missed++;
+    } else if(!isTarget && selected) {
+      btn.style.background='#FFE8E8'; btn.style.borderColor='#E63946'; btn.style.transform='scale(1)'; allCorrect=false; wrongPicked++;
+    }
+  });
+  const msg = allCorrect ? 'מצאתם את כולם! 🌟 '+d.correctTotal+' ריבועים נכונים' :
+    (missed>0 && wrongPicked>0) ? 'פספסתם '+missed+' ובחרתם '+wrongPicked+' שגויות. צהוב = פספסתם, אדום = טעות' :
+    missed>0 ? 'פספסתם '+missed+'. הם מסומנים בצהוב' :
+    'בחרתם '+wrongPicked+' שגויות. הן מסומנות באדום';
+  showFeedback(4, allCorrect, msg);
+}
+
+// ============ GAME 5: LAST SOUND ============
+function renderLastSound() {
+  const d = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2)[state[5].q];
+  document.getElementById('lastEmoji').textContent = d.emoji;
+
+  const container = document.getElementById('letterOptions');
+  container.innerHTML = '';
+  shuffle([...d.options]).forEach(letter => {
+    const btn = document.createElement('button');
+    btn.className = 'letter-btn';
+    btn.textContent = letter;
+    btn.onclick = () => {
+      if(state[5].answered) return;
+      state[5].answered = true;
+      const correct = letter === d.lastLetter;
+      btn.classList.add(correct?'correct':'wrong');
+      if(!correct) {
+        container.querySelectorAll('button').forEach(b=>{
+          if(b.textContent===d.lastLetter) b.classList.add('correct');
+        });
+      }
+      showFeedback(5, correct, correct?'"'+d.display+'" נגמרת ב—'+d.lastLetter:'המילה נגמרת ב—'+d.lastLetter);
+    };
+    container.appendChild(btn);
+  });
+}
+
+// ============ UTILS ============
+function shuffle(arr) {
+  return arr.sort(()=>Math.random()-0.5);
+}
+
+// ============ GAME 6: SONG FILL-IN ============
+const songData = [
+  { emoji:'🐸', line:'אֶחָד מִי יוֹדֵעַ? אֶחָד אֲנִי ___', answer:'יוֹדֵעַ', wrong:['שָׁר','רוֹצֶה','אוֹמֵר'] },
+  { emoji:'🎉', line:'שִׂמְחָה רַבָּה שִׂמְחָה רַבָּה, ___ הִגִּיעַ', answer:'אָבִיב', wrong:['קַיִץ','גֶּשֶׁם','סְתָיו'] },
+  { emoji:'🌸', line:'אֵיךְ יוֹדְעִים שֶׁבָּא אָבִיב? מַסְתַּכְּלִים ___ סָבִיב', answer:'סָבִיב', wrong:['לְמַעְלָה','לְמַטָּה','קָדִימָה'] },
+  { emoji:'⛓️', line:'עֲבָדִים הָיִינוּ עֲבָדִים, עַתָּה בְּנֵי ___', answer:'חוֹרִין', wrong:['יִשְׂרָאֵל','מֶלֶךְ','דָּוִד'] },
+  { emoji:'❓', line:'מַה נִּשְׁתַּנָּה הַלַּיְלָה הַזֶּה מִכָּל הַ___', answer:'לֵילוֹת', wrong:['יָמִים','שָׁנִים','חַגִּים'] },
+  { emoji:'👶', line:'וּבְתֵיבָה מֹשֶׁה הַקָּטָן, יֶלֶד יָפֶה וְ___', answer:'רַךְ', wrong:['גָּדוֹל','חָכָם','טוֹב'] },
+];
+
+function renderSongQuestion(gameNum) {
+  const d = songData[state[6].q];
+  const total = songData.length;
+  const q = state[6].q;
+
+  document.getElementById('score6').textContent = '⭐ ' + state[6].score;
+  document.getElementById('prog6').style.width = (q/total*100)+'%';
+  document.getElementById('qnum6').textContent = 'שאלה '+(q+1)+'/'+total;
+  document.getElementById('fb6').textContent = '';
+  document.getElementById('fb6').className = 'feedback-box';
+  document.getElementById('next6').style.display = 'none';
+  state[6].answered = false;
+
+  document.getElementById('songEmoji').textContent = d.emoji;
+  const hint = '_' + d.answer.slice(1);
+  document.getElementById('songLine').innerHTML = d.line.replace('___', `<span style="display:inline-block;border-bottom:3px solid var(--gold);padding:0 6px;color:#555;font-weight:700;">${hint}</span>`);
+
+  const opts = shuffle([d.answer, ...d.wrong.slice(0,3)]);
+  const container = document.getElementById('songOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt.charAt(0);
+    btn.style.cssText = `
+      padding:14px 8px;border-radius:16px;border:3px solid #E8E8E8;
+      background:white;font-family:'Rubik',sans-serif;font-size:1.05rem;
+      font-weight:700;cursor:pointer;transition:all 0.15s;
+      box-shadow:0 3px 8px rgba(0,0,0,0.07);color:#333;
+    `;
+    btn.onmouseenter = () => { if(!state[6].answered) btn.style.transform='scale(1.05)'; };
+    btn.onmouseleave = () => { btn.style.transform='scale(1)'; };
+    btn.onclick = () => {
+      if(state[6].answered) return;
+      state[6].answered = true;
+      const correct = opt === d.answer;
+      if(correct) state[6].score++;
+      container.querySelectorAll('button').forEach(b => {
+        if(b.textContent === d.answer) { b.style.background='#D4EDDA'; b.style.borderColor='#57CC99'; }
+        else if(b === btn && !correct) { b.style.background='#FADADD'; b.style.borderColor='var(--red)'; }
+      });
+      // Fill in the blank
+      document.getElementById('songLine').innerHTML = d.line.replace('___', `<span style="color:var(--green);font-weight:900;">${d.answer}</span>`);
+      showFeedback(6, correct, correct ? '🎵 כל הכבוד!' : `המילה הנכונה היא: ${d.answer}`);
+      document.getElementById('score6').textContent = '⭐ ' + state[6].score;
+      document.getElementById('next6').style.display = 'inline-block';
+    };
+    container.appendChild(btn);
+  });
+}
+
+// ============ GAME 7: WORD SEARCH ============
+const wsWords = ['מצה','סדר','יין','פסח','מרור','כרפס','הגדה','אביב','חרוסת','ברד'];
+const wsEmojis = {'מצה':'🫓','סדר':'🍽️','יין':'🍷','פסח':'🎉','מרור':'🥬','כרפס':'🥗','הגדה':'📖','אביב':'🌸','חרוסת':'🍯','ברד':'🌨️'};
+const GRID_SIZE = 9;
+
+let wsGrid = [], wsPlaced = [], wsFound = [], wsSelecting = false, wsStart = null, wsCurrent = [];
+
+function initWordSearch() {
+  wsGrid = Array.from({length:GRID_SIZE}, ()=>Array(GRID_SIZE).fill(''));
+  wsPlaced = [];
+  wsFound = [];
+  wsSelecting = false;
+  wsStart = null;
+  wsCurrent = [];
+
+  const hebrewFill = 'אבגדהוזחטיכלמנסעפצקרשת';
+  const wordsToPlace = shuffle([...wsWords]).slice(0, 7);
+
+  // Place words
+  wordsToPlace.forEach(word => {
+    const reversed = word.split('').reverse().join('');
+    let placed = false;
+    let attempts = 0;
+    while(!placed && attempts < 200) {
+      attempts++;
+      const dirs = shuffle([[0,1],[1,0],[1,1]]);
+      for(const [dr,dc] of dirs) {
+        const maxR = GRID_SIZE - dr*(reversed.length-1);
+        const maxC = GRID_SIZE - dc*(reversed.length-1);
+        if(maxR<=0||maxC<=0) continue;
+        const r = Math.floor(Math.random()*maxR);
+        const c = Math.floor(Math.random()*maxC);
+        let ok = true;
+        const cells = [];
+        for(let i=0;i<reversed.length;i++) {
+          const nr=r+dr*i, nc=c+dc*i;
+          if(wsGrid[nr][nc]!=='' && wsGrid[nr][nc]!==reversed[i]) { ok=false; break; }
+          cells.push([nr,nc]);
+        }
+        if(ok) {
+          cells.forEach(([nr,nc],i)=>wsGrid[nr][nc]=reversed[i]);
+          wsPlaced.push({word, cells});
+          placed=true;
+          break;
+        }
+      }
+    }
+  });
+
+  // Fill blanks
+  for(let r=0;r<GRID_SIZE;r++)
+    for(let c=0;c<GRID_SIZE;c++)
+      if(wsGrid[r][c]==='') wsGrid[r][c]=hebrewFill[Math.floor(Math.random()*hebrewFill.length)];
+
+  renderWordSearch();
+  renderWordList();
+  document.getElementById('fb7').textContent='';
+  document.getElementById('fb7').className='feedback-box';
+  document.getElementById('next7').style.display='none';
+}
+
+function renderWordList() {
+  const container = document.getElementById('wordList');
+  container.innerHTML = '';
+  wsPlaced.forEach(({word}) => {
+    const tag = document.createElement('div');
+    tag.id = 'wtag-'+word;
+    tag.style.cssText = `padding:6px 14px;border-radius:50px;background:white;border:2px solid var(--blue);
+      font-family:'Rubik',sans-serif;font-weight:700;font-size:0.95rem;color:var(--blue);
+      box-shadow:0 2px 6px rgba(0,0,0,0.07);`;
+    tag.textContent = (wsEmojis[word]||'') + ' ' + word;
+    container.appendChild(tag);
+  });
+}
+
+function renderWordSearch() {
+  const grid = document.getElementById('wsGrid');
+  const available = Math.min(window.innerWidth, 480) - 60;
+  const cellSize = Math.floor(available / GRID_SIZE);
+  grid.style.gridTemplateColumns = `repeat(${GRID_SIZE}, ${cellSize}px)`;
+  grid.style.margin = '0 auto';
+  grid.innerHTML = '';
+
+  for(let r=0;r<GRID_SIZE;r++) {
+    for(let c=0;c<GRID_SIZE;c++) {
+      const cell = document.createElement('div');
+      cell.dataset.r = r;
+      cell.dataset.c = c;
+      cell.textContent = wsGrid[r][c];
+      cell.style.cssText = `
+        width:${cellSize}px;height:${cellSize}px;display:flex;align-items:center;justify-content:center;
+        font-family:'Fredoka One',cursive;font-size:${cellSize*0.65}px;border-radius:6px;
+        background:#f5f5f5;cursor:pointer;user-select:none;transition:background 0.1s;
+        border:1px solid #e8e8e8;
+      `;
+      // Check if already found
+      const foundEntry = wsFound.find(f=>f.cells.some(([fr,fc])=>fr===r&&fc===c));
+      if(foundEntry) cell.style.background = '#D4EDDA';
+
+      cell.addEventListener('pointerdown', wsPointerDown);
+      cell.addEventListener('pointerenter', wsPointerEnter);
+      cell.addEventListener('pointerup', wsPointerUp);
+      cell.style.touchAction = 'none';
+      grid.appendChild(cell);
+    }
+  }
+  grid.addEventListener('pointerup', wsPointerUp);
+  grid.addEventListener('pointermove', wsPointerMove);
+}
+
+function getCellEl(r,c) {
+  return document.querySelector(`#wsGrid [data-r="${r}"][data-c="${c}"]`);
+}
+
+function wsPointerDown(e) {
+  e.preventDefault();
+  wsSelecting = true;
+  wsStart = {r:+e.target.dataset.r, c:+e.target.dataset.c};
+  wsCurrent = [[wsStart.r, wsStart.c]];
+  highlightSelection();
+}
+
+function wsPointerEnter(e) {
+  if(!wsSelecting) return;
+  const r=+e.target.dataset.r, c=+e.target.dataset.c;
+  if(!wsStart) return;
+  updateSelection(r, c);
+}
+
+function wsPointerMove(e) {
+  if(!wsSelecting) return;
+  e.preventDefault();
+  const touch = e.changedTouches ? e.changedTouches[0] : e;
+  const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  if(!el || !el.dataset.r) return;
+  const r = +el.dataset.r, c = +el.dataset.c;
+  updateSelection(r, c);
+}
+
+function updateSelection(r, c) {
+  if(!wsStart) return;
+  const dr=r-wsStart.r, dc=c-wsStart.c;
+  const len=Math.max(Math.abs(dr),Math.abs(dc));
+  if(len===0){wsCurrent=[[wsStart.r,wsStart.c]];highlightSelection();return;}
+  const sr=dr===0?0:dr/Math.abs(dr), sc=dc===0?0:dc/Math.abs(dc);
+  if(Math.abs(dr)!==0&&Math.abs(dc)!==0&&Math.abs(dr)!==Math.abs(dc)){return;}
+  wsCurrent=[];
+  for(let i=0;i<=len;i++) wsCurrent.push([wsStart.r+sr*i,wsStart.c+sc*i]);
+  highlightSelection();
+}
+
+function wsPointerUp() {
+  if(!wsSelecting) return;
+  wsSelecting=false;
+  checkSelection();
+  wsCurrent=[];
+  renderWordSearch();
+}
+
+function highlightSelection() {
+  // Reset non-found
+  for(let r=0;r<GRID_SIZE;r++) for(let c=0;c<GRID_SIZE;c++) {
+    const el=getCellEl(r,c);
+    if(!el) continue;
+    const found=wsFound.find(f=>f.cells.some(([fr,fc])=>fr===r&&fc===c));
+    el.style.background = found?'#D4EDDA': wsCurrent.some(([cr,cc])=>cr===r&&cc===c)?'#FFF3CD':'#f5f5f5';
+    el.style.borderColor = wsCurrent.some(([cr,cc])=>cr===r&&cc===c)?'var(--gold)':'#e8e8e8';
+  }
+}
+
+function checkSelection() {
+  const selected = wsCurrent.map(([r,c])=>wsGrid[r][c]).join('');
+  const reversed = [...selected].reverse().join('');
+  for(const placed of wsPlaced) {
+    if(wsFound.find(f=>f.word===placed.word)) continue;
+    const placedStr = placed.cells.map(([r,c])=>wsGrid[r][c]).join('');
+    if(selected===placedStr || reversed===placedStr) {
+      wsFound.push(placed);
+      // Strike word tag
+      const tag=document.getElementById('wtag-'+placed.word);
+      if(tag){tag.style.background='#D4EDDA';tag.style.borderColor='#57CC99';tag.style.color='#2a7a4a';tag.style.textDecoration='line-through';}
+      if(wsFound.length===wsPlaced.length) {
+        document.getElementById('fb7').textContent='🎉 מצאת את כל המילות! כל הכבוד!';
+        document.getElementById('fb7').className='feedback-box correct';
+        document.getElementById('next7').style.display='inline-block';
+      }
+      return;
+    }
+  }
+}
+
+// ============ GAME 8: 2-PLAYER MATCHING ============
+const doublePairs = [
+  {id:'נ', a:'🕯️', b:'נ'},
+  {id:'מ', a:'🫓', b:'מ'},
+  {id:'י', a:'🍷', b:'י'},
+  {id:'ח', a:'👕', b:'ח'},
+  {id:'ה', a:'📖', b:'ה'},
+  {id:'ע', a:'🎂', b:'ע'},
+  {id:'צ', a:'🐸', b:'צ'},
+  {id:'א', a:'🦁', b:'א'},
+  {id:'ד', a:'🍯', b:'ד'},
+  {id:'ס', a:'🍽️', b:'ס'},
+  {id:'ב', a:'🥚', b:'ב'},
+  {id:'פ', a:'🌸', b:'פ'},
+  {id:'ת', a:'🍎', b:'ת'},
+];
+
+let doubleFirst = null, doubleMatched = [], doubleMoves = 0, doublePairsFound = 0;
+let doubleDeck = [];
+const doublePairsBoard2 = [
+  {id:'ש', a:'7️⃣', b:'ש'},
+  {id:'ע', a:'🍇', b:'ע'},
+  {id:'מ', a:'🎁', b:'מ'},
+  {id:'ת', a:'🍎', b:'ת'},
+  {id:'כ', a:'🥃', b:'כ'},
+  {id:'ל', a:'🍞', b:'ל'},
+  {id:'צ', a:'🍽️', b:'צ'},
+  {id:'ס', a:'🍲', b:'ס'},
+  {id:'ג', a:'🍦', b:'ג'},
+  {id:'ז', a:'🫒', b:'ז'},
+  {id:'א', a:'🌰', b:'א'},
+];
+
+let g8boardIndex = 0;
+let g8scores = [0, 0];
+let g8currentPlayer = 0;
+let g8timerInterval = null;
+let g8timeLeft = 60;
+let g8names = ['שחקן 1', 'שחקן 2'];
+
+function initMemory() {
+  document.getElementById('g8intro').style.display = 'block';
+  document.getElementById('g8ready').style.display = 'none';
+  document.getElementById('g8board').style.display = 'none';
+  document.getElementById('g8result').style.display = 'none';
+  document.getElementById('fb8').textContent = '';
+  document.getElementById('fb8').className = 'feedback-box';
+  document.getElementById('p1name').value = '';
+  document.getElementById('p2name').value = '';
+  g8scores = [0, 0];
+  // Alternate board each new game
+  g8boardIndex = (g8boardIndex + 1) % 2;
+}
+
+function buildDeck() {
+  const pool = g8boardIndex === 0 ? doublePairs : doublePairsBoard2;
+  doubleRoundPairs = shuffle([...pool]).slice(0, 8);
+  doubleDeck = shuffle(
+    doubleRoundPairs.flatMap(p => [
+      {id: p.id, type:'img', value: p.a},
+      {id: p.id, type:'letter', value: p.b}
+    ])
+  );
+  doubleFirst = null;
+  doubleMatched = [];
+  doublePairsFound = 0;
+}
+
+function startG8Player(playerNum) {
+  g8names[0] = document.getElementById('p1name').value.trim() || 'שחקן 1';
+  g8names[1] = document.getElementById('p2name').value.trim() || 'שחקן 2';
+  g8currentPlayer = playerNum - 1;
+
+  if(playerNum === 1) buildDeck();
+
+  document.getElementById('g8intro').style.display = 'none';
+  document.getElementById('g8ready').style.display = 'block';
+  document.getElementById('g8board').style.display = 'none';
+  document.getElementById('g8result').style.display = 'none';
+
+  const color = g8currentPlayer === 0 ? 'var(--blue)' : 'var(--purple)';
+  document.getElementById('g8readyText').innerHTML =
+    `<span style="color:${color}">תור ${g8names[g8currentPlayer]}!</span><br>
+     <span style="font-size:1rem;color:#777">לחץ כשאתה מוכן</span>`;
+}
+
+function beginTurn() {
+  document.getElementById('g8ready').style.display = 'none';
+  document.getElementById('g8board').style.display = 'block';
+
+  doubleFirst = null;
+  g8timeLeft = 60;
+
+  const color = g8currentPlayer === 0 ? 'var(--blue)' : 'var(--purple)';
+  document.getElementById('g8playerLabel').textContent = '👤 ' + g8names[g8currentPlayer];
+  document.getElementById('g8playerLabel').style.color = color;
+  const timerEl = document.getElementById('g8timer');
+  timerEl.style.display = 'block';
+  timerEl.textContent = '60';
+  timerEl.style.color = 'var(--red)';
+  document.getElementById('g8pairsLabel').textContent = '✅ ' + g8scores[g8currentPlayer];
+
+  renderDoubleGrid();
+
+  g8timerInterval = setInterval(() => {
+    g8timeLeft--;
+    timerEl.textContent = g8timeLeft;
+    if(g8timeLeft <= 0) {
+      clearInterval(g8timerInterval);
+      endTurn();
+    }
+  }, 1000);
+}
+
+function endTurn() {
+  clearInterval(g8timerInterval);
+  g8scores[g8currentPlayer] = doublePairsFound;
+
+  if(g8currentPlayer === 0) {
+    g8currentPlayer = 1;
+    doubleMatched = [];
+    doublePairsFound = 0;
+    buildDeck();
+    startG8Player(2);
+  } else {
+    showG8Result();
+  }
+}
+
+function showG8Result() {
+  document.getElementById('g8board').style.display = 'none';
+  document.getElementById('g8result').style.display = 'block';
+  const s1 = g8scores[0], s2 = g8scores[1];
+  const n1 = g8names[0], n2 = g8names[1];
+  let txt = `${n1}: ${s1} זוגות<br>${n2}: ${s2} זוגות<br><br>`;
+  if(s1 > s2) txt += `🏆 ${n1} ניצח!`;
+  else if(s2 > s1) txt += `🏆 ${n2} ניצח!`;
+  else txt += `🤝 תיקו!`;
+  document.getElementById('g8resultText').innerHTML = txt;
+}
+
+function renderDoubleGrid() {
+  const grid = document.getElementById('memGrid');
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = 'repeat(4,1fr)';
+  grid.style.gap = '8px';
+
+  doubleDeck.forEach((card, i) => {
+    const el = document.createElement('div');
+    el.id = 'dc' + i;
+    const isMatched = doubleMatched.includes(i);
+    const isLetter = card.type === 'letter';
+    el.style.cssText = `
+      aspect-ratio:1;border-radius:50%;
+      background:${isMatched ? '#D4EDDA' : isLetter ? 'linear-gradient(135deg,var(--blue),var(--purple))' : 'white'};
+      display:flex;align-items:center;justify-content:center;
+      font-size:${isLetter ? '2.4rem' : '3.2rem'};
+      font-family:${isLetter ? "'Fredoka One',cursive" : 'inherit'};
+      color:${isMatched ? '#2a7a4a' : isLetter ? 'white' : 'inherit'};
+      cursor:${isMatched ? 'default' : 'pointer'};transition:all 0.2s;
+      box-shadow:0 3px 12px rgba(0,0,0,0.12);
+      border:3px solid ${isMatched ? 'var(--green)' : '#eee'};
+      font-weight:bold;pointer-events:${isMatched ? 'none' : 'auto'};
+    `;
+    el.textContent = card.value;
+    if(!isMatched) el.onclick = () => selectDouble(i);
+    grid.appendChild(el);
+  });
+}
+
+function selectDouble(i) {
+  if(doubleMatched.includes(i)) return;
+  const card = document.getElementById('dc' + i);
+
+  // Deselect if same card tapped again
+  if(doubleFirst === i) {
+    doubleFirst = null;
+    card.style.borderColor = '#eee';
+    card.style.boxShadow = '0 3px 12px rgba(0,0,0,0.12)';
+    card.style.transform = 'scale(1)';
+    return;
+  }
+
+  if(doubleFirst === null) {
+    doubleFirst = i;
+    card.style.borderColor = 'var(--gold)';
+    card.style.boxShadow = '0 0 0 4px #F5C84244';
+    card.style.transform = 'scale(1.1)';
+  } else {
+    const cardA = doubleDeck[doubleFirst];
+    const cardB = doubleDeck[i];
+    const prevIdx = doubleFirst;
+    doubleFirst = null;
+
+    if(cardA.id === cardB.id && cardA.type !== cardB.type) {
+      doublePairsFound++;
+      g8scores[g8currentPlayer] = doublePairsFound;
+      doubleMatched.push(prevIdx, i);
+      [prevIdx, i].forEach(idx => {
+        const el = document.getElementById('dc' + idx);
+        el.style.borderColor = 'var(--green)';
+        el.style.background = '#D4EDDA';
+        el.style.color = '#2a7a4a';
+        el.style.transform = 'scale(1)';
+        el.style.cursor = 'default';
+        el.style.pointerEvents = 'none';
+        el.style.boxShadow = '0 0 0 4px #57CC9944';
+      });
+      document.getElementById('g8pairsLabel').textContent = '✅ ' + doublePairsFound;
+      if(doubleMatched.length === doubleDeck.length) {
+        clearInterval(g8timerInterval);
+        setTimeout(endTurn, 500);
+      }
+    } else {
+      // No match — reset first card highlight, block both with red X
+      const prevCard = document.getElementById('dc' + prevIdx);
+      prevCard.style.borderColor = '#eee';
+      prevCard.style.boxShadow = '0 3px 12px rgba(0,0,0,0.12)';
+      prevCard.style.transform = 'scale(1)';
+      [prevIdx, i].forEach(idx => {
+        const el = document.getElementById('dc' + idx);
+        el.style.borderColor = 'var(--red)';
+        el.style.background = '#FFE8E8';
+        el.style.transform = 'scale(1)';
+        el.style.pointerEvents = 'none';
+        el.style.cursor = 'default';
+        const orig = el.textContent;
+        el.innerHTML = `<span style="position:relative;display:inline-block;">${orig}<span style="position:absolute;top:-8px;right:-8px;font-size:1rem;">❌</span></span>`;
+      });
+    }
+  }
+}
+
+</script>
+</body>
+</html>
