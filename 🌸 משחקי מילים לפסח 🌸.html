@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///Users/lilachcaspary/Downloads/index%20(3).html -->
+<!-- saved from url=(0054)file:///Users/lilachcaspary/Downloads/index%20(5).html -->
 <html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -236,7 +236,14 @@
     min-height: 50px;
   }
 
-  .syl-chip {
+  .syl-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: 2px solid #ccc;
+    transition: background 0.2s, transform 0.2s;
+  }
     background: var(--gold);
     color: white;
     font-family: 'Fredoka One', cursive;
@@ -286,8 +293,7 @@
   .img-option:hover { transform: scale(1.04); border-color: var(--blue); }
   .img-option.correct { background: #E8FFF5; border-color: var(--green); }
   .img-option.wrong { background: #FFE8E8; border-color: var(--red); }
-  .img-option .emoji { font-size: 2.5rem; display: block; margin-bottom: 6px; }
-  .img-option .label { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+  .img-option .emoji { font-size: 4.5rem; display: block; }
 
   /* GAME 4 - Word Count */
   .sentence-card {
@@ -481,8 +487,8 @@
   <div class="menu">
     <button class="menu-btn" onclick="startGame(2)">
       <span class="icon">🥁</span>
-      <span class="title">כמה הברות?</span>
-      <span class="sub">ספירת הברות במילה</span>
+      <span class="title">כמה תתי-הברות?</span>
+      <span class="sub">ספרו את תתי-ההברות במילה</span>
     </button>
     <button class="menu-btn" onclick="startGame(3)">
       <span class="icon" style="font-family:&#39;Fredoka One&#39;,cursive;">א</span>
@@ -509,7 +515,61 @@
       <span class="title">תפזורת מילים!</span>
       <span class="sub">מצאו מילות פסח ברשת</span>
     </button>
+    <button class="menu-btn" onclick="startGame(8)">
+      <span class="icon">🃏</span>
+      <span class="title">משחק ההתאמה!</span>
+      <span class="sub">מצאו זוגות תמונה + אות — 2 שחקנים</span>
+    </button>
   </div>
+</div>
+
+<!-- GAME 8: 2-PLAYER MATCHING -->
+<div class="game-screen" id="game8">
+  <button class="back-btn" onclick="goHome()">← חזרה</button>
+  <div class="game-title" style="color:var(--purple)">🃏 משחק ההתאמה!</div>
+
+  <!-- INTRO SCREEN -->
+  <div id="g8intro" style="text-align:center;padding:16px 0;">
+    <div style="font-size:3rem;margin-bottom:8px;">👫</div>
+    <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.3rem;color:var(--blue);margin-bottom:20px;">שני שחקנים — כל אחד דקה אחת!</div>
+    <div style="background:white;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
+      <div style="font-size:1.5rem;">👤</div>
+      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;margin:6px 0;">שם שחקן 1:</div>
+      <input id="p1name" type="text" placeholder="שם..." style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;border:2px solid var(--blue);border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;">
+    </div>
+    <div style="background:white;border-radius:20px;padding:16px;margin-bottom:20px;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
+      <div style="font-size:1.5rem;">👤</div>
+      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;margin:6px 0;">שם שחקן 2:</div>
+      <input id="p2name" type="text" placeholder="שם..." style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;border:2px solid var(--purple);border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;">
+    </div>
+    <button class="next-btn" onclick="startG8Player(1)" style="display:inline-block;">התחילו! ▶</button>
+  </div>
+
+  <!-- READY SCREEN (between turns) -->
+  <div id="g8ready" style="display:none;text-align:center;padding:20px 0;">
+    <div style="font-size:3rem;margin-bottom:12px;">⏳</div>
+    <div id="g8readyText" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.4rem;color:var(--blue);margin-bottom:20px;"></div>
+    <button class="next-btn" onclick="beginTurn()" style="display:inline-block;">התחל תור! ▶</button>
+  </div>
+
+  <!-- GAME BOARD -->
+  <div id="g8board" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div id="g8playerLabel" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--purple);"></div>
+      <div id="g8timer" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.6rem;color:var(--red);min-width:48px;text-align:center;">60</div>
+      <div id="g8pairsLabel" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1rem;color:var(--green);">✅ 0</div>
+    </div>
+    <div id="memGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin:0 auto;"></div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="g8result" style="display:none;text-align:center;padding:16px 0;">
+    <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
+    <div id="g8resultText" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.3rem;color:var(--blue);margin-bottom:16px;line-height:1.6;"></div>
+    <button class="next-btn" onclick="initMemory()" style="display:inline-block;">🔄 משחק חדש</button>
+  </div>
+
+  <div class="feedback-box" id="fb8"></div>
 </div>
 <div class="game-screen" id="game1">
   <button class="back-btn" onclick="goHome()">← חזרה</button>
@@ -535,8 +595,8 @@
 <!-- GAME 2: SYLLABLES -->
 <div class="game-screen" id="game2">
   <button class="back-btn" onclick="goHome()">← חזרה</button>
-  <div class="game-title" style="color:var(--red)">🥁 כמה הברות?</div>
-  <div class="game-subtitle">הקישו על המספר הנכון של הברות במילה</div>
+  <div class="game-title" style="color:var(--red)">🥁 כמה תתי-הברות?</div>
+  <div class="game-subtitle">הקישו על המספר הנכון של תתי-ההברות במילה</div>
   <div class="score-bar">
     <div class="score-badge" id="score2">⭐ 0</div>
     <div class="progress-bar-wrap" style="flex:1">
@@ -548,6 +608,7 @@
     <div class="emoji" id="sylEmoji">🫓</div>
     <div class="word" id="sylWord">מַצָּה</div>
   </div>
+  <div id="sylDots" style="display:flex;justify-content:center;gap:12px;margin:10px 0 4px;"></div>
   <div class="syllable-display" id="sylDisplay"></div>
   <div class="syllable-buttons">
     <button class="syllable-btn" onclick="answerSyl(1)">1</button>
@@ -629,8 +690,7 @@
     <span id="qnum5" style="font-size:0.85rem;color:#888">שאלה 1/6</span>
   </div>
   <div class="last-sound-card" id="lastCard">
-    <div class="emoji" id="lastEmoji">🌿</div>
-    <div class="word" id="lastWord">כַּרְפַּס</div>
+    <div class="emoji" id="lastEmoji" style="font-size:5rem;">🥗</div>
   </div>
   <div class="letter-options" id="letterOptions"></div>
   <div class="feedback-box" id="fb5"></div>
@@ -681,31 +741,65 @@ const rhymeData = [
   { emoji: '🍷', word: 'יַיִן', correct: {emoji:'🔑', word:'מַיִן'}, wrong: [{emoji:'🐟',word:'דָּג'},{emoji:'🍎',word:'תַּפּוּחַ'}] },
   { emoji: '🫓', word: 'מַצָּה', correct: {emoji:'🌳',word:'עֵצָה'}, wrong: [{emoji:'🐕',word:'כֶּלֶב'},{emoji:'🌙',word:'לַיְלָה'}] },
   { emoji: '🪑', word: 'כִּסֵּא', correct: {emoji:'🌊',word:'יַמָּה'}, wrong: [{emoji:'⭐',word:'כּוֹכָב'},{emoji:'🦁',word:'אַרְיֵה'}] },
-  { emoji: '🌿', word: 'כַּרְפַּס', correct: {emoji:'🥕',word:'גֶּזֶר'}, wrong: [{emoji:'🎶',word:'שִׁיר'},{emoji:'🌈',word:'קֶשֶׁת'}] },
+  { emoji: '🥗', word: 'כַּרְפַּס', correct: {emoji:'🥕',word:'גֶּזֶר'}, wrong: [{emoji:'🎶',word:'שִׁיר'},{emoji:'🌈',word:'קֶשֶׁת'}] },
   { emoji: '🐑', word: 'כֶּבֶשׂ', correct: {emoji:'🧀',word:'גֶּבֶן'}, wrong: [{emoji:'🌺',word:'פֶּרַח'},{emoji:'🎁',word:'מַתָּנָה'}] },
   { emoji: '🥗', word: 'חֲזֶרֶת', correct: {emoji:'🌸',word:'בֶּרֶכֶת'}, wrong: [{emoji:'🚂',word:'רַכֶּבֶת'},{emoji:'🏠',word:'בַּיִת'}] },
 ];
 
 const sylData = [
-  { emoji:'🔺', word:'פִּירָמִידָה', syllables:['פִּי','רָ','מִי','דָה'], count:4, display:'פירמידה' },
-  { emoji:'🫓', word:'מַצָּה', syllables:['מַ','צָּה'], count:2, display:'מצה' },
-  { emoji:'🌿', word:'כַּרְפַּס', syllables:['כַּר','פַּס'], count:2, display:'כרפס' },
-  { emoji:'📖', word:'הַגָּדָה', syllables:['הַ','גָּ','דָה'], count:3, display:'הגדה' },
-  { emoji:'🥬', word:'מָרוֹר', syllables:['מָ','רוֹר'], count:2, display:'מרור' },
-  { emoji:'👨‍👩‍👧‍👦', word:'סְעוּדָה', syllables:['סְ','עוּ','דָה'], count:3, display:'סעודה' },
+  { emoji:'🔺', word:'פִּירָמִידָה', syllables:['פי','ר','מי','דה'], count:4, display:'פירמידה' },
+  { emoji:'🫓', word:'מַצָּה', syllables:['מ','צה'], count:2, display:'מצה' },
+  { emoji:'🥗', word:'כַּרְפַּס', syllables:['כ','ר','פ','ס'], count:4, display:'כרפס' },
+  { emoji:'📖', word:'הַגָּדָה', syllables:['ה','ג','דה'], count:3, display:'הגדה' },
+  { emoji:'🥬', word:'מָרוֹר', syllables:['מ','רו','ר'], count:3, display:'מרור' },
+  { emoji:'👨‍👩‍👧‍👦', word:'סְעוּדָה', syllables:['ס','עו','דה'], count:3, display:'סעודה' },
 ];
+
+const sylData2 = [
+  { emoji:'☀️', word:'שֶׁמֶשׁ', syllables:['ש','מ','ש'], count:3, display:'שמש' },
+  { emoji:'🦋', word:'פַּרְפַּר', syllables:['פ','ר','פ','ר'], count:4, display:'פרפר' },
+  { emoji:'🍕', word:'פִּיצָּה', syllables:['פי','צה'], count:2, display:'פיצה' },
+  { emoji:'🐇', word:'אַרְנָב', syllables:['א','ר','נ','ב'], count:4, display:'ארנב' },
+  { emoji:'👃', word:'אַף', syllables:['א','ף'], count:2, display:'אף' },
+  { emoji:'🍞', word:'לֶחֶם', syllables:['ל','ח','ם'], count:3, display:'לחם' },
+];
+
+const sylData3 = [
+  { emoji:'🌸', word:'פֶּרַח', syllables:['פ','ר','ח'], count:3, display:'פרח' },
+  { emoji:'⏰', word:'שָׁעוֹן', syllables:['ש','עו','ן'], count:3, display:'שעון' },
+  { emoji:'🪑', word:'כִּסֵּא', syllables:['כ','סא'], count:2, display:'כיסא' },
+  { emoji:'🚪', word:'דֶּלֶת', syllables:['ד','ל','ת'], count:3, display:'דלת' },
+  { emoji:'🐕', word:'כֶּלֶב', syllables:['כ','ל','ב'], count:3, display:'כלב' },
+  { emoji:'👜', word:'תִּיק', syllables:['תי','ק'], count:2, display:'תיק' },
+];
+
+let sylRoundIndex = 0;
 
 const firstSoundData = [
   { letter:'מ', correct:{emoji:'🫓',label:'מצה'}, wrong:[{emoji:'🍷',label:'יין'},{emoji:'🪑',label:'כיסא'}] },
-  { letter:'כ', correct:{emoji:'🥃',label:'כוס'}, wrong:[{emoji:'🌿',label:'פרח'},{emoji:'🐟',label:'דג'}] },
+  { letter:'כ', correct:{emoji:'🥃',label:'כוס'}, wrong:[{emoji:'🌸',label:'פרח'},{emoji:'🐟',label:'דג'}] },
   { letter:'פ', correct:{emoji:'🦋',label:'פרפר'}, wrong:[{emoji:'🌙',label:'לילה'},{emoji:'🍎',label:'תפוח'}] },
-  { letter:'ס', correct:{emoji:'👨‍👩‍👧‍👦',label:'סעודה'}, wrong:[{emoji:'🎶',label:'שיר'},{emoji:'🌷',label:'פרח'}] },
-  { letter:'ד', correct:{emoji:'🐟',label:'דג'}, wrong:[{emoji:'🍷',label:'יין'},{emoji:'🌿',label:'כרפס'}] },
-  { letter:'א', correct:{emoji:'🌸',label:'אביב'}, wrong:[{emoji:'🧀',label:'גבינה'},{emoji:'🥕',label:'גזר'}] },
-  { letter:'ח', correct:{emoji:'🎉',label:'חג'}, wrong:[{emoji:'🐟',label:'דג'},{emoji:'🫓',label:'מצה'}] },
+  { letter:'ס', correct:{emoji:'🍲',label:'סיר'}, wrong:[{emoji:'🎶',label:'שיר'},{emoji:'🌷',label:'פרח'}] },
+  { letter:'ד', correct:{emoji:'🐟',label:'דג'}, wrong:[{emoji:'🍷',label:'יין'},{emoji:'🥗',label:'כרפס'}] },
+  { letter:'א', correct:{emoji:'🐇',label:'ארנב'}, wrong:[{emoji:'🧀',label:'גבינה'},{emoji:'🥕',label:'גזר'}] },
+  { letter:'ח', correct:{emoji:'🐌',label:'חילזון'}, wrong:[{emoji:'🐟',label:'דג'},{emoji:'🫓',label:'מצה'}] },
   { letter:'מ', correct:{emoji:'🗺️',label:'מפה'}, wrong:[{emoji:'🍷',label:'יין'},{emoji:'🐸',label:'צפרדע'}] },
   { letter:'י', correct:{emoji:'🍷',label:'יין'}, wrong:[{emoji:'🌸',label:'אביב'},{emoji:'🫓',label:'מצה'}] },
 ];
+
+const firstSoundData2 = [
+  { letter:'ח', correct:{emoji:'👕',label:'חולצה'}, wrong:[{emoji:'🍞',label:'לחם'},{emoji:'☀️',label:'שמש'}] },
+  { letter:'ל', correct:{emoji:'🍞',label:'לחם'}, wrong:[{emoji:'🌂',label:'מטריה'},{emoji:'🫒',label:'זית'}] },
+  { letter:'ש', correct:{emoji:'☀️',label:'שמש'}, wrong:[{emoji:'🏠',label:'בית'},{emoji:'🌽',label:'תירס'}] },
+  { letter:'מ', correct:{emoji:'🌂',label:'מטריה'}, wrong:[{emoji:'🐍',label:'נחש'},{emoji:'🍞',label:'לחם'}] },
+  { letter:'ז', correct:{emoji:'🫒',label:'זית'}, wrong:[{emoji:'☀️',label:'שמש'},{emoji:'🏠',label:'בית'}] },
+  { letter:'ב', correct:{emoji:'🏠',label:'בית'}, wrong:[{emoji:'🌽',label:'תירס'},{emoji:'🫒',label:'זית'}] },
+  { letter:'ת', correct:{emoji:'🌽',label:'תירס'}, wrong:[{emoji:'🌂',label:'מטריה'},{emoji:'🐍',label:'נחש'}] },
+  { letter:'מ', correct:{emoji:'🎁',label:'מתנה'}, wrong:[{emoji:'🍞',label:'לחם'},{emoji:'🏠',label:'בית'}] },
+  { letter:'נ', correct:{emoji:'🐍',label:'נחש'}, wrong:[{emoji:'☀️',label:'שמש'},{emoji:'🌽',label:'תירס'}] },
+];
+
+let firstSoundRoundIndex = 0;
 
 // All Hebrew letters (no final forms)
 const hebrewAlphabet = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י','כ','ל','מ','נ','ס','ע','פ','צ','ק','ר','ש','ת'];
@@ -727,7 +821,7 @@ const pesachWordsByLetter = {
   'ג':[ {emoji:'🍦',word:'גלידה'},{emoji:'🐪',word:'גמל'} ],
   'ד':[ {emoji:'🐟',word:'דג'},{emoji:'🍯',word:'דבש'} ],
   'ה':[ {emoji:'📖',word:'הגדה'},{emoji:'🏔️',word:'הר'} ],
-  'ו':[ {emoji:'🌹',word:'ורד'},{emoji:'🩷',word:'ורוד'} ],
+  'ו':[ {emoji:'🌹',word:'ורד'},{emoji:'🪝',word:'וו'} ],
   'ז':[ {emoji:'🫒',word:'זית'},{emoji:'🪰',word:'זבוב'} ],
   'ח':[ {emoji:'🌾',word:'חיטה'},{emoji:'🥛',word:'חלב'} ],
   'ט':[ {emoji:'🦚',word:'טווס'},{emoji:'🐯',word:'טיגריס'} ],
@@ -762,27 +856,26 @@ const distractorImages = [
   {emoji:'🐱',word:'חתול',letter:'ח'},
 ];
 
+const letterRoundPool1 = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י','כ'];
+const letterRoundPool2 = ['ל','מ','נ','ס','ע','פ','צ','ק','ר','ש','ת'];
+let letterRoundIndex = 0;
+
 function buildLetterRounds() {
+  const pool = letterRoundIndex % 2 === 0 ? letterRoundPool1 : letterRoundPool2;
   const rounds = [];
-  const letters = shuffle([...hebrewAlphabet]).slice(0, 8);
+  const letters = shuffle([...pool]).slice(0, 8);
   letters.forEach((target) => {
     const similar = similarLetters[target] || [];
-    const pool = hebrewAlphabet.filter(l => l !== target);
-    const distractorLetters = shuffle([...similar, ...shuffle(pool.filter(l=>!similar.includes(l)))]).slice(0,3);
+    const poolAll = hebrewAlphabet.filter(l => l !== target);
+    const distractorLetters = shuffle([...similar, ...shuffle(poolAll.filter(l=>!similar.includes(l)))]).slice(0,3);
 
-    // Target images (correct)
     const targetImgs = shuffle([...(pesachWordsByLetter[target]||[])]);
-    // Distractor images (wrong — different starting letter)
     const wrongImgs = shuffle(distractorImages.filter(d=>d.letter!==target));
 
-    // Build 16 cells (4x4): mix of letters and images
-    // 3 target-letter + 2 target-image = 5 correct, 11 wrong
     const cells = [];
-
     const targetLetterCount = 3;
     const targetImgCount = Math.min(2, targetImgs.length);
     const correctTotal = targetLetterCount + targetImgCount;
-
     const wrongLetterCount = 7;
     const wrongImgCount = 4;
 
@@ -800,7 +893,7 @@ function buildLetterRounds() {
 let letterRounds = [];
 
 const lastSoundData = [
-  { emoji:'🌿', word:'כַּרְפַּס', display:'כרפס', lastLetter:'ס', options:['ס','ן','ר','ת'] },
+  { emoji:'🐴', word:'סוּס', display:'סוס', lastLetter:'ס', options:['ס','ן','ר','ת'] },
   { emoji:'🔺', word:'פִּירָמִידָה', display:'פירמידה', lastLetter:'ה', options:['ת','ה','א','ס'] },
   { emoji:'🫓', word:'מַצָּה', display:'מצה', lastLetter:'ה', options:['ת','ה','א','ס'] },
   { emoji:'🪑', word:'כִּסֵּא', display:'כיסא', lastLetter:'א', options:['ה','ס','א','ן'] },
@@ -810,6 +903,21 @@ const lastSoundData = [
   { emoji:'🌨️', word:'בָּרָד', display:'ברד', lastLetter:'ד', options:['ד','ר','ת','ב'] },
   { emoji:'🐸', word:'צְפַרְדֵּעַ', display:'צפרדע', lastLetter:'ע', options:['ע','א','ה','י'] },
 ];
+
+const lastSoundData2 = [
+  { emoji:'🐍', word:'נָחָשׁ', display:'נחש', lastLetter:'ש', options:['ש','ס','ת','ב'] },
+  { emoji:'🍽️', word:'צַלַּחַת', display:'צלחת', lastLetter:'ת', options:['ת','ד','ה','ס'] },
+  { emoji:'👕', word:'חוּלְצָה', display:'חולצה', lastLetter:'ה', options:['ה','ת','א','ס'] },
+  { emoji:'🏠', word:'בַּיִת', display:'בית', lastLetter:'ת', options:['ת','ד','ב','ה'] },
+  { emoji:'🐇', word:'אַרְנָב', display:'ארנב', lastLetter:'ב', options:['ב','פ','ד','ר'] },
+  { emoji:'🫑', word:'פִּלְפֵּל', display:'פלפל', lastLetter:'ל', options:['ל','ר','נ','ד'] },
+  { emoji:'⚙️', word:'גַּלְגַּל', display:'גלגל', lastLetter:'ל', options:['ל','ר','כ','ד'] },
+  { emoji:'🍎', word:'תַּפּוּחַ', display:'תפוח', lastLetter:'ח', options:['ח','כ','ה','ת'] },
+  { emoji:'⭕', word:'עִגּוּל', display:'עיגול', lastLetter:'ל', options:['ל','ר','נ','ב'] },
+  { emoji:'🌽', word:'תִּירָס', display:'תירס', lastLetter:'ס', options:['ס','ת','ז','ר'] },
+];
+
+let lastSoundRoundIndex = 0;
 
 // ============ STATE ============
 const state = {
@@ -825,17 +933,22 @@ const state = {
 // ============ NAVIGATION ============
 function goHome() {
   document.getElementById('homeScreen').classList.remove('hidden');
-  for(let i=1;i<=7;i++) document.getElementById('game'+i).classList.remove('active');
+  for(let i=1;i<=8;i++) document.getElementById('game'+i).classList.remove('active');
 }
 
 function startGame(n) {
   document.getElementById('homeScreen').classList.add('hidden');
-  for(let i=1;i<=7;i++) document.getElementById('game'+i).classList.remove('active');
+  for(let i=1;i<=8;i++) document.getElementById('game'+i).classList.remove('active');
   document.getElementById('game'+n).classList.add('active');
+  state[n] = state[n] || {q:0,score:0,total:0,answered:false};
   state[n].q = 0; state[n].score = 0; state[n].answered = false;
-  if(n===4) letterRounds = [];
+  if(n===2) { sylRoundIndex++; state[2].total = ([sylData,sylData2,sylData3][sylRoundIndex % 3]).length; }
+  if(n===3) { firstSoundRoundIndex++; state[3].total = (firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2).length; }
+  if(n===4) { letterRounds = []; letterRoundIndex++; state[4].total = 8; }
+  if(n===5) { lastSoundRoundIndex++; state[5].total = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length; }
   if(n===6) { renderSongQuestion(6); return; }
   if(n===7) { initWordSearch(); return; }
+  if(n===8) { initMemory(); return; }
   renderQuestion(n);
 }
 
@@ -863,7 +976,7 @@ function updateScoreBar(n) {
 
 function nextQuestion(n) {
   state[n].q++;
-  const totals = {1:rhymeData.length,2:sylData.length,3:firstSoundData.length,4:8,5:lastSoundData.length,6:songData.length};
+  const totals = {1:rhymeData.length,2:([sylData,sylData2,sylData3][sylRoundIndex % 3]).length,3:(firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2).length,4:8,5:(lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length,6:songData.length};
   if(state[n].q >= (totals[n]||state[n].total)) { showWin(n); return; }
   if(n===4) { document.getElementById('letterGrid').innerHTML=''; }
   if(n===6) { renderSongQuestion(6); return; }
@@ -936,31 +1049,63 @@ function renderRhyme() {
 
 // ============ GAME 2: SYLLABLES ============
 function renderSyl() {
-  const d = sylData[state[2].q];
+  const d = ([sylData,sylData2,sylData3][sylRoundIndex % 3])[state[2].q];
   document.getElementById('sylEmoji').textContent = d.emoji;
   document.getElementById('sylWord').textContent = d.word;
   document.getElementById('sylDisplay').innerHTML = '';
+  // Draw 4 empty dots with placeholder labels
+  const dotsEl = document.getElementById('sylDots');
+  dotsEl.innerHTML = '';
+  for(let i=0; i<4; i++) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;';
+    const dot = document.createElement('div');
+    dot.className = 'syl-dot';
+    dot.id = 'dot'+i;
+    const lbl = document.createElement('div');
+    lbl.id = 'dotlbl'+i;
+    lbl.style.cssText = 'font-family:"Fredoka One",cursive;font-size:0.9rem;color:transparent;min-width:20px;text-align:center;';
+    lbl.textContent = '—';
+    wrap.appendChild(dot);
+    wrap.appendChild(lbl);
+    dotsEl.appendChild(wrap);
+  }
 }
 
 function answerSyl(n) {
   if(state[2].answered) return;
   state[2].answered = true;
-  const d = sylData[state[2].q];
+  const d = ([sylData,sylData2,sylData3][sylRoundIndex % 3])[state[2].q];
+  const correct = n === d.count;
+
+  // Color dots and show syllable labels
+  for(let i=0; i<4; i++) {
+    const dot = document.getElementById('dot'+i);
+    const lbl = document.getElementById('dotlbl'+i);
+    if(!dot || !lbl) continue;
+    dot.style.transition = `background 0.2s ${i*0.1}s, transform 0.2s ${i*0.1}s`;
+    if(i < d.count) {
+      dot.style.background = correct ? 'var(--green)' : 'var(--red)';
+      dot.style.transform = 'scale(1.2)';
+      lbl.textContent = d.syllables[i];
+      lbl.style.color = correct ? 'var(--green)' : 'var(--red)';
+      lbl.style.transition = `color 0.2s ${i*0.1}s`;
+    } else {
+      dot.style.background = '#e0e0e0';
+      lbl.style.color = 'transparent';
+    }
+  }
+
+  // Show syllable chips
   const display = document.getElementById('sylDisplay');
   display.innerHTML = '';
-  d.syllables.forEach(s=>{
-    const chip = document.createElement('div');
-    chip.className = 'syl-chip';
-    chip.textContent = s;
-    display.appendChild(chip);
-  });
-  const correct = n === d.count;
-  showFeedback(2, correct, correct ? 'ספרתם נכון: '+d.count+' הברות!' : 'יש '+d.count+' הברות: '+d.syllables.join('—'));
+
+  showFeedback(2, correct, correct ? 'ספרתם נכון: '+d.count+' תתי-הברות!' : 'יש '+d.count+' תתי-הברות: '+d.syllables.join('—'));
 }
 
 // ============ GAME 3: FIRST SOUND ============
 function renderFirstSound() {
-  const d = firstSoundData[state[3].q];
+  const d = (firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2)[state[3].q];
   document.getElementById('firstSoundLetter').textContent = d.letter;
   const opts = shuffle([d.correct, ...d.wrong]);
   const container = document.getElementById('firstSoundOptions');
@@ -968,7 +1113,8 @@ function renderFirstSound() {
   opts.forEach(opt => {
     const div = document.createElement('div');
     div.className = 'img-option';
-    div.innerHTML = `<span class="emoji">${opt.emoji}</span><span class="label">${opt.label}</span>`;
+    div.innerHTML = `<span class="emoji">${opt.emoji}</span>`;
+    div.dataset.label = opt.label;
     div.onclick = () => {
       if(state[3].answered) return;
       state[3].answered = true;
@@ -976,7 +1122,7 @@ function renderFirstSound() {
       div.classList.add(correct?'correct':'wrong');
       if(!correct) {
         container.querySelectorAll('.img-option').forEach(el=>{
-          if(el.querySelector('.label').textContent === d.correct.label) el.classList.add('correct');
+          if(el.dataset.label === d.correct.label) el.classList.add('correct');
         });
       }
       showFeedback(3, correct, correct?'"'+d.correct.label+'" מתחילה ב—'+d.letter:'המילה שמתחילה ב—'+d.letter+' היא "'+d.correct.label+'"');
@@ -1063,9 +1209,9 @@ function checkLetterGame() {
 
 // ============ GAME 5: LAST SOUND ============
 function renderLastSound() {
-  const d = lastSoundData[state[5].q];
+  const d = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2)[state[5].q];
   document.getElementById('lastEmoji').textContent = d.emoji;
-  document.getElementById('lastWord').textContent = d.word;
+
   const container = document.getElementById('letterOptions');
   container.innerHTML = '';
   shuffle([...d.options]).forEach(letter => {
@@ -1155,7 +1301,7 @@ function renderSongQuestion(gameNum) {
 
 // ============ GAME 7: WORD SEARCH ============
 const wsWords = ['מצה','סדר','יין','פסח','מרור','כרפס','הגדה','אביב','חרוסת','ברד'];
-const wsEmojis = {'מצה':'🫓','סדר':'🍽️','יין':'🍷','פסח':'🎉','מרור':'🥬','כרפס':'🌿','הגדה':'📖','אביב':'🌸','חרוסת':'🍯','ברד':'🌨️'};
+const wsEmojis = {'מצה':'🫓','סדר':'🍽️','יין':'🍷','פסח':'🎉','מרור':'🥬','כרפס':'🥗','הגדה':'📖','אביב':'🌸','חרוסת':'🍯','ברד':'🌨️'};
 const GRID_SIZE = 9;
 
 let wsGrid = [], wsPlaced = [], wsFound = [], wsSelecting = false, wsStart = null, wsCurrent = [];
@@ -1244,7 +1390,7 @@ function renderWordSearch() {
       cell.textContent = wsGrid[r][c];
       cell.style.cssText = `
         width:${cellSize}px;height:${cellSize}px;display:flex;align-items:center;justify-content:center;
-        font-family:'Fredoka One',cursive;font-size:${cellSize*0.5}px;border-radius:6px;
+        font-family:'Fredoka One',cursive;font-size:${cellSize*0.65}px;border-radius:6px;
         background:#f5f5f5;cursor:pointer;user-select:none;transition:background 0.1s;
         border:1px solid #e8e8e8;
       `;
@@ -1340,6 +1486,239 @@ function checkSelection() {
         document.getElementById('next7').style.display='inline-block';
       }
       return;
+    }
+  }
+}
+
+// ============ GAME 8: 2-PLAYER MATCHING ============
+const doublePairs = [
+  {id:'נ', a:'🕯️', b:'נ'},
+  {id:'מ', a:'🫓', b:'מ'},
+  {id:'י', a:'🍷', b:'י'},
+  {id:'ח', a:'👕', b:'ח'},
+  {id:'ה', a:'📖', b:'ה'},
+  {id:'ע', a:'🎂', b:'ע'},
+  {id:'צ', a:'🐸', b:'צ'},
+  {id:'א', a:'🦁', b:'א'},
+  {id:'ד', a:'🍯', b:'ד'},
+  {id:'ס', a:'🍽️', b:'ס'},
+  {id:'ב', a:'🥚', b:'ב'},
+  {id:'פ', a:'🌸', b:'פ'},
+  {id:'ת', a:'🍎', b:'ת'},
+];
+
+let doubleFirst = null, doubleMatched = [], doubleMoves = 0, doublePairsFound = 0;
+let doubleDeck = [];
+const doublePairsBoard2 = [
+  {id:'ש', a:'7️⃣', b:'ש'},
+  {id:'ע', a:'🍇', b:'ע'},
+  {id:'מ', a:'🎁', b:'מ'},
+  {id:'ת', a:'🍎', b:'ת'},
+  {id:'כ', a:'🥃', b:'כ'},
+  {id:'ל', a:'🍞', b:'ל'},
+  {id:'צ', a:'🍽️', b:'צ'},
+  {id:'ס', a:'🍲', b:'ס'},
+  {id:'ג', a:'🍦', b:'ג'},
+  {id:'ז', a:'🫒', b:'ז'},
+  {id:'א', a:'🌰', b:'א'},
+];
+
+let g8boardIndex = 0;
+let g8scores = [0, 0];
+let g8currentPlayer = 0;
+let g8timerInterval = null;
+let g8timeLeft = 60;
+let g8names = ['שחקן 1', 'שחקן 2'];
+
+function initMemory() {
+  document.getElementById('g8intro').style.display = 'block';
+  document.getElementById('g8ready').style.display = 'none';
+  document.getElementById('g8board').style.display = 'none';
+  document.getElementById('g8result').style.display = 'none';
+  document.getElementById('fb8').textContent = '';
+  document.getElementById('fb8').className = 'feedback-box';
+  document.getElementById('p1name').value = '';
+  document.getElementById('p2name').value = '';
+  g8scores = [0, 0];
+  // Alternate board each new game
+  g8boardIndex = (g8boardIndex + 1) % 2;
+}
+
+function buildDeck() {
+  const pool = g8boardIndex === 0 ? doublePairs : doublePairsBoard2;
+  doubleRoundPairs = shuffle([...pool]).slice(0, 8);
+  doubleDeck = shuffle(
+    doubleRoundPairs.flatMap(p => [
+      {id: p.id, type:'img', value: p.a},
+      {id: p.id, type:'letter', value: p.b}
+    ])
+  );
+  doubleFirst = null;
+  doubleMatched = [];
+  doublePairsFound = 0;
+}
+
+function startG8Player(playerNum) {
+  g8names[0] = document.getElementById('p1name').value.trim() || 'שחקן 1';
+  g8names[1] = document.getElementById('p2name').value.trim() || 'שחקן 2';
+  g8currentPlayer = playerNum - 1;
+
+  if(playerNum === 1) buildDeck();
+
+  document.getElementById('g8intro').style.display = 'none';
+  document.getElementById('g8ready').style.display = 'block';
+  document.getElementById('g8board').style.display = 'none';
+  document.getElementById('g8result').style.display = 'none';
+
+  const color = g8currentPlayer === 0 ? 'var(--blue)' : 'var(--purple)';
+  document.getElementById('g8readyText').innerHTML =
+    `<span style="color:${color}">תור ${g8names[g8currentPlayer]}!</span><br>
+     <span style="font-size:1rem;color:#777">לחץ כשאתה מוכן</span>`;
+}
+
+function beginTurn() {
+  document.getElementById('g8ready').style.display = 'none';
+  document.getElementById('g8board').style.display = 'block';
+
+  doubleFirst = null;
+  g8timeLeft = 60;
+
+  const color = g8currentPlayer === 0 ? 'var(--blue)' : 'var(--purple)';
+  document.getElementById('g8playerLabel').textContent = '👤 ' + g8names[g8currentPlayer];
+  document.getElementById('g8playerLabel').style.color = color;
+  const timerEl = document.getElementById('g8timer');
+  timerEl.style.display = 'block';
+  timerEl.textContent = '60';
+  timerEl.style.color = 'var(--red)';
+  document.getElementById('g8pairsLabel').textContent = '✅ ' + g8scores[g8currentPlayer];
+
+  renderDoubleGrid();
+
+  g8timerInterval = setInterval(() => {
+    g8timeLeft--;
+    timerEl.textContent = g8timeLeft;
+    if(g8timeLeft <= 0) {
+      clearInterval(g8timerInterval);
+      endTurn();
+    }
+  }, 1000);
+}
+
+function endTurn() {
+  clearInterval(g8timerInterval);
+  g8scores[g8currentPlayer] = doublePairsFound;
+
+  if(g8currentPlayer === 0) {
+    g8currentPlayer = 1;
+    doubleMatched = [];
+    doublePairsFound = 0;
+    buildDeck();
+    startG8Player(2);
+  } else {
+    showG8Result();
+  }
+}
+
+function showG8Result() {
+  document.getElementById('g8board').style.display = 'none';
+  document.getElementById('g8result').style.display = 'block';
+  const s1 = g8scores[0], s2 = g8scores[1];
+  const n1 = g8names[0], n2 = g8names[1];
+  let txt = `${n1}: ${s1} זוגות<br>${n2}: ${s2} זוגות<br><br>`;
+  if(s1 > s2) txt += `🏆 ${n1} ניצח!`;
+  else if(s2 > s1) txt += `🏆 ${n2} ניצח!`;
+  else txt += `🤝 תיקו!`;
+  document.getElementById('g8resultText').innerHTML = txt;
+}
+
+function renderDoubleGrid() {
+  const grid = document.getElementById('memGrid');
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = 'repeat(4,1fr)';
+  grid.style.gap = '8px';
+
+  doubleDeck.forEach((card, i) => {
+    const el = document.createElement('div');
+    el.id = 'dc' + i;
+    const isMatched = doubleMatched.includes(i);
+    const isLetter = card.type === 'letter';
+    el.style.cssText = `
+      aspect-ratio:1;border-radius:50%;
+      background:${isMatched ? '#D4EDDA' : isLetter ? 'linear-gradient(135deg,var(--blue),var(--purple))' : 'white'};
+      display:flex;align-items:center;justify-content:center;
+      font-size:${isLetter ? '2.4rem' : '3.2rem'};
+      font-family:${isLetter ? "'Fredoka One',cursive" : 'inherit'};
+      color:${isMatched ? '#2a7a4a' : isLetter ? 'white' : 'inherit'};
+      cursor:${isMatched ? 'default' : 'pointer'};transition:all 0.2s;
+      box-shadow:0 3px 12px rgba(0,0,0,0.12);
+      border:3px solid ${isMatched ? 'var(--green)' : '#eee'};
+      font-weight:bold;pointer-events:${isMatched ? 'none' : 'auto'};
+    `;
+    el.textContent = card.value;
+    if(!isMatched) el.onclick = () => selectDouble(i);
+    grid.appendChild(el);
+  });
+}
+
+function selectDouble(i) {
+  if(doubleMatched.includes(i)) return;
+  const card = document.getElementById('dc' + i);
+
+  // Deselect if same card tapped again
+  if(doubleFirst === i) {
+    doubleFirst = null;
+    card.style.borderColor = '#eee';
+    card.style.boxShadow = '0 3px 12px rgba(0,0,0,0.12)';
+    card.style.transform = 'scale(1)';
+    return;
+  }
+
+  if(doubleFirst === null) {
+    doubleFirst = i;
+    card.style.borderColor = 'var(--gold)';
+    card.style.boxShadow = '0 0 0 4px #F5C84244';
+    card.style.transform = 'scale(1.1)';
+  } else {
+    const cardA = doubleDeck[doubleFirst];
+    const cardB = doubleDeck[i];
+    const prevIdx = doubleFirst;
+    doubleFirst = null;
+
+    if(cardA.id === cardB.id && cardA.type !== cardB.type) {
+      doublePairsFound++;
+      g8scores[g8currentPlayer] = doublePairsFound;
+      doubleMatched.push(prevIdx, i);
+      [prevIdx, i].forEach(idx => {
+        const el = document.getElementById('dc' + idx);
+        el.style.borderColor = 'var(--green)';
+        el.style.background = '#D4EDDA';
+        el.style.color = '#2a7a4a';
+        el.style.transform = 'scale(1)';
+        el.style.cursor = 'default';
+        el.style.pointerEvents = 'none';
+        el.style.boxShadow = '0 0 0 4px #57CC9944';
+      });
+      document.getElementById('g8pairsLabel').textContent = '✅ ' + doublePairsFound;
+      if(doubleMatched.length === doubleDeck.length) {
+        clearInterval(g8timerInterval);
+        setTimeout(endTurn, 500);
+      }
+    } else {
+      // No match — reset first card highlight, block both with red X
+      const prevCard = document.getElementById('dc' + prevIdx);
+      prevCard.style.borderColor = '#eee';
+      prevCard.style.boxShadow = '0 3px 12px rgba(0,0,0,0.12)';
+      prevCard.style.transform = 'scale(1)';
+      [prevIdx, i].forEach(idx => {
+        const el = document.getElementById('dc' + idx);
+        el.style.borderColor = 'var(--red)';
+        el.style.background = '#FFE8E8';
+        el.style.transform = 'scale(1)';
+        el.style.pointerEvents = 'none';
+        el.style.cursor = 'default';
+        const orig = el.textContent;
+        el.innerHTML = `<span style="position:relative;display:inline-block;">${orig}<span style="position:absolute;top:-8px;right:-8px;font-size:1rem;">❌</span></span>`;
+      });
     }
   }
 }
