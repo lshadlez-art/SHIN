@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מילות יחס</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Varela+Round&display=swap');
+:root {
+  --bg: #F0F7FF;
+  --purple: #7C5CBF;
+  --purple-light: #EDE7FF;
+  --yellow: #FFD84D;
+  --green: #5DC87A;
+  --green-light: #DFFAE8;
+  --red: #FF6B6B;
+  --red-light: #FFE5E5;
+  --radius: 16px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.09);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Varela Round', Arial, sans-serif; background: var(--bg); min-height: 100vh; direction: rtl; user-select: none; -webkit-user-select: none; }
+
+.header { background: var(--purple); padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(124,92,191,.3); }
+.header-title { font-family: 'Fredoka One', cursive; color: #fff; font-size: 1.1rem; }
+.score { background: var(--yellow); color: #5a3a00; font-family: 'Fredoka One', cursive; font-size: .85rem; padding: 3px 10px; border-radius: 50px; }
+
+/* PAGE NAV */
+.page-nav { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 3px 16px 2px; }
+.pg-arrow { background: #fff; border: 2px solid #E5E7EB; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; color: var(--purple); transition: all .15s; }
+.pg-arrow:hover { background: var(--purple-light); border-color: var(--purple); }
+.pg-arrow:disabled { opacity: .3; cursor: default; }
+.pg-dots { display: flex; gap: 6px; }
+.pg-dot { width: 10px; height: 10px; border-radius: 50%; background: #D1D5DB; transition: all .2s; }
+.pg-dot.active { background: var(--purple); transform: scale(1.3); }
+.pg-dot.done { background: var(--green); }
+
+/* INSTRUCTION */
+.instruction-box { background: var(--purple-light); border-right: 4px solid var(--purple); margin: 3px 10px 4px; padding: 6px 12px; border-radius: 0 var(--radius) var(--radius) 0; display: flex; align-items: center; gap: 10px; }
+.instr-text { font-family: 'Fredoka One', cursive; font-size: 1.05rem; color: var(--purple); flex: 1; }
+.btn-play { background: var(--yellow); border: none; border-radius: 50px; padding: 5px 12px; font-family: 'Varela Round', Arial, sans-serif; font-size: .95rem; color: #5a3a00; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap; transition: background .15s; }
+.btn-play:hover { background: #FFC800; }
+
+/* 4 CARDS GRID */
+.cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 0 8px; margin-bottom: 5px; }
+.card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); border: 3px solid transparent; cursor: pointer; overflow: hidden; transition: transform .15s, box-shadow .15s, border-color .15s; position: relative; }
+.card:hover:not(.answered) { transform: scale(1.03); border-color: var(--purple); box-shadow: 0 6px 20px rgba(124,92,191,.2); }
+.card:active:not(.answered) { transform: scale(.97); }
+.card.correct-flash { border-color: var(--green); box-shadow: 0 0 0 4px rgba(93,200,122,.3); animation: popCard .4s ease; }
+.card.wrong-flash   { border-color: var(--red);   box-shadow: 0 0 0 4px rgba(255,107,107,.2); animation: shakeCard .4s ease; }
+.answered { cursor: default; }
+@keyframes popCard   { 0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)} }
+@keyframes shakeCard { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+.card canvas { display: block; width: 100%; aspect-ratio: 1; }
+.card-label { text-align: center; font-size: .72rem; color: #9CA3AF; padding: 2px 4px 3px; font-family: 'Varela Round', Arial, sans-serif; }
+
+/* BOTTOM NAV */
+.bottom-nav { display: flex; gap: 6px; padding: 3px 8px 8px; justify-content: space-between; position: relative; z-index: 10; }
+.btn { font-family: 'Varela Round', Arial, sans-serif; font-size: .82rem; padding: 7px 14px; border-radius: 50px; border: none; cursor: pointer; transition: all .15s; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; gap: 5px; }
+.btn-prev { background: #fff; color: #374151; border: 2px solid #E5E7EB; }
+.btn-prev:hover { background: #F3F4F6; }
+.btn-next { background: var(--purple); color: #fff; flex: 1; justify-content: center; font-size: 1rem; box-shadow: 0 4px 14px rgba(124,92,191,.3); }
+.btn-next:hover { background: #6a4daa; }
+
+/* FEEDBACK */
+.feedback { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); color: #fff; font-family: 'Fredoka One', cursive; font-size: 1.9rem; padding: 16px 36px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,.2); z-index: 100; pointer-events: none; opacity: 0; transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s; text-align: center; }
+.feedback.show      { transform: translate(-50%,-50%) scale(1); opacity: 1; background: var(--green); }
+.feedback.show.wrong{ background: var(--red); }
+
+.mode-bar { display: flex; gap: 5px; padding: 4px 8px 0; justify-content: center; flex-wrap: wrap; }
+.mode-btn { font-family: 'Varela Round', Arial, sans-serif; font-size: .75rem; padding: 4px 10px; border-radius: 50px; border: 2px solid #E5E7EB; background: #fff; color: #6B7280; cursor: pointer; transition: all .15s; }
+.mode-btn.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+#modeBtn3 { border-color: #f59e0b; color: #d97706; font-weight: bold; background: #fffbeb; }
+#modeBtn3.active { background: #f59e0b; border-color: #d97706; color: #fff; }
+
+/* Activity 2 — complete the sentence */
+.act2 { display: none; }
+.act2.show { display: block; }
+.act1 { display: block; }
+.act1.hide { display: none; }
+
+.scene-wrap { padding: 0 8px; margin-bottom: 5px; }
+.scene-canvas { width: 100%; max-width: 340px; display: block; margin: 0 auto; border-radius: var(--radius); box-shadow: var(--shadow); background: #fff; aspect-ratio: 4/3; }
+
+.sentence-box { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin: 0 12px 10px; padding: 12px 16px; text-align: center; }
+.sentence-text { font-family: 'Fredoka One', cursive; font-size: 1.25rem; color: #374151; line-height: 1.6; }
+.blank { display: inline-block; min-width: 80px; border-bottom: 3px solid var(--purple); color: var(--purple); padding: 0 6px; }
+
+.word-choices { display: flex; gap: 10px; padding: 0 12px 8px; justify-content: center; flex-wrap: wrap; }
+.word-btn { font-family: 'Fredoka One', cursive; font-size: 1.15rem; padding: 10px 22px; border-radius: 50px; border: 2.5px solid var(--purple); background: #fff; color: var(--purple); cursor: pointer; transition: all .18s; -webkit-tap-highlight-color: transparent; }
+.word-btn:hover { background: var(--purple-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(124,92,191,.2); }
+.word-btn.correct { background: var(--green-light); border-color: var(--green); color: #1a7a3c; animation: popCard .35s ease; pointer-events: none; }
+.word-btn.wrong   { background: var(--red-light);   border-color: var(--red);   color: #b02020; animation: shakeCard .4s ease; pointer-events: none; }
+.word-btn:disabled { cursor: default; }
+
+.round-end { display: none; position: fixed; inset: 0; background: rgba(124,92,191,.93); z-index: 150; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 30px; }
+.round-end.show { display: flex; }
+.round-end-emoji { font-size: 4rem; animation: medalBounce 0.8s cubic-bezier(.34,1.56,.64,1) .1s both; }
+.round-end-title { font-family: 'Fredoka One', cursive; color: #fff; font-size: 1.5rem; animation: fadeUp .4s ease .3s both; }
+.round-end-sub { color: rgba(255,255,255,.85); font-size: 1rem; animation: fadeUp .4s ease .5s both; }
+.round-end-btns { display: flex; gap: 12px; margin-top: 6px; animation: fadeUp .4s ease .7s both; }
+.round-end-btn { font-family: 'Fredoka One', cursive; font-size: 1.05rem; padding: 12px 28px; border-radius: 50px; border: none; cursor: pointer; }
+.btn-next-round { background: var(--yellow); color: #5a3a00; }
+.btn-replay-round { background: rgba(255,255,255,.2); color: #fff; border: 2px solid rgba(255,255,255,.4) !important; }
+
+.end-screen { display: none; position: fixed; inset: 0; background: rgba(124,92,191,.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 30px; }
+.end-screen.show { display: flex; }
+.end-medal { font-size: 5rem; animation: medalBounce 1s cubic-bezier(.34,1.56,.64,1) .2s both; }
+.end-title { font-family: 'Fredoka One', cursive; color: #fff; font-size: 1.7rem; animation: fadeUp .5s ease .5s both; }
+.end-sub { color: rgba(255,255,255,.85); font-size: 1.1rem; animation: fadeUp .5s ease .7s both; }
+.end-btn { background: var(--yellow); color: #5a3a00; font-family: 'Fredoka One', cursive; font-size: 1.1rem; padding: 12px 32px; border-radius: 50px; border: none; cursor: pointer; margin-top: 8px; animation: fadeUp .5s ease .9s both; }
+@keyframes medalBounce { from{transform:scale(0) rotate(-20deg)} to{transform:scale(1) rotate(0)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="flex:1;text-align:center;">
+    <div class="header-title">🔍 מצאתם את זה?</div>
+    <div style="color:rgba(255,255,255,.82);font-size:.68rem;font-family:'Varela Round',Arial,sans-serif;margin-top:1px;">מי נמצא מעל? מי נמצא מתחת? בוא נגלה ביחד!</div>
+  </div>
+  <div class="score" id="scoreBadge">⭐ 0</div>
+</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" id="modeBtn1" onclick="switchMode(1)">📍 מילות יחס</button>
+  <button class="mode-btn" id="modeBtn2" onclick="switchMode(2)">⚽ גרור את הכדור</button>
+  <button class="mode-btn" id="modeBtn3" onclick="switchMode(3)" style="border-color:#f59e0b;color:#d97706;font-weight:bold;">📏 תארי מידה</button>
+  <button class="mode-btn" id="modeBtn4" onclick="switchMode(4)">🎯 משולב</button>
+</div>
+
+<div class="act1" id="act1">
+<div class="page-nav">
+  <button class="pg-arrow" id="btnNext" onclick="nextPage()">◀</button>
+  <div class="pg-dots" id="pgDots"></div>
+  <button class="pg-arrow" id="btnPrev" onclick="prevPage()">▶</button>
+</div>
+
+<div class="instruction-box">
+  <div class="instr-text" id="instrText">טוען...</div>
+  <button class="btn-play" id="btnPlay" onclick="playInstruction()">🔊 האזן</button>
+</div>
+
+<div class="cards-grid" id="cardsGrid">
+  <div class="card" id="card0"><canvas id="c0"></canvas><div class="card-label" id="lbl0"></div></div>
+  <div class="card" id="card1"><canvas id="c1"></canvas><div class="card-label" id="lbl1"></div></div>
+  <div class="card" id="card2"><canvas id="c2"></canvas><div class="card-label" id="lbl2"></div></div>
+  <div class="card" id="card3"><canvas id="c3"></canvas><div class="card-label" id="lbl3"></div></div>
+</div>
+
+<div class="bottom-nav">
+  <button class="btn btn-prev" id="btnPrevQ" onclick="prevPage()">הקודם ▶</button>
+  <button class="btn btn-next" onclick="nextPage()">שאלה הבאה ◀</button>
+</div>
+</div><!-- /act1 -->
+
+<!-- ACTIVITY 2: DRAG THE BALL -->
+<div class="act2" id="act2">
+<div class="page-nav">
+  <button class="pg-arrow" id="a2btnNext" onclick="a2NextPage()">◀</button>
+  <div class="pg-dots" id="a2pgDots"></div>
+  <button class="pg-arrow" id="a2btnPrev" onclick="a2PrevPage()">▶</button>
+</div>
+
+<div class="instruction-box" style="cursor:pointer;" onclick="a2Read()">
+  <div class="instr-text" id="a2instrText">טוען...</div>
+  <button class="btn-play">🔊 שוב</button>
+</div>
+
+<div class="scene-wrap" style="position:relative;">
+  <canvas id="a2canvas" style="width:100%;display:block;border-radius:var(--radius);box-shadow:var(--shadow);background:#fff;touch-action:none;"></canvas>
+</div>
+
+<div style="text-align:center;font-size:.8rem;color:#9CA3AF;padding:4px 0 6px;">גרור את הכדור למקום הנכון 👆</div>
+
+<div class="bottom-nav">
+  <button class="btn btn-prev" id="a2btnPrevQ" onclick="a2PrevPage()">הקודם ▶</button>
+  <button class="btn btn-next" onclick="a2NextPage()">שאלה הבאה ◀</button>
+</div>
+</div><!-- /act2 -->
+<!-- ACTIVITY 3: TOAREY MIDA -->
+<div class="act2" id="act3" style="display:none;">
+<div class="page-nav">
+  <button class="pg-arrow" id="a3btnNext" onclick="a3NextPage()">◀</button>
+  <div class="pg-dots" id="a3pgDots"></div>
+  <button class="pg-arrow" id="a3btnPrev" onclick="a3PrevPage()">▶</button>
+</div>
+
+<div style="text-align:center;padding:8px 14px 10px;">
+  <div id="a3qText" style="font-family:'Fredoka One',cursive;font-size:1.25rem;color:var(--purple);text-align:center;width:100%;">טוען...</div>
+</div>
+
+<div class="cards-row" id="a3cardsRow" style="display:flex;gap:5px;padding:0 8px;margin-bottom:5px;">
+  <div id="a3card0" style="flex:1;background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.08);border:3px solid transparent;cursor:pointer;overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s;">
+    <canvas id="a3c0" style="display:block;width:100%;aspect-ratio:1;"></canvas>
+  </div>
+  <div id="a3card1" style="flex:1;background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.08);border:3px solid transparent;cursor:pointer;overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s;">
+    <canvas id="a3c1" style="display:block;width:100%;aspect-ratio:1;"></canvas>
+  </div>
+  <div id="a3card2" style="flex:1;background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.08);border:3px solid transparent;cursor:pointer;overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s;">
+    <canvas id="a3c2" style="display:block;width:100%;aspect-ratio:1;"></canvas>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button class="btn btn-prev" id="a3btnPrevQ" onclick="a3PrevPage()" style="visibility:hidden;">הקודם ▶</button>
+  <button class="btn" style="background:var(--yellow);color:#5a3a00;font-weight:bold;" onclick="a3Read()">🔊 קרא</button>
+  <button class="btn btn-next" onclick="a3NextPage()">שאלה הבאה ◀</button>
+</div>
+</div><!-- /act3 -->
+<!-- ACTIVITY 4: COMBINED — drag correct item to correct place -->
+<div class="act2" id="act4" style="display:none;">
+<div class="page-nav">
+  <button class="pg-arrow" id="a4btnNext" onclick="a4NextPage()">◀</button>
+  <div class="pg-dots" id="a4pgDots"></div>
+  <button class="pg-arrow" id="a4btnPrev" onclick="a4PrevPage()">▶</button>
+</div>
+
+<div class="instruction-box" style="cursor:pointer;" onclick="a4Read()">
+  <div class="instr-text" id="a4instrText">טוען...</div>
+  <button class="btn-play">🔊 שוב</button>
+</div>
+
+<!-- Scene canvas -->
+<div class="scene-wrap" style="position:relative;padding:0 10px;margin-bottom:6px;">
+  <canvas id="a4scene" style="width:100%;display:block;border-radius:var(--radius);box-shadow:var(--shadow);background:#fff;"></canvas>
+</div>
+
+<!-- Draggable items bank -->
+<div style="text-align:center;font-size:.78rem;color:#9CA3AF;margin-bottom:4px;">בחר את הפריט הנכון וגרור אותו למקום 👆</div>
+<div id="a4bank" style="display:flex;gap:8px;padding:0 10px 4px;justify-content:center;flex-wrap:wrap;"></div>
+
+<div class="bottom-nav">
+  <button class="btn btn-prev" id="a4btnPrevQ" onclick="a4PrevPage()">הקודם ▶</button>
+  <button class="btn btn-next" onclick="a4NextPage()">שאלה הבאה ◀</button>
+</div>
+</div><!-- /act4 -->
+
+<div class="feedback" id="feedback"></div>
+
+<div class="round-end" id="roundEndScreen">
+  <div class="round-end-emoji" id="roundEndEmoji">🎉</div>
+  <div class="round-end-title" id="roundEndTitle">סבב הושלם!</div>
+  <div class="round-end-sub" id="roundEndSub"></div>
+  <div class="round-end-btns">
+    <button class="round-end-btn btn-next-round" id="btnNextRound" onclick="startNextRound()">סבב הבא ◀</button>
+    <button class="round-end-btn btn-replay-round" onclick="replayRound()">🔄 שחק שוב</button>
+  </div>
+</div>
+
+<div class="end-screen" id="endScreen">
+  <div class="end-medal">🥇</div>
+  <div class="end-title">נגמר! כל הכבוד! 🎉</div>
+  <div class="end-sub" id="endSub"></div>
+  <button class="end-btn" onclick="restartGame()">🔄 שחק שוב</button>
+</div>
+
+<script>
+// ============================================================
+// DRAW HELPERS
+// ============================================================
+function clearBg(ctx, w, h, color) {
+  ctx.fillStyle = color || '#F8FAFF';
+  ctx.fillRect(0,0,w,h);
+}
+
+function drawTable(ctx, cx, cy, w, h) {
+  const tw = w*.68, th = h*.42;
+  ctx.fillStyle = '#d97706'; ctx.strokeStyle = '#92400e'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect(cx-tw/2, cy-th, tw, th*.18, 4); ctx.fill(); ctx.stroke();
+  [[cx-tw*.36],[cx+tw*.36]].forEach(([lx])=>{
+    ctx.fillStyle='#d97706'; ctx.strokeStyle='#92400e'; ctx.lineWidth=2;
+    ctx.fillRect(lx-tw*.045, cy-th*.82, tw*.09, th*.82);
+    ctx.strokeRect(lx-tw*.045, cy-th*.82, tw*.09, th*.82);
+  });
+}
+
+function drawBall(ctx, cx, cy, r, c1, c2) {
+  const g = ctx.createRadialGradient(cx-r*.3,cy-r*.3,r*.05,cx,cy,r);
+  g.addColorStop(0,c1||'#f43f5e'); g.addColorStop(1,c2||'#9f1239');
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle=g; ctx.fill();
+  ctx.strokeStyle=c2||'#881337'; ctx.lineWidth=2; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx-r*.3,cy-r*.3,r*.22,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.5)'; ctx.fill();
+}
+
+function drawBox(ctx, cx, cy, size, color) {
+  ctx.fillStyle=color||'#60a5fa'; ctx.strokeStyle='#2563eb'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.roundRect(cx-size/2, cy-size, size, size, 6); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.25)';
+  ctx.fillRect(cx-size/2+4, cy-size+4, size*.3, size*.15);
+}
+
+function drawTree(ctx, cx, cy, size) {
+  ctx.fillStyle='#92400e';
+  ctx.fillRect(cx-size*.05, cy-size*.26, size*.1, size*.26);
+  ctx.beginPath(); ctx.moveTo(cx,cy-size*.8); ctx.lineTo(cx+size*.38,cy-size*.26); ctx.lineTo(cx-size*.38,cy-size*.26); ctx.closePath();
+  const g=ctx.createLinearGradient(cx,cy-size*.8,cx,cy-size*.26);
+  g.addColorStop(0,'#34d399'); g.addColorStop(1,'#059669');
+  ctx.fillStyle=g; ctx.fill(); ctx.strokeStyle='#065f46'; ctx.lineWidth=2; ctx.stroke();
+}
+
+function drawHouse(ctx, cx, cy, size) {
+  const w=size*.62, h=size*.42;
+  ctx.fillStyle='#fde68a'; ctx.strokeStyle='#d97706'; ctx.lineWidth=2;
+  ctx.fillRect(cx-w/2, cy-h, w, h); ctx.strokeRect(cx-w/2, cy-h, w, h);
+  ctx.beginPath(); ctx.moveTo(cx-w/2-3,cy-h); ctx.lineTo(cx,cy-h-size*.3); ctx.lineTo(cx+w/2+3,cy-h); ctx.closePath();
+  ctx.fillStyle='#ef4444'; ctx.fill(); ctx.strokeStyle='#b91c1c'; ctx.lineWidth=2; ctx.stroke();
+  ctx.fillStyle='#92400e'; ctx.fillRect(cx-w*.1,cy-h*.38,w*.2,h*.38);
+}
+
+function drawCat(ctx, cx, cy, size) {
+  const c='#fbbf24', s='#d97706';
+  ctx.beginPath(); ctx.ellipse(cx,cy,size*.36,size*.26,0,0,Math.PI*2); ctx.fillStyle=c; ctx.fill(); ctx.strokeStyle=s; ctx.lineWidth=2; ctx.stroke();
+  const hr=size*.18, hy=cy-size*.26-hr*.6;
+  ctx.beginPath(); ctx.arc(cx,hy,hr,0,Math.PI*2); ctx.fillStyle=c; ctx.fill(); ctx.strokeStyle=s; ctx.lineWidth=2; ctx.stroke();
+  [-1,1].forEach(d=>{ ctx.beginPath(); ctx.moveTo(cx+d*hr*.6,hy-hr*.5); ctx.lineTo(cx+d*hr*.9,hy-hr*1.1); ctx.lineTo(cx+d*hr*1.1,hy-hr*.5); ctx.closePath(); ctx.fillStyle=c; ctx.fill(); ctx.strokeStyle=s; ctx.lineWidth=1.5; ctx.stroke(); });
+  [-1,1].forEach(d=>{ ctx.beginPath(); ctx.arc(cx+d*hr*.38,hy,hr*.13,0,Math.PI*2); ctx.fillStyle='#1e293b'; ctx.fill(); });
+}
+
+// ============================================================
+// ROUNDS — each round = 4 images, one per relation variant
+// correctIdx = which card (0-3) shows the target relation
+// ============================================================
+// Relations pool — each has: id, label, draw function
+const ALL_RELATIONS = {
+  al:      { label:'על',      draw(ctx,w,h){ clearBg(ctx,w,h,'#FFF7ED'); const cy=h*.78,cx=w/2; drawTable(ctx,cx,cy,w,h); drawBall(ctx,cx,cy-h*.46,w*.13); } },
+  mitahat: { label:'מתחת',   draw(ctx,w,h){ clearBg(ctx,w,h,'#F0F9FF'); const cy=h*.78,cx=w/2; drawTable(ctx,cx,cy,w,h); drawBall(ctx,cx,cy-h*.08,w*.13); } },
+  betoch:  { label:'בתוך',   draw(ctx,w,h){ clearBg(ctx,w,h,'#F0FFF4'); const cx=w/2,by=h*.8; drawBox(ctx,cx,by,w*.56,'#60a5fa'); drawBall(ctx,cx,by-w*.2,w*.12); } },
+  michuts: { label:'מחוץ',   draw(ctx,w,h){
+    clearBg(ctx,w,h,'#FFF0F6');
+    const cx=w/2, by=h*.8;
+    drawBox(ctx,cx-w*.08,by,w*.5,'#60a5fa');
+    drawBall(ctx,cx+w*.41,by-w*.1,w*.12);
+  }},
+  lifney:  { label:'לפני',   draw(ctx,w,h){ clearBg(ctx,w,h,'#FAFFF0'); const cy=h*.82,cx=w/2; drawHouse(ctx,cx+w*.08,cy,w*.62); drawTree(ctx,cx-w*.22,cy,w*.5); } },
+  aharey:  { label:'אחרי',   draw(ctx,w,h){ clearBg(ctx,w,h,'#F5F0FF'); const cy=h*.82,cx=w/2; drawTree(ctx,cx-w*.18,cy-h*.04,w*.46); drawHouse(ctx,cx+w*.1,cy,w*.62); } },
+  leyad:   { label:'ליד',    draw(ctx,w,h){ clearBg(ctx,w,h,'#FFF8F0'); const cx=w/2,by=h*.8; drawBox(ctx,cx-w*.2,by,w*.26,'#a78bfa'); drawBall(ctx,cx+w*.16,by-w*.1,w*.12); } },
+  rachok:  { label:'רחוק',   draw(ctx,w,h){ clearBg(ctx,w,h,'#F0F8FF'); const cx=w/2,by=h*.8; drawBox(ctx,cx-w*.3,by,w*.26,'#a78bfa'); drawBall(ctx,cx+w*.4,by-w*.05,w*.12); } },
+  meal:    { label:'מעל',    draw(ctx,w,h){ clearBg(ctx,w,h,'#F0FFFD'); const cy=h*.82,cx=w/2; drawHouse(ctx,cx,cy,w*.7); drawBall(ctx,cx,h*.2,w*.12,'#60a5fa','#1d4ed8'); } },
+  lemata:  { label:'למטה מ-',draw(ctx,w,h){ clearBg(ctx,w,h,'#FFF5F0'); const cy=h*.78,cx=w/2; drawTree(ctx,cx,cy,w*.7); drawBall(ctx,cx,cy-h*.04,w*.12,'#60a5fa','#1d4ed8'); } },
+  beyn:    { label:'בין',    draw(ctx,w,h){ clearBg(ctx,w,h,'#F5FFF0'); const cy=h*.82,cx=w/2; drawTree(ctx,cx-w*.34,cy,w*.36); drawBall(ctx,cx,cy-h*.09,w*.12); drawTree(ctx,cx+w*.34,cy,w*.36); } },
+};
+
+// ROUNDS: each round asks about one relation, shows 4 different relations
+const ROUNDS = [
+  { target:'al',      pool:['al','mitahat','leyad','betoch'],   question:'לְחַץ על הכדור שעל השולחן' },
+  { target:'mitahat', pool:['mitahat','al','leyad','michuts'],  question:'לְחַץ על הכדור שמתחת לשולחן' },
+  { target:'betoch',  pool:['betoch','michuts','al','leyad'],   question:'לְחַץ על הכדור שבתוך הקופסה' },
+  { target:'michuts', pool:['michuts','betoch','leyad','al'],   question:'לְחַץ על הכדור שליד הקופסה הכחולה' },
+  { target:'lifney',  pool:['lifney','aharey','leyad','meal'],  question:'לְחַץ על הבית שהעץ לפניו' },
+  { target:'leyad',   pool:['leyad','al','mitahat','beyn'],     question:'לְחַץ על הכדור שליד הקופסה הקטנה' },
+  { target:'leyad',   pool:['leyad','rachok','betoch','al'],    question:'לְחַץ על הכדור שליד הקופסה הקטנה' },
+  { target:'rachok',  pool:['rachok','leyad','al','mitahat'],   question:'לְחַץ על הכדור שרחוק מהקופסה' },
+  { target:'meal',    pool:['meal','lemata','al','leyad'],      question:'לְחַץ על הכדור שמעל הבית' },
+  { target:'lemata',  pool:['lemata','meal','mitahat','beyn'],  question:'לְחַץ על הכדור שנמצא מתחת לעץ' },
+  { target:'beyn',    pool:['beyn','leyad','al','lifney'],      question:'לְחַץ על הכדור שבין שני העצים' },
+];
+
+// ============================================================
+let currentPage = 0;
+let answered = false;
+let score = 0;
+const done = new Set();
+
+window.addEventListener('load', () => { buildDots(); render(); });
+
+function buildDots() {
+  const el = document.getElementById('pgDots');
+  el.innerHTML = '';
+  ROUNDS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'pg-dot' + (i===currentPage?' active':done.has(i)?' done':'');
+    el.appendChild(d);
+  });
+}
+
+function render() {
+  const round = ROUNDS[currentPage];
+  answered = false;
+
+  buildDots();
+  document.getElementById('btnPrev').disabled = currentPage === ROUNDS.length-1;
+  document.getElementById('btnNext').disabled = currentPage === ROUNDS.length-1;
+  document.getElementById('btnPrevQ').style.visibility = currentPage===0 ? 'hidden':'visible';
+  document.getElementById('instrText').textContent = round.question;
+
+  // shuffle the pool so target card position is random
+  const poolShuffled = [...round.pool].sort(()=>Math.random()-.5);
+  const correctCardIdx = poolShuffled.indexOf(round.target);
+
+  poolShuffled.forEach((relId, i) => {
+    const rel = ALL_RELATIONS[relId];
+    const card = document.getElementById('card'+i);
+    card.className = 'card';
+
+    const canvas = document.getElementById('c'+i);
+    const sz = Math.max(canvas.parentElement.offsetWidth, 80);
+    canvas.width = sz; canvas.height = sz;
+    rel.draw(canvas.getContext('2d'), sz, sz);
+
+    document.getElementById('lbl'+i).textContent = '';
+    card.onclick = () => handleClick(i, correctCardIdx, round);
+  });
+
+  // auto-play instruction
+  setTimeout(() => playInstruction(), 400);
+}
+
+function handleClick(cardIdx, correctCardIdx, round) {
+  if(answered) return;
+  answered = true;
+  const isCorrect = cardIdx === correctCardIdx;
+
+  document.getElementById('card'+correctCardIdx).classList.add('correct-flash');
+  if(!isCorrect) document.getElementById('card'+cardIdx).classList.add('wrong-flash');
+  [0,1,2,3].forEach(i => { document.getElementById('card'+i).classList.add('answered'); document.getElementById('card'+i).onclick=null; });
+
+  // show correct label
+  document.getElementById('lbl'+correctCardIdx).textContent = ALL_RELATIONS[round.target].label;
+
+  if(isCorrect) { score++; document.getElementById('scoreBadge').textContent='⭐ '+score; done.add(currentPage); }
+
+  const fb = document.getElementById('feedback');
+  fb.textContent = isCorrect ? '✓ כל הכבוד!' : '✗ נסה שוב';
+  fb.className = 'feedback show' + (isCorrect?'':' wrong');
+  setTimeout(()=>fb.className='feedback', isCorrect?1400:1000);
+  buildDots();
+}
+
+function playInstruction() {
+  const text = ROUNDS[currentPage].question;
+  if('speechSynthesis' in window) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang='he-IL'; u.rate=0.85; speechSynthesis.speak(u);
+  }
+}
+
+function nextPage() {
+  if(currentPage < ROUNDS.length-1) {
+    currentPage++; render();
+  } else {
+    showEndScreen();
+  }
+}
+
+function showEndScreen() {
+  document.getElementById('endSub').textContent = 'ענית נכון על ' + score + ' מתוך ' + ROUNDS.length + ' שאלות';
+  document.getElementById('endScreen').classList.add('show');
+}
+
+function restartGame() {
+  currentPage = 0; score = 0; done.clear();
+  a2Page = 0; a2Score = 0; a2Done.clear();
+  a3PairIdx = 0; a3Answered = false;
+  document.getElementById('scoreBadge').textContent = '⭐ 0';
+  document.getElementById('endScreen').classList.remove('show');
+  switchMode(1);
+  render();
+}
+function prevPage() { if(currentPage>0){ currentPage--; render(); } }
+
+window.addEventListener('resize', ()=>{ render(); if(document.getElementById('act2').classList.contains('show')) a2Render(); });
+
+// ============================================================
+// ACTIVITY 2 — DRAG THE BALL
+// ============================================================
+// Each round: a scene (table/box/house/trees), a target zone, instruction
+const A2_ROUNDS = [
+  {
+    instruction: 'שִׂים את הכדור על השולחן',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF7ED');
+      drawTable(ctx,w/2,h*.82,w,h);
+    },
+    // target zone: {x,y,r} relative (0-1)
+    target: {x:.5, y:.52, r:.14},
+    hint: 'על השולחן'
+  },
+  {
+    instruction: 'שִׂים את הכדור מתחת לשולחן',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0F9FF');
+      drawTable(ctx,w/2,h*.65,w,h);
+    },
+    target: {x:.5, y:.82, r:.2},
+    hint: 'מתחת לשולחן'
+  },
+  {
+    instruction: 'שִׂים את הכדור בתוך הקופסה',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0FFF4');
+      drawBox(ctx,w/2,h*.85,w*.52,'#60a5fa');
+    },
+    target: {x:.5, y:.68, r:.13},
+    hint: 'בתוך הקופסה'
+  },
+  {
+    instruction: 'שִׂים את הכדור ליד הקופסה',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF8F0');
+      drawBox(ctx,w*.35,h*.82,w*.38,'#a78bfa');
+    },
+    target: {x:.72, y:.82, r:.13},
+    hint: 'ליד הקופסה'
+  },
+  {
+    instruction: 'שִׂים את הכדור לפני הבית',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#FAFFF0');
+      drawHouse(ctx,w*.55,h*.85,w*.62);
+    },
+    target: {x:.22, y:.85, r:.13},
+    hint: 'לפני הבית'
+  },
+  {
+    instruction: 'שִׂים את הכדור מעל הבית',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0FFFD');
+      drawHouse(ctx,w*.5,h*.9,w*.7);
+    },
+    target: {x:.5, y:.2, r:.13},
+    hint: 'מעל הבית'
+  },
+  {
+    instruction: 'שִׂים את הכדור בין שני העצים',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#F5FFF0');
+      drawTree(ctx,w*.2,h*.88,w*.38);
+      drawTree(ctx,w*.8,h*.88,w*.38);
+    },
+    target: {x:.5, y:.82, r:.13},
+    hint: 'בין העצים'
+  },
+  {
+    instruction: 'שִׂים את הכדור מתחת לעץ',
+    drawScene(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF5F0');
+      drawTree(ctx,w*.5,h*.72,w*.55);
+    },
+    target: {x:.5, y:.9, r:.13},
+    hint: 'מתחת לעץ'
+  },
+];
+
+let a2Page = 0;
+let a2Score = 0;
+const a2Done = new Set();
+
+// ball drag state
+let a2Ball = {x:.15, y:.5, dragging:false};
+let a2Placed = false;
+let a2CanvasW = 1, a2CanvasH = 1;
+
+function a2BuildDots() {
+  const el = document.getElementById('a2pgDots');
+  el.innerHTML = '';
+  A2_ROUNDS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'pg-dot' + (i===a2Page?' active':a2Done.has(i)?' done':'');
+    el.appendChild(d);
+  });
+}
+
+function a2Render() {
+  const round = A2_ROUNDS[a2Page];
+  a2Placed = false;
+  a2Ball = {x:.12, y:.5, dragging:false};
+  a2BuildDots();
+
+  document.getElementById('a2btnPrev').disabled = a2Page === 0;
+  document.getElementById('a2btnPrevQ').style.visibility = a2Page===0?'hidden':'visible';
+  document.getElementById('a2instrText').textContent = round.instruction;
+
+  // Size canvas
+  const canvas = document.getElementById('a2canvas');
+  const w = canvas.parentElement.offsetWidth - 20;
+  const h = Math.round(w * .78);
+  canvas.width = w; canvas.height = h;
+  canvas.style.height = h+'px';
+  a2CanvasW = w; a2CanvasH = h;
+
+  a2DrawAll();
+  a2SetupDrag();
+
+  // Auto-play
+  setTimeout(() => a2Read(), 350);
+}
+
+function a2DrawAll() {
+  const round = A2_ROUNDS[a2Page];
+  const canvas = document.getElementById('a2canvas');
+  const ctx = canvas.getContext('2d');
+  const w = a2CanvasW, h = a2CanvasH;
+
+  // Draw scene
+  round.drawScene(ctx, w, h);
+
+  // Draw ball
+  const bx = a2Ball.x*w, by = a2Ball.y*h, br = round.target.r*w*.85;
+  drawBall(ctx, bx, by, br, '#f43f5e','#9f1239');
+
+  // If placed correctly — big green success indicator
+  if(a2Placed) {
+    // green filled circle behind ball
+    ctx.beginPath(); ctx.arc(bx, by, br*1.6, 0, Math.PI*2);
+    ctx.fillStyle='rgba(93,200,122,0.3)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(bx, by, br*1.6, 0, Math.PI*2);
+    ctx.strokeStyle='#16a34a'; ctx.lineWidth=4; ctx.stroke();
+    // big white checkmark on top
+    const cs = br*0.55;
+    ctx.strokeStyle='#fff'; ctx.lineWidth=Math.max(4, br*.28);
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.beginPath();
+    ctx.moveTo(bx-cs*.7, by);
+    ctx.lineTo(bx-cs*.1, by+cs*.7);
+    ctx.lineTo(bx+cs*.8, by-cs*.7);
+    ctx.stroke();
+    // green checkmark slightly offset for depth
+    ctx.strokeStyle='#16a34a'; ctx.lineWidth=Math.max(3, br*.2);
+    ctx.beginPath();
+    ctx.moveTo(bx-cs*.7, by);
+    ctx.lineTo(bx-cs*.1, by+cs*.7);
+    ctx.lineTo(bx+cs*.8, by-cs*.7);
+    ctx.stroke();
+  }
+}
+
+function a2SetupDrag() {
+  const overlay = document.getElementById('a2canvas');
+
+  function getPos(e) {
+    const rect = overlay.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX-rect.left)/a2CanvasW, y: (t.clientY-rect.top)/a2CanvasH };
+  }
+
+  function onStart(e) {
+    if(a2Placed) return;
+    const pos = getPos(e);
+    const round = A2_ROUNDS[a2Page];
+    const br = round.target.r*.85;
+    const dx = pos.x - a2Ball.x, dy = pos.y - a2Ball.y;
+    if(Math.sqrt(dx*dx + dy*dy) < br*1.5) {
+      a2Ball.dragging = true;
+      e.preventDefault();
+    }
+  }
+  function onMove(e) {
+    if(!a2Ball.dragging || a2Placed) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    a2Ball.x = Math.max(.05, Math.min(.95, pos.x));
+    a2Ball.y = Math.max(.05, Math.min(.95, pos.y));
+    a2DrawAll();
+  }
+  function onEnd() {
+    if(!a2Ball.dragging) return;
+    a2Ball.dragging = false;
+    checkA2Drop();
+  }
+
+  overlay.onmousedown = onStart;
+  overlay.onmousemove = onMove;
+  overlay.onmouseup = onEnd;
+  overlay.ontouchstart = onStart;
+  overlay.ontouchmove = onMove;
+  overlay.ontouchend = onEnd;
+}
+
+function checkA2Drop() {
+  const round = A2_ROUNDS[a2Page];
+  const dx = a2Ball.x - round.target.x;
+  const dy = a2Ball.y - round.target.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+
+  if(dist < round.target.r * 2.5) {
+    // Snap to center
+    a2Ball.x = round.target.x;
+    a2Ball.y = round.target.y;
+    a2Placed = true;
+    a2Score++;
+    a2Done.add(a2Page);
+    a2BuildDots();
+    a2DrawAll();
+
+    const fb = document.getElementById('feedback');
+    fb.textContent = '✓ כל הכבוד!';
+    fb.className = 'feedback show';
+    setTimeout(()=>fb.className='feedback', 1400);
+  } else {
+    a2DrawAll();
+  }
+}
+
+function a2NextPage() {
+  if(a2Page < A2_ROUNDS.length-1) { a2Page++; a2Render(); }
+  else { showEndScreen(); }
+}
+function a2PrevPage() { if(a2Page>0){ a2Page--; a2Render(); } }
+function a2Read() {
+  const txt = A2_ROUNDS[a2Page].instruction;
+  if('speechSynthesis' in window) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang='he-IL'; u.rate=0.82; speechSynthesis.speak(u);
+  }
+}
+
+
+// ============================================================
+// ACTIVITY 3 — תארי מידה
+// ============================================================
+const A3_PAIRS = [
+  { id: 'gadol', label: 'גדול / קטן',   draw: a3DrawGadolKatan },
+  { id: 'gavoah', label: 'גבוה / נמוך', draw: a3DrawGavoahNamuch },
+  { id: 'shamen', label: 'שמן / רזה',   draw: a3DrawShamenRaze },
+  { id: 'aroch',  label: 'ארוך / קצר',  draw: a3DrawArochKatsar },
+  { id: 'dak',    label: 'עבה / דק',    draw: a3DrawDakAve },
+  { id: 'male',   label: 'מלא / ריק',   draw: a3DrawMaleRik },
+];
+
+const A3_QUESTIONS = {
+  gadol:  [{ q: 'איזה כדור גדול?',   answers: ['גדול','קטן','בינוני'] }],
+  gavoah: [{ q: 'איזה עץ גבוה?',    answers: ['גבוה','נמוך','ארוך']  }],
+  shamen: [{ q: 'איזה חתול שָׁמֵן?',   answers: ['שמן','רזה','גדול']   }],
+  aroch:  [{ q: 'איזה חוט ארוך?',   answers: ['ארוך','קצר','דק']    }],
+  dak:    [{ q: 'איזה קו עָבֶה?',     answers: ['עבה','דק','ארוך']    }],
+  male:   [{ q: 'איזה כוס מלאה?',   answers: ['מלא','ריק','גדול']   }],
+};
+
+let a3PairIdx = 0;
+let a3Answered = false;
+let a3CorrectCard = 0;
+
+function a3BuildDots() {
+  const el = document.getElementById('a3pgDots');
+  el.innerHTML = '';
+  A3_PAIRS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'pg-dot' + (i===a3PairIdx?' active':'');
+    el.appendChild(d);
+  });
+}
+
+function a3Render() {
+  const pair = A3_PAIRS[a3PairIdx];
+  const q = A3_QUESTIONS[pair.id][0];
+  a3Answered = false;
+  a3BuildDots();
+
+  document.getElementById('a3btnPrevQ').style.visibility = a3PairIdx===0?'hidden':'visible';
+  document.getElementById('a3qText').textContent = q.q;
+
+  // randomize correct card
+  a3CorrectCard = Math.floor(Math.random() * 3);
+  const wrongCards = [0,1,2].filter(i=>i!==a3CorrectCard);
+  const drawMap = {};
+  drawMap[a3CorrectCard] = 0;
+  drawMap[wrongCards[0]] = 1;
+  drawMap[wrongCards[1]] = 2;
+
+  [0,1,2].forEach(i => {
+    const card = document.getElementById('a3card'+i);
+    card.style.borderColor = 'transparent';
+    card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+    const canvas = document.getElementById('a3c'+i);
+    const sz = Math.max(canvas.parentElement.offsetWidth, 80);
+    canvas.width = sz; canvas.height = sz;
+    pair.draw(canvas.getContext('2d'), sz, sz, drawMap[i]);
+    card.onclick = () => a3HandleClick(i, q);
+  });
+
+  // auto-read
+  setTimeout(() => a3Read(), 300);
+}
+
+function a3HandleClick(cardIdx, q) {
+  if(a3Answered) return;
+  a3Answered = true;
+  const isCorrect = cardIdx === a3CorrectCard;
+
+  const correctCard = document.getElementById('a3card'+a3CorrectCard);
+  correctCard.style.borderColor = '#5DC87A';
+  correctCard.style.boxShadow = '0 0 0 4px rgba(93,200,122,.25)';
+  if(!isCorrect) {
+    const wCard = document.getElementById('a3card'+cardIdx);
+    wCard.style.borderColor = '#FF6B6B';
+  }
+  [0,1,2].forEach(i => document.getElementById('a3card'+i).onclick = null);
+
+  const fb = document.getElementById('feedback');
+  fb.textContent = isCorrect ? '✓ כל הכבוד!' : '✗ נסה שוב';
+  fb.className = 'feedback show' + (isCorrect?'':' wrong');
+  setTimeout(()=>fb.className='feedback', isCorrect?1400:1000);
+}
+
+function a3NextPage() {
+  if(a3PairIdx < A3_PAIRS.length-1) { a3PairIdx++; a3Render(); }
+  else { showEndScreen(); }
+}
+function a3PrevPage() { if(a3PairIdx>0){ a3PairIdx--; a3Render(); } }
+function a3Read() {
+  const q = A3_QUESTIONS[A3_PAIRS[a3PairIdx].id][0];
+  if('speechSynthesis' in window) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(q.q);
+    u.lang='he-IL'; u.rate=0.85; speechSynthesis.speak(u);
+  }
+}
+
+// ---- DRAW FUNCTIONS (copied & adapted from toarey-mida) ----
+function a3DrawGadolKatan(ctx, w, h, idx) {
+  const cx=w/2, cy=h*.50;
+  const configs=[{r:w*.40,c1:'#ff6b6b',c2:'#c0392b',s:'#922b21'},{r:w*.14,c1:'#60a5fa',c2:'#1d4ed8',s:'#1e3a8a'},{r:w*.26,c1:'#6ee7b7',c2:'#059669',s:'#065f46'}];
+  const {r,c1,c2,s}=configs[idx]||configs[1];
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#F9F7FF'; ctx.fillRect(0,0,w,h);
+  ctx.beginPath(); ctx.ellipse(cx,cy+r+6,r*.7,r*.18,0,0,Math.PI*2); ctx.fillStyle='rgba(0,0,0,.12)'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  const g=ctx.createRadialGradient(cx-r*.3,cy-r*.3,r*.05,cx,cy,r); g.addColorStop(0,c1); g.addColorStop(1,c2);
+  ctx.fillStyle=g; ctx.fill(); ctx.strokeStyle=s; ctx.lineWidth=2; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx-r*.32,cy-r*.32,r*.22,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,.55)'; ctx.fill();
+}
+
+function a3DrawGavoahNamuch(ctx,w,h,idx) {
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#F9FFF7'; ctx.fillRect(0,0,w,h);
+  const cx=w/2;
+  const treeH=idx===0?h*.75:idx===2?h*.55:h*.38;
+  const trunkW=idx===0?w*.08:w*.1;
+  const trunkH=treeH*.28; const topH=treeH-trunkH;
+  const topW=idx===0?w*.45:idx===2?w*.50:w*.55;
+  const base=h*.88;
+  ctx.fillStyle='#92400e'; ctx.fillRect(cx-trunkW/2,base-trunkH,trunkW,trunkH);
+  ctx.beginPath(); ctx.moveTo(cx,base-trunkH-topH); ctx.lineTo(cx+topW/2,base-trunkH); ctx.lineTo(cx-topW/2,base-trunkH); ctx.closePath();
+  const g=ctx.createLinearGradient(cx,base-trunkH-topH,cx,base-trunkH); g.addColorStop(0,'#34d399'); g.addColorStop(1,'#059669');
+  ctx.fillStyle=g; ctx.fill(); ctx.strokeStyle='#065f46'; ctx.lineWidth=2; ctx.stroke();
+}
+
+function a3DrawShamenRaze(ctx,w,h,idx) {
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#FFFBF0'; ctx.fillRect(0,0,w,h);
+  const cx=w/2;
+  if(idx===0){
+    const bodyR=w*.32,bodyCy=h*.62,fill='#fde68a',stroke='#d97706';
+    ctx.beginPath(); ctx.arc(cx,bodyCy,bodyR,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    const headR=w*.18,headCy=bodyCy-bodyR-headR*.6;
+    ctx.beginPath(); ctx.arc(cx,headCy,headR,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    [-1,1].forEach(s=>{const ex=cx+s*headR*.6,ey=headCy-headR*.7;ctx.beginPath();ctx.moveTo(ex,ey+headR*.4);ctx.lineTo(ex+s*headR*.25,ey-headR*.25);ctx.lineTo(ex-s*headR*.05,ey-headR*.25);ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.arc(cx+s*headR*.38,headCy-headR*.05,headR*.13,0,Math.PI*2);ctx.fillStyle='#1e293b';ctx.fill();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.ellipse(cx+s*bodyR*.6,bodyCy+bodyR*.82,bodyR*.2,bodyR*.12,0,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();});
+    // tail fat cat
+    ctx.beginPath(); ctx.moveTo(cx+bodyR*.9,bodyCy); ctx.quadraticCurveTo(cx+bodyR*1.5,bodyCy-bodyR*.5,cx+bodyR*1.2,bodyCy-bodyR*1.1);
+    ctx.strokeStyle=stroke; ctx.lineWidth=5; ctx.lineCap='round'; ctx.stroke();
+  } else if(idx===1){
+    const bodyW=w*.2,bodyH=h*.34,bodyCy=h*.60,fill='#fca5a5',stroke='#ef4444';
+    ctx.beginPath(); ctx.ellipse(cx,bodyCy,bodyW,bodyH,0,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    const headR=w*.15,headCy=bodyCy-bodyH-headR*.5;
+    ctx.beginPath(); ctx.arc(cx,headCy,headR,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    [-1,1].forEach(s=>{const ex=cx+s*headR*.6,ey=headCy-headR*.7;ctx.beginPath();ctx.moveTo(ex,ey+headR*.4);ctx.lineTo(ex+s*headR*.25,ey-headR*.25);ctx.lineTo(ex-s*headR*.05,ey-headR*.25);ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.arc(cx+s*headR*.38,headCy-headR*.05,headR*.13,0,Math.PI*2);ctx.fillStyle='#1e293b';ctx.fill();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.moveTo(cx+s*bodyW*.5,bodyCy+bodyH*.88);ctx.lineTo(cx+s*bodyW*.55,bodyCy+bodyH*1.12);ctx.strokeStyle=stroke;ctx.lineWidth=4;ctx.lineCap='round';ctx.stroke();});
+    // tail thin cat
+    ctx.beginPath(); ctx.moveTo(cx+bodyW*.9,bodyCy); ctx.quadraticCurveTo(cx+bodyW*2.5,bodyCy-bodyH*.3,cx+bodyW*2,bodyCy-bodyH*.8);
+    ctx.strokeStyle=stroke; ctx.lineWidth=3; ctx.lineCap='round'; ctx.stroke();
+  } else {
+    const bodyR=w*.22,bodyCy=h*.62;
+    ctx.beginPath(); ctx.ellipse(cx,bodyCy,bodyR,bodyR*1.15,0,0,Math.PI*2); ctx.fillStyle='#fdba74'; ctx.fill(); ctx.strokeStyle='#ea580c'; ctx.lineWidth=2.5; ctx.stroke();
+    const headR=w*.16,headCy=bodyCy-bodyR*1.15-headR*.55;
+    ctx.beginPath(); ctx.arc(cx,headCy,headR,0,Math.PI*2); ctx.fillStyle='#fdba74'; ctx.fill(); ctx.strokeStyle='#ea580c'; ctx.lineWidth=2.5; ctx.stroke();
+    // ears medium cat
+    [-1,1].forEach(s=>{const ex=cx+s*headR*.6,ey=headCy-headR*.7;ctx.beginPath();ctx.moveTo(ex,ey+headR*.4);ctx.lineTo(ex+s*headR*.25,ey-headR*.25);ctx.lineTo(ex-s*headR*.05,ey-headR*.25);ctx.closePath();ctx.fillStyle='#fdba74';ctx.fill();ctx.strokeStyle='#ea580c';ctx.lineWidth=2;ctx.stroke();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.arc(cx+s*headR*.38,headCy-headR*.05,headR*.13,0,Math.PI*2);ctx.fillStyle='#1e293b';ctx.fill();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.ellipse(cx+s*bodyR*.65,bodyCy+bodyR*.95,bodyR*.22,bodyR*.13,0,0,Math.PI*2);ctx.fillStyle='#fdba74';ctx.fill();ctx.strokeStyle='#ea580c';ctx.lineWidth=2;ctx.stroke();});
+    // tail medium cat
+    ctx.beginPath(); ctx.moveTo(cx+bodyR*1.1,bodyCy); ctx.quadraticCurveTo(cx+bodyR*1.8,bodyCy-bodyR*.4,cx+bodyR*1.5,bodyCy-bodyR*1.0);
+    ctx.strokeStyle='#ea580c'; ctx.lineWidth=4; ctx.lineCap='round'; ctx.stroke();
+  }
+}
+
+function a3DrawArochKatsar(ctx,w,h,idx) {
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#FFF8F5'; ctx.fillRect(0,0,w,h);
+  const cy=h/2;
+  const threadLen=idx===0?w*.80:idx===2?w*.55:w*.35;
+  const x0=(w-threadLen)/2, x1=x0+threadLen;
+  const color=idx===0?'#f43f5e':idx===2?'#f59e0b':'#8b5cf6';
+  const waves=idx===0?5:idx===2?3:2;
+  ctx.beginPath(); ctx.moveTo(x0,cy);
+  const segW=threadLen/(waves*2);
+  for(let i=0;i<waves*2;i++){const cpx=x0+segW*(i+.5),cpy=cy+(i%2===0?-14:14),ex=x0+segW*(i+1);ctx.quadraticCurveTo(cpx,cpy,ex,cy);}
+  ctx.strokeStyle=color; ctx.lineWidth=5; ctx.lineCap='round'; ctx.stroke();
+  [x0,x1].forEach(ex=>{ctx.beginPath();ctx.arc(ex,cy,7,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();});
+}
+
+function a3DrawDakAve(ctx,w,h,idx) {
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#F8F5FF'; ctx.fillRect(0,0,w,h);
+  const lw=idx===0?22:idx===2?12:5;
+  const cy=h/2;
+  ctx.beginPath(); ctx.moveTo(w*.12,cy); ctx.lineTo(w*.88,cy);
+  ctx.strokeStyle=idx===0?'#7c3aed':idx===2?'#f59e0b':'#0ea5e9';
+  ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
+}
+
+function a3DrawMaleRik(ctx,w,h,idx) {
+  ctx.clearRect(0,0,w,h); ctx.fillStyle='#F0F8FF'; ctx.fillRect(0,0,w,h);
+  const cx=w/2,base=h*.82,cupW=w*.38,cupH=h*.48;
+  ctx.beginPath(); ctx.moveTo(cx-cupW/2,base-cupH); ctx.lineTo(cx-cupW*.6,base); ctx.lineTo(cx+cupW*.6,base); ctx.lineTo(cx+cupW/2,base-cupH); ctx.closePath();
+  ctx.fillStyle='rgba(219,234,254,.7)'; ctx.fill(); ctx.strokeStyle='#3b82f6'; ctx.lineWidth=3; ctx.stroke();
+  const fillLevel=idx===0?.7:idx===2?.38:0;
+  if(fillLevel>0){
+    const liquidH=cupH*fillLevel;
+    ctx.beginPath(); ctx.moveTo(cx-cupW*.47,base-liquidH); ctx.lineTo(cx-cupW*.6,base); ctx.lineTo(cx+cupW*.6,base); ctx.lineTo(cx+cupW*.47,base-liquidH); ctx.closePath();
+    ctx.fillStyle='#60a5fa'; ctx.fill();
+  }
+  ctx.beginPath(); ctx.moveTo(cx-cupW/2-4,base-cupH); ctx.lineTo(cx+cupW/2+4,base-cupH); ctx.strokeStyle='#3b82f6'; ctx.lineWidth=4; ctx.lineCap='round'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx+cupW*.6,base-cupH*.35,cupW*.22,-Math.PI*.5,Math.PI*.5); ctx.strokeStyle='#3b82f6'; ctx.lineWidth=3; ctx.stroke();
+}
+
+
+// ============================================================
+// ACTIVITY 4 — COMBINED: תארי מידה + מילות יחס
+// ============================================================
+// Each round: scene background + 2-3 draggable items (different sizes)
+// Child must drag the correct item to the correct zone
+
+const A4_ROUNDS = [
+  // --- כדור גדול/קטן + על/מתחת ---
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַגָּדוֹל עַל הַשּׁוּלְחָן',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF7ED');
+      drawTable(ctx,w/2,h*.82,w,h);
+    },
+    items: [
+      { id:'big',   label:'כדור גדול',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',   draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#60a5fa','#1d4ed8'); } },
+    ],
+    correctItem: 'big',
+    target: {x:.5, y:.52, r:.18},
+  },
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַקָּטָן מִתַּחַת לַשּׁוּלְחָן',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0F9FF');
+      drawTable(ctx,w/2,h*.65,w,h);
+    },
+    items: [
+      { id:'big',   label:'כדור גדול',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',   draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#60a5fa','#1d4ed8'); } },
+    ],
+    correctItem: 'small',
+    target: {x:.5, y:.82, r:.2},
+  },
+  // --- כדור גדול/קטן + בתוך/ליד ---
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַקָּטָן בְּתוֹך הַקֻּפְסָה',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0FFF4');
+      drawBox(ctx,w/2,h*.85,w*.52,'#60a5fa');
+    },
+    items: [
+      { id:'big',   label:'כדור גדול',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',   draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#8b5cf6','#5b21b6'); } },
+    ],
+    correctItem: 'small',
+    target: {x:.5, y:.65, r:.16},
+  },
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַגָּדוֹל לְיַד הַקֻּפְסָה',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF8F0');
+      drawBox(ctx,w*.3,h*.82,w*.38,'#a78bfa');
+    },
+    items: [
+      { id:'big',   label:'כדור גדול',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',   draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#60a5fa','#1d4ed8'); } },
+    ],
+    correctItem: 'big',
+    target: {x:.75, y:.82, r:.18},
+  },
+  // --- עץ גבוה/נמוך + לפני/אחרי ---
+  {
+    instruction: 'שִׂים אֶת הָעֵץ הַגָּבוֹהַ לִפְנֵי הַבַּיִת',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FAFFF0');
+      drawHouse(ctx,w*.6,h*.85,w*.6);
+    },
+    items: [
+      { id:'tall',  label:'עץ גבוה',  draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.55,true); } },
+      { id:'short', label:'עץ נמוך',  draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.32,false); } },
+    ],
+    correctItem: 'tall',
+    target: {x:.22, y:.82, r:.17},
+  },
+  {
+    instruction: 'שִׂים אֶת הָעֵץ הַנָּמוּךְ לְיַד הַבַּיִת',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F5F0FF');
+      drawHouse(ctx,w*.38,h*.85,w*.5);
+    },
+    items: [
+      { id:'tall',  label:'עץ גבוה',  draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.55,true); } },
+      { id:'short', label:'עץ נמוך',  draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.32,false); } },
+    ],
+    correctItem: 'short',
+    target: {x:.76, y:.82, r:.22},
+  },
+  // --- חתול שמן/רזה + מעל/מתחת ---
+  {
+    instruction: 'שִׂים אֶת הַחָתוּל הַשָּׁמֵן מֵעַל הַשּׁוּלְחָן',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFFBF0');
+      drawTable(ctx,w/2,h*.78,w,h);
+    },
+    items: [
+      { id:'fat',  label:'חתול שָׁמֵן', draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.7,w*.55,true); } },
+      { id:'thin', label:'חתול רזה',   draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.75,w*.38,false); } },
+    ],
+    correctItem: 'fat',
+    target: {x:.5, y:.42, r:.18},
+  },
+  {
+    instruction: 'שִׂים אֶת הַחָתוּל הָרָזֶה מִתַּחַת לַשּׁוּלְחָן',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF0F6');
+      drawTable(ctx,w/2,h*.62,w,h);
+    },
+    items: [
+      { id:'fat',  label:'חתול שָׁמֵן', draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.7,w*.55,true); } },
+      { id:'thin', label:'חתול רזה',   draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.75,w*.38,false); } },
+    ],
+    correctItem: 'thin',
+    target: {x:.5, y:.82, r:.2},
+  },
+
+  // ===== סבב 2: כדור + בין עצים / ליד עץ =====
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַגָּדוֹל בֵּין הָעֵצִים',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F5FFF0');
+      drawTree(ctx,w*.2,h*.85,w*.36); drawTree(ctx,w*.8,h*.85,w*.36);
+    },
+    items: [
+      { id:'big',   label:'כדור גדול', draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#60a5fa','#1d4ed8'); } },
+    ],
+    correctItem: 'big',
+    target: {x:.5, y:.82, r:.18},
+  },
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַקָּטָן לְיַד הָעֵץ',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0FFF4');
+      drawTree(ctx,w*.35,h*.85,w*.44);
+    },
+    items: [
+      { id:'big',   label:'כדור גדול', draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#8b5cf6','#5b21b6'); } },
+    ],
+    correctItem: 'small',
+    target: {x:.72, y:.84, r:.15},
+  },
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַקָּטָן מֵעַל הָעֵץ',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF7F0');
+      drawTree(ctx,w*.5,h*.88,w*.5);
+    },
+    items: [
+      { id:'big',   label:'כדור גדול', draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#fbbf24','#d97706'); } },
+    ],
+    correctItem: 'small',
+    target: {x:.5, y:.18, r:.15},
+  },
+  {
+    instruction: 'שִׂים אֶת הכַּדּוּר הַגָּדוֹל לִפְנֵי הַבַּיִת',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0F8FF');
+      drawHouse(ctx,w*.6,h*.86,w*.58);
+    },
+    items: [
+      { id:'big',   label:'כדור גדול', draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.4,'#f43f5e','#9f1239'); } },
+      { id:'small', label:'כדור קטן',  draw(ctx,w,h){ a4DrawBall(ctx,w/2,h/2,w*.18,'#60a5fa','#1d4ed8'); } },
+    ],
+    correctItem: 'big',
+    target: {x:.2, y:.84, r:.18},
+  },
+
+  // ===== סבב 3: חתול + בתוך/מחוץ/ליד קופסה =====
+  {
+    instruction: 'שִׂים אֶת הַחָתוּל הַשָּׁמֵן בְּתוֹךְ הַקֻּפְסָה',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF0F8');
+      drawBox(ctx,w/2,h*.85,w*.58,'#a78bfa');
+    },
+    items: [
+      { id:'fat',  label:'חתול שָׁמֵן', draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.65,w*.5,true); } },
+      { id:'thin', label:'חתול רזה',    draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.7,w*.35,false); } },
+    ],
+    correctItem: 'fat',
+    target: {x:.5, y:.64, r:.18},
+  },
+  {
+    instruction: 'שִׂים אֶת הַחָתוּל הָרָזֶה לְיַד הַקֻּפְסָה',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F5F0FF');
+      drawBox(ctx,w*.3,h*.82,w*.38,'#60a5fa');
+    },
+    items: [
+      { id:'fat',  label:'חתול שָׁמֵן', draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.65,w*.5,true); } },
+      { id:'thin', label:'חתול רזה',    draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.7,w*.35,false); } },
+    ],
+    correctItem: 'thin',
+    target: {x:.72, y:.8, r:.16},
+  },
+  {
+    instruction: 'שִׂים אֶת הַחָתוּל הַשָּׁמֵן לִפְנֵי הַבַּיִת',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFFBF0');
+      drawHouse(ctx,w*.62,h*.86,w*.58);
+    },
+    items: [
+      { id:'fat',  label:'חתול שָׁמֵן', draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.65,w*.5,true); } },
+      { id:'thin', label:'חתול רזה',    draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.7,w*.35,false); } },
+    ],
+    correctItem: 'fat',
+    target: {x:.22, y:.8, r:.18},
+  },
+  {
+    instruction: 'שִׂים אֶת הַחָתוּל הָרָזֶה לְיַד הַבַּיִת',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0FFF8');
+      drawHouse(ctx,w*.38,h*.86,w*.5);
+    },
+    items: [
+      { id:'fat',  label:'חתול שָׁמֵן', draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.65,w*.5,true); } },
+      { id:'thin', label:'חתול רזה',    draw(ctx,w,h){ a4DrawCat(ctx,w/2,h*.7,w*.35,false); } },
+    ],
+    correctItem: 'thin',
+    target: {x:.76, y:.82, r:.22},
+  },
+
+  // ===== סבב 4: עץ גבוה/נמוך + על/ליד/בין/מעל =====
+  {
+    instruction: 'שִׂים אֶת הָעֵץ הַנָּמוּךְ לְיַד הַבַּיִת',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF8F5');
+      drawHouse(ctx,w*.38,h*.86,w*.58);
+    },
+    items: [
+      { id:'tall',  label:'עץ גבוה', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.55,true); } },
+      { id:'short', label:'עץ נמוך', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.3,false); } },
+    ],
+    correctItem: 'short',
+    target: {x:.78, y:.82, r:.16},
+  },
+  {
+    instruction: 'שִׂים אֶת הָעֵץ הַגָּבוֹהַ בֵּין הַבָּתִּים',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F0F8FF');
+      drawHouse(ctx,w*.18,h*.86,w*.34);
+      drawHouse(ctx,w*.82,h*.86,w*.34);
+    },
+    items: [
+      { id:'tall',  label:'עץ גבוה', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.55,true); } },
+      { id:'short', label:'עץ נמוך', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.3,false); } },
+    ],
+    correctItem: 'tall',
+    target: {x:.5, y:.8, r:.17},
+  },
+  {
+    instruction: 'שִׂים אֶת הָעֵץ הַנָּמוּךְ עַל יַד הַקֻּפְסָה',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#F5FFF5');
+      drawBox(ctx,w*.28,h*.82,w*.36,'#60a5fa');
+    },
+    items: [
+      { id:'tall',  label:'עץ גבוה', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.55,true); } },
+      { id:'short', label:'עץ נמוך', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.3,false); } },
+    ],
+    correctItem: 'short',
+    target: {x:.72, y:.8, r:.15},
+  },
+  {
+    instruction: 'שִׂים אֶת הָעֵץ הַגָּבוֹהַ לְיַד הַבַּיִת',
+    drawBg(ctx,w,h) {
+      clearBg(ctx,w,h,'#FFF0FA');
+      drawHouse(ctx,w*.38,h*.86,w*.5);
+    },
+    items: [
+      { id:'tall',  label:'עץ גבוה', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.55,true); } },
+      { id:'short', label:'עץ נמוך', draw(ctx,w,h){ a4DrawTree(ctx,w/2,h*.9,w*.3,false); } },
+    ],
+    correctItem: 'tall',
+    target: {x:.76, y:.78, r:.22},
+  },
+];
+
+// Draw helpers for act4
+function a4DrawBall(ctx,cx,cy,r,c1,c2) {
+  const g=ctx.createRadialGradient(cx-r*.3,cy-r*.3,r*.05,cx,cy,r);
+  g.addColorStop(0,c1); g.addColorStop(1,c2);
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle=g; ctx.fill(); ctx.strokeStyle=c2; ctx.lineWidth=2; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx-r*.3,cy-r*.3,r*.22,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.5)'; ctx.fill();
+}
+
+function a4DrawTree(ctx,cx,cy,size,tall) {
+  const trunkH=size*(tall?.26:.22);
+  ctx.fillStyle='#92400e';
+  ctx.fillRect(cx-size*.05,cy-trunkH,size*.1,trunkH);
+  const topH=tall?size*.72:size*.52;
+  const topW=tall?size*.4:size*.55;
+  ctx.beginPath(); ctx.moveTo(cx,cy-trunkH-topH); ctx.lineTo(cx+topW/2,cy-trunkH); ctx.lineTo(cx-topW/2,cy-trunkH); ctx.closePath();
+  const g=ctx.createLinearGradient(cx,cy-trunkH-topH,cx,cy-trunkH);
+  g.addColorStop(0,'#34d399'); g.addColorStop(1,'#059669');
+  ctx.fillStyle=g; ctx.fill(); ctx.strokeStyle='#065f46'; ctx.lineWidth=2; ctx.stroke();
+}
+
+function a4DrawCat(ctx,cx,cy,size,fat) {
+  const fill=fat?'#fde68a':'#fca5a5', stroke=fat?'#d97706':'#ef4444';
+  if(fat) {
+    const bodyR=size*.38;
+    ctx.beginPath(); ctx.arc(cx,cy,bodyR,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    const headR=size*.2, headCy=cy-bodyR-headR*.6;
+    ctx.beginPath(); ctx.arc(cx,headCy,headR,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    [-1,1].forEach(s=>{const ex=cx+s*headR*.6,ey=headCy-headR*.7; ctx.beginPath();ctx.moveTo(ex,ey+headR*.4);ctx.lineTo(ex+s*headR*.25,ey-headR*.25);ctx.lineTo(ex-s*headR*.05,ey-headR*.25);ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.arc(cx+s*headR*.38,headCy,headR*.13,0,Math.PI*2);ctx.fillStyle='#1e293b';ctx.fill();});
+    ctx.beginPath(); ctx.moveTo(cx+bodyR*.9,cy); ctx.quadraticCurveTo(cx+bodyR*1.5,cy-bodyR*.5,cx+bodyR*1.2,cy-bodyR*1.1); ctx.strokeStyle=stroke; ctx.lineWidth=4; ctx.lineCap='round'; ctx.stroke();
+  } else {
+    const bodyW=size*.2, bodyH=size*.38;
+    ctx.beginPath(); ctx.ellipse(cx,cy,bodyW,bodyH,0,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    const headR=size*.16, headCy=cy-bodyH-headR*.5;
+    ctx.beginPath(); ctx.arc(cx,headCy,headR,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+    [-1,1].forEach(s=>{const ex=cx+s*headR*.6,ey=headCy-headR*.7; ctx.beginPath();ctx.moveTo(ex,ey+headR*.4);ctx.lineTo(ex+s*headR*.25,ey-headR*.25);ctx.lineTo(ex-s*headR*.05,ey-headR*.25);ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();});
+    [-1,1].forEach(s=>{ctx.beginPath();ctx.arc(cx+s*headR*.38,headCy,headR*.13,0,Math.PI*2);ctx.fillStyle='#1e293b';ctx.fill();});
+    ctx.beginPath(); ctx.moveTo(cx+bodyW*.9,cy); ctx.quadraticCurveTo(cx+bodyW*2.5,cy-bodyH*.3,cx+bodyW*2,cy-bodyH*.8); ctx.strokeStyle=stroke; ctx.lineWidth=3; ctx.lineCap='round'; ctx.stroke();
+  }
+}
+
+// State
+let a4Page = 0;
+let a4Round = 0; // 0-3
+const A4_ROUND_SIZE = 5;
+let a4Placed = false;
+let a4ScW = 1, a4ScH = 1;
+let a4DragItem = null; // {id, x, y (normalized), dragging, offX, offY}
+let a4Items = []; // [{id, x, y, placed}]
+
+function a4BuildDots() {
+  const el = document.getElementById('a4pgDots');
+  el.innerHTML = '';
+  const start = a4Round * A4_ROUND_SIZE;
+  for(let i=0; i<A4_ROUND_SIZE; i++) {
+    const d = document.createElement('div');
+    const absIdx = start + i;
+    d.className = 'pg-dot' + (absIdx===a4Page?' active':absIdx<a4Page?' done':'');
+    el.appendChild(d);
+  }
+  // Show round indicator
+  document.getElementById('a4pgDots').title = 'סבב ' + (a4Round+1) + ' מתוך 4';
+}
+
+function a4Render() {
+  const round = A4_ROUNDS[a4Page];
+  a4Placed = false;
+  a4DragItem = null;
+  a4BuildDots();
+
+  document.getElementById('a4btnPrevQ').style.visibility = (a4Page === a4Round*A4_ROUND_SIZE) ? 'hidden':'visible';
+  // Show round badge
+  let badge = document.getElementById('a4roundBadge');
+  if(!badge) {
+    badge = document.createElement('div');
+    badge.id = 'a4roundBadge';
+    badge.style.cssText = 'text-align:center;font-family:Fredoka One,cursive;font-size:.9rem;color:var(--purple);padding:0 0 4px;';
+    document.getElementById('a4instrText').parentElement.before(badge);
+  }
+  badge.textContent = 'סבב ' + (a4Round+1) + ' מתוך 4';
+  document.getElementById('a4instrText').textContent = round.instruction;
+
+  // Size scene canvas
+  const sc = document.getElementById('a4scene');
+  const sw = sc.parentElement.offsetWidth - 20;
+  const sh = Math.round(sw * .72);
+  sc.width = sw; sc.height = sh;
+  sc.style.height = sh+'px';
+  a4ScW = sw; a4ScH = sh;
+
+  // Draw background
+  round.drawBg(sc.getContext('2d'), sw, sh);
+
+  // Build bank items as mini canvases
+  const bank = document.getElementById('a4bank');
+  bank.innerHTML = '';
+
+  // Shuffle items
+  const shuffled = [...round.items].sort(()=>Math.random()-.5);
+  shuffled.forEach(item => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;touch-action:none;';
+    const cv = document.createElement('canvas');
+    const sz = Math.round(sw * .28);
+    cv.width = sz; cv.height = sz;
+    cv.style.cssText = 'border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,.1);background:#fff;border:3px solid transparent;transition:border-color .15s;';
+    cv.id = 'a4item-'+item.id;
+    item.draw(cv.getContext('2d'), sz, sz);
+    const lbl = document.createElement('div');
+    lbl.textContent = item.label;
+    lbl.style.cssText = 'font-size:.75rem;color:#6B7280;font-family:Varela Round,Arial,sans-serif;';
+    wrap.appendChild(cv); wrap.appendChild(lbl);
+    bank.appendChild(wrap);
+
+    // Drag from bank onto scene
+    function startDrag(ex, ey) {
+      if(a4Placed) return;
+      a4DragItem = { id: item.id, item, ex, ey };
+      cv.style.borderColor = 'var(--purple)';
+      cv.style.opacity = '.5';
+    }
+    function moveDrag(ex, ey) {
+      if(!a4DragItem || a4DragItem.id !== item.id) return;
+      a4DragItem.ex = ex; a4DragItem.ey = ey;
+      a4DrawSceneWithDrag();
+    }
+    function endDrag(ex, ey) {
+      if(!a4DragItem || a4DragItem.id !== item.id) return;
+      cv.style.borderColor = 'transparent'; cv.style.opacity = '1';
+      // Convert screen coords to canvas coords
+      const scRect = document.getElementById('a4scene').getBoundingClientRect();
+      const nx = (ex - scRect.left) / a4ScW;
+      const ny = (ey - scRect.top)  / a4ScH;
+      const r = round;
+      const dx = nx - r.target.x, dy = ny - r.target.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist < r.target.r * 2.2 && item.id === r.correctItem) {
+        a4Placed = true;
+        a4DrawSuccess(r.target.x * a4ScW, r.target.y * a4ScH, item);
+        const fb = document.getElementById('feedback');
+        fb.textContent = '✓ כל הכבוד!'; fb.className = 'feedback show';
+        setTimeout(()=>fb.className='feedback', 1400);
+      } else if(dist < r.target.r * 2.2 && item.id !== r.correctItem) {
+        // Wrong item in right place
+        a4DrawBgOnly();
+        const fb = document.getElementById('feedback');
+        fb.textContent = '✗ נסה שוב'; fb.className = 'feedback show wrong';
+        setTimeout(()=>fb.className='feedback', 1000);
+      } else {
+        a4DrawBgOnly();
+      }
+      a4DragItem = null;
+    }
+
+    cv.onmousedown = e => startDrag(e.clientX, e.clientY);
+    cv.ontouchstart = e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); };
+  });
+
+  // Global move/end handlers on scene canvas — catches drop anywhere on scene
+  const scEl = document.getElementById('a4scene');
+  scEl.onmousemove = e => { if(a4DragItem) { a4DragItem.ex=e.clientX; a4DragItem.ey=e.clientY; a4DrawSceneWithDrag(); } };
+  scEl.ontouchmove = e => { if(a4DragItem) { a4DragItem.ex=e.touches[0].clientX; a4DragItem.ey=e.touches[0].clientY; a4DrawSceneWithDrag(); e.preventDefault(); } };
+  document.onmousemove = e => { if(a4DragItem) { a4DragItem.ex=e.clientX; a4DragItem.ey=e.clientY; a4DrawSceneWithDrag(); } };
+  document.ontouchmove = e => { if(a4DragItem) { a4DragItem.ex=e.touches[0].clientX; a4DragItem.ey=e.touches[0].clientY; a4DrawSceneWithDrag(); e.preventDefault(); } };
+
+  function globalEnd(ex, ey) {
+    if(!a4DragItem || a4Placed) return;
+    const draggedItem = a4DragItem.item;
+    const draggedId = a4DragItem.id;
+    // reset all item card visuals
+    document.querySelectorAll('[id^="a4item-"]').forEach(c => { c.style.borderColor='transparent'; c.style.opacity='1'; });
+    const scRect = document.getElementById('a4scene').getBoundingClientRect();
+    const nx = (ex - scRect.left) / a4ScW;
+    const ny = (ey - scRect.top)  / a4ScH;
+    const r = A4_ROUNDS[a4Page];
+    const dx = nx - r.target.x, dy = ny - r.target.y;
+    const dist = Math.sqrt(dx*dx+dy*dy);
+    a4DragItem = null;
+    if(dist < r.target.r * 2.8 && draggedId === r.correctItem) {
+      a4Placed = true;
+      a4DrawSuccess(r.target.x * a4ScW, r.target.y * a4ScH, draggedItem);
+      const fb = document.getElementById('feedback');
+      fb.textContent = '✓ כל הכבוד!'; fb.className = 'feedback show';
+      setTimeout(()=>fb.className='feedback', 1400);
+    } else if(dist < r.target.r * 2.8 && draggedId !== r.correctItem) {
+      a4DrawBgOnly();
+      const fb = document.getElementById('feedback');
+      fb.textContent = '✗ נסה שוב'; fb.className = 'feedback show wrong';
+      setTimeout(()=>fb.className='feedback', 1000);
+    } else {
+      a4DrawBgOnly();
+    }
+  }
+  document.onmouseup  = e => globalEnd(e.clientX, e.clientY);
+  document.ontouchend = e => globalEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+
+  setTimeout(() => a4Read(), 350);
+}
+
+function a4DrawBgOnly() {
+  const sc = document.getElementById('a4scene');
+  A4_ROUNDS[a4Page].drawBg(sc.getContext('2d'), a4ScW, a4ScH);
+}
+
+function a4DrawSceneWithDrag() {
+  if(!a4DragItem) return;
+  a4DrawBgOnly();
+  const sc = document.getElementById('a4scene');
+  const ctx = sc.getContext('2d');
+  const scRect = sc.getBoundingClientRect();
+  const nx = (a4DragItem.ex - scRect.left) / a4ScW;
+  const ny = (a4DragItem.ey - scRect.top)  / a4ScH;
+  const round = A4_ROUNDS[a4Page];
+  const tx = round.target.x, ty = round.target.y, tr = round.target.r;
+  const dx = nx-tx, dy = ny-ty;
+  const near = Math.sqrt(dx*dx+dy*dy) < tr*2.5;
+
+  // draw dragged item
+  const sz = a4ScW * .2;
+  const tmpCv = document.createElement('canvas');
+  tmpCv.width=sz*2; tmpCv.height=sz*2;
+  a4DragItem.item.draw(tmpCv.getContext('2d'), sz*2, sz*2);
+  ctx.globalAlpha = .88;
+  ctx.drawImage(tmpCv, nx*a4ScW-sz, ny*a4ScH-sz, sz*2, sz*2);
+  ctx.globalAlpha = 1;
+}
+
+function a4DrawSuccess(bx, by, item) {
+  a4DrawBgOnly();
+  const sc = document.getElementById('a4scene');
+  const ctx = sc.getContext('2d');
+  const sz = a4ScW * .22;
+  const tmpCv = document.createElement('canvas');
+  tmpCv.width=sz*2; tmpCv.height=sz*2;
+  item.draw(tmpCv.getContext('2d'), sz*2, sz*2);
+  ctx.drawImage(tmpCv, bx-sz, by-sz, sz*2, sz*2);
+  // green ring
+  ctx.beginPath(); ctx.arc(bx, by, sz*1.1, 0, Math.PI*2);
+  ctx.strokeStyle='#16a34a'; ctx.lineWidth=4; ctx.stroke();
+  // checkmark
+  const cs=sz*.5;
+  ctx.strokeStyle='#16a34a'; ctx.lineWidth=Math.max(3,sz*.18); ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(bx-cs*.7,by); ctx.lineTo(bx-cs*.1,by+cs*.7); ctx.lineTo(bx+cs*.8,by-cs*.7); ctx.stroke();
+}
+
+function a4NextPage() {
+  const roundEnd = (a4Page + 1) % A4_ROUND_SIZE === 0;
+  const isLast = a4Page === A4_ROUNDS.length - 1;
+  if(isLast) {
+    showEndScreen();
+  } else if(roundEnd) {
+    showRoundEnd();
+  } else {
+    a4Page++; a4Render();
+  }
+}
+
+function showRoundEnd() {
+  const emojis = ['🌟','🏆','🎊','🥇'];
+  document.getElementById('roundEndEmoji').textContent = emojis[a4Round] || '🎉';
+  document.getElementById('roundEndTitle').textContent = 'סבב ' + (a4Round+1) + ' הושלם!';
+  document.getElementById('roundEndSub').textContent = 'כל הכבוד! מוכן לסבב ' + (a4Round+2) + '?';
+  document.getElementById('btnNextRound').style.display = 'inline-block';
+  document.getElementById('roundEndScreen').classList.add('show');
+}
+
+function startNextRound() {
+  document.getElementById('roundEndScreen').classList.remove('show');
+  a4Round++;
+  a4Page = a4Round * A4_ROUND_SIZE;
+  a4Render();
+}
+
+function replayRound() {
+  document.getElementById('roundEndScreen').classList.remove('show');
+  a4Page = a4Round * A4_ROUND_SIZE;
+  a4Render();
+}
+function a4PrevPage() { if(a4Page>0){ a4Page--; a4Render(); } }
+function a4Read() {
+  const txt = A4_ROUNDS[a4Page].instruction;
+  if('speechSynthesis' in window) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang='he-IL'; u.rate=0.82; speechSynthesis.speak(u);
+  }
+}
+
+function switchMode(mode) {
+  document.getElementById('act1').classList.toggle('hide', mode!==1);
+  document.getElementById('act2').style.display = mode===2 ? 'block' : 'none';
+  document.getElementById('act3').style.display = mode===3 ? 'block' : 'none';
+  document.getElementById('act4').style.display = mode===4 ? 'block' : 'none';
+  [1,2,3,4].forEach(m => document.getElementById('modeBtn'+m)?.classList.toggle('active', m===mode));
+  if(mode===2) setTimeout(()=>a2Render(), 50);
+  if(mode===3) setTimeout(()=>{ a3PairIdx=0; a3Render(); }, 50);
+  if(mode===4) setTimeout(()=>{ a4Page=0; a4Render(); }, 50);
+}
+
+</script>
+
+<div style="text-align:center;padding:4px 0 8px;font-size:.68rem;color:#9CA3AF;font-family:'Varela Round',Arial,sans-serif;">
+  עוצב ונוצר על ידי <strong style="color:var(--purple);">לילך כספרי</strong> — קלינאית תקשורת
+</div>
+</body>
+</html>
