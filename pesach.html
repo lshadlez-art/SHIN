@@ -639,6 +639,14 @@
   <div class="images-grid" id="firstSoundOptions"></div>
   <div class="feedback-box" id="fb3"></div>
   <button class="next-btn" id="next3" onclick="nextQuestion(3)" style="display:none">הבא ←</button>
+
+  <!-- מסך סיום -->
+  <div id="win3" style="display:none;text-align:center;padding:30px 20px;">
+    <div style="font-size:4rem;margin-bottom:10px;">🎊</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--blue);margin-bottom:8px;">כל הכבוד!</div>
+    <div id="win3score" style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--blue);margin-bottom:24px;"></div>
+    <button onclick="startGame(3)" style="font-family:'Fredoka One',cursive;font-size:1.4rem;background:var(--blue);color:white;border:none;border-radius:20px;padding:14px 32px;cursor:pointer;">🔄 סבב חדש!</button>
+  </div>
 </div>
 
 <!-- GAME 4: LETTER RECOGNITION -->
@@ -807,6 +815,15 @@ const firstSoundData2 = [
   { letter:'נ', correct:{emoji:'🐍',label:'נחש'}, wrong:[{emoji:'☀️',label:'שמש'},{emoji:'🌽',label:'תירס'}] },
 ];
 
+const firstSoundData3 = [
+  { letter:'ג', correct:{emoji:'🧦',label:'גרב'}, wrong:[{emoji:'✋',label:'יד'},{emoji:'🦵',label:'רגל'}] },
+  { letter:'י', correct:{emoji:'✋',label:'יד'}, wrong:[{emoji:'🚌',label:'אוטובוס'},{emoji:'🧴',label:'סבון'}] },
+  { letter:'ר', correct:{emoji:'🦵',label:'רגל'}, wrong:[{emoji:'🧦',label:'גרב'},{emoji:'🍯',label:'דבש'}] },
+  { letter:'ס', correct:{emoji:'🧴',label:'סבון'}, wrong:[{emoji:'🦵',label:'רגל'},{emoji:'✋',label:'יד'}] },
+  { letter:'א', correct:{emoji:'🚌',label:'אוטובוס'}, wrong:[{emoji:'🧦',label:'גרב'},{emoji:'🍯',label:'דבש'}] },
+  { letter:'ב', correct:{emoji:'🎈',label:'בלון'}, wrong:[{emoji:'🧴',label:'סבון'},{emoji:'🦵',label:'רגל'}] },
+];
+
 let firstSoundRoundIndex = 0;
 
 // All Hebrew letters (no final forms)
@@ -918,6 +935,15 @@ const lastSoundData2 = [
   { emoji:'🌽', word:'תִּירָס', display:'תירס', lastLetter:'ס', options:['ס','ת','ז','ר'] },
 ];
 
+const lastSoundData3 = [
+  { emoji:'🧦', word:'גֶּרֶב', display:'גרב', lastLetter:'ב', options:['ב','פ','ד','ר'] },
+  { emoji:'🍯', word:'דְּבַשׁ', display:'דבש', lastLetter:'ש', options:['ש','ס','ת','ב'] },
+  { emoji:'🧴', word:'סָבוֹן', display:'סבון', lastLetter:'ן', options:['ן','מ','ר','ל'] },
+  { emoji:'✋', word:'יָד', display:'יד', lastLetter:'ד', options:['ד','ר','ת','ב'] },
+  { emoji:'🚌', word:'אוֹטוֹבּוּס', display:'אוטובוס', lastLetter:'ס', options:['ס','ת','ז','ר'] },
+  { emoji:'🦵', word:'רֶגֶל', display:'רגל', lastLetter:'ל', options:['ל','ר','נ','ד'] },
+];
+
 let lastSoundRoundIndex = 0;
 
 // ============ STATE ============
@@ -944,11 +970,18 @@ function startGame(n) {
   state[n] = state[n] || {q:0,score:0,total:0,answered:false};
   state[n].q = 0; state[n].score = 0; state[n].answered = false;
   if(n===2) { sylRoundIndex++; state[2].total = ([sylData,sylData2,sylData3][sylRoundIndex % 3]).length; }
-  if(n===3) { firstSoundRoundIndex++; state[3].total = (firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2).length; }
+  if(n===3) {
+    firstSoundRoundIndex++;
+    state[3].total = ([firstSoundData,firstSoundData2,firstSoundData3][firstSoundRoundIndex % 3]).length;
+    document.getElementById('win3').style.display = 'none';
+    document.getElementById('firstSoundOptions').style.display = '';
+    document.querySelector('#game3 .first-sound-card').style.display = '';
+    document.getElementById('fb3').style.display = '';
+  }
   if(n===4) { letterRounds = []; letterRoundIndex++; state[4].total = 8; }
   if(n===5) {
     lastSoundRoundIndex++;
-    state[5].total = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length;
+    state[5].total = ([lastSoundData,lastSoundData2,lastSoundData3][lastSoundRoundIndex % 3]).length;
     document.getElementById('win5').style.display = 'none';
     document.getElementById('lastCard').style.display = '';
     document.getElementById('letterOptions').style.display = '';
@@ -984,7 +1017,7 @@ function updateScoreBar(n) {
 
 function nextQuestion(n) {
   state[n].q++;
-  const totals = {1:rhymeData.length,2:([sylData,sylData2,sylData3][sylRoundIndex % 3]).length,3:(firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2).length,4:8,5:(lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length,6:songData.length};
+  const totals = {1:rhymeData.length,2:([sylData,sylData2,sylData3][sylRoundIndex % 3]).length,3:([firstSoundData,firstSoundData2,firstSoundData3][firstSoundRoundIndex % 3]).length,4:8,5:([lastSoundData,lastSoundData2,lastSoundData3][lastSoundRoundIndex % 3]).length,6:songData.length};
   if(state[n].q >= (totals[n]||state[n].total)) { showWin(n); return; }
   if(n===4) { document.getElementById('letterGrid').innerHTML=''; }
   if(n===6) { renderSongQuestion(6); return; }
@@ -1039,6 +1072,15 @@ function showConfetti() {
 
 function showWin(n) {
   const s = state[n];
+  if(n === 3) {
+    document.getElementById('firstSoundOptions').style.display = 'none';
+    document.querySelector('#game3 .first-sound-card').style.display = 'none';
+    document.getElementById('fb3').style.display = 'none';
+    document.getElementById('next3').style.display = 'none';
+    document.getElementById('win3score').textContent = 'קיבלתם ' + s.score + ' מתוך ' + s.total + ' ⭐';
+    document.getElementById('win3').style.display = 'block';
+    return;
+  }
   if(n === 5) {
     // הסתר אלמנטי המשחק והצג מסך סיום
     document.getElementById('lastCard').style.display = 'none';
@@ -1143,7 +1185,7 @@ function answerSyl(n) {
 
 // ============ GAME 3: FIRST SOUND ============
 function renderFirstSound() {
-  const d = (firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2)[state[3].q];
+  const d = ([firstSoundData,firstSoundData2,firstSoundData3][firstSoundRoundIndex % 3])[state[3].q];
   document.getElementById('firstSoundLetter').textContent = d.letter;
   const opts = shuffle([d.correct, ...d.wrong]);
   const container = document.getElementById('firstSoundOptions');
@@ -1247,7 +1289,7 @@ function checkLetterGame() {
 
 // ============ GAME 5: LAST SOUND ============
 function renderLastSound() {
-  const d = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2)[state[5].q];
+  const d = ([lastSoundData,lastSoundData2,lastSoundData3][lastSoundRoundIndex % 3])[state[5].q];
   document.getElementById('lastEmoji').textContent = d.emoji;
 
   const container = document.getElementById('letterOptions');
