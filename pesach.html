@@ -476,7 +476,7 @@
 
 <div class="header">
   <h1>🌸 משחקי מילים לפסח 🌸</h1>
-  <p>משחקים עם מילים של חג הפסח</p>
+
   <p style="margin-top:6px;font-size:0.8rem;color:rgba(255,255,255,0.7);">עורכת: לילך כספרי — קלינאית תקשורת</p>
 </div>
 
@@ -695,6 +695,14 @@
   <div class="letter-options" id="letterOptions"></div>
   <div class="feedback-box" id="fb5"></div>
   <button class="next-btn" id="next5" onclick="nextQuestion(5)" style="display:none">הבא ←</button>
+
+  <!-- מסך סיום -->
+  <div id="win5" style="display:none;text-align:center;padding:30px 20px;">
+    <div style="font-size:4rem;margin-bottom:10px;">🎊</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--orange);margin-bottom:8px;">כל הכבוד!</div>
+    <div id="win5score" style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--blue);margin-bottom:24px;"></div>
+    <button onclick="startGame(5)" style="font-family:'Fredoka One',cursive;font-size:1.4rem;background:var(--orange);color:white;border:none;border-radius:20px;padding:14px 32px;cursor:pointer;">🔄 שחק שוב!</button>
+  </div>
 </div>
 
 <!-- GAME 6: SONG FILL-IN -->
@@ -747,7 +755,7 @@ const rhymeData = [
 ];
 
 const sylData = [
-  { emoji:'🔺', word:'פִּירָמִידָה', syllables:['פי','ר','מי','דה'], count:4, display:'פירמידה' },
+  { emoji:'⚽', word:'כַּדּוּר', syllables:['כ','דו','ר'], count:3, display:'כדור' },
   { emoji:'🫓', word:'מַצָּה', syllables:['מ','צה'], count:2, display:'מצה' },
   { emoji:'🥗', word:'כַּרְפַּס', syllables:['כ','ר','פ','ס'], count:4, display:'כרפס' },
   { emoji:'📖', word:'הַגָּדָה', syllables:['ה','ג','דה'], count:3, display:'הגדה' },
@@ -894,14 +902,11 @@ let letterRounds = [];
 
 const lastSoundData = [
   { emoji:'🐴', word:'סוּס', display:'סוס', lastLetter:'ס', options:['ס','ן','ר','ת'] },
-  { emoji:'🔺', word:'פִּירָמִידָה', display:'פירמידה', lastLetter:'ה', options:['ת','ה','א','ס'] },
+  { emoji:'⚽', word:'כַּדּוּר', display:'כדור', lastLetter:'ר', options:['ר','ד','ל','נ'] },
   { emoji:'🫓', word:'מַצָּה', display:'מצה', lastLetter:'ה', options:['ת','ה','א','ס'] },
-  { emoji:'🪑', word:'כִּסֵּא', display:'כיסא', lastLetter:'א', options:['ה','ס','א','ן'] },
-  { emoji:'🥗', word:'חֲזֶרֶת', display:'חזרת', lastLetter:'ת', options:['ת','ד','ה','ס'] },
-  { emoji:'🌰', word:'אֱגוֹז', display:'אגוז', lastLetter:'ז', options:['ב','ר','ל','ז'] },
-  { emoji:'🌸', word:'אָבִיב', display:'אביב', lastLetter:'ב', options:['ב','פ','ד','ר'] },
-  { emoji:'🌨️', word:'בָּרָד', display:'ברד', lastLetter:'ד', options:['ד','ר','ת','ב'] },
-  { emoji:'🐸', word:'צְפַרְדֵּעַ', display:'צפרדע', lastLetter:'ע', options:['ע','א','ה','י'] },
+  { emoji:'⭐', word:'כּוֹכָב', display:'כוכב', lastLetter:'ב', options:['ב','פ','ד','ר'] },
+  { emoji:'🌸', word:'פֶּרַח', display:'פרח', lastLetter:'ח', options:['ח','כ','ה','ת'] },
+  { emoji:'👜', word:'תִּיק', display:'תיק', lastLetter:'ק', options:['ק','כ','ג','ת'] },
 ];
 
 const lastSoundData2 = [
@@ -909,11 +914,7 @@ const lastSoundData2 = [
   { emoji:'🍽️', word:'צַלַּחַת', display:'צלחת', lastLetter:'ת', options:['ת','ד','ה','ס'] },
   { emoji:'👕', word:'חוּלְצָה', display:'חולצה', lastLetter:'ה', options:['ה','ת','א','ס'] },
   { emoji:'🏠', word:'בַּיִת', display:'בית', lastLetter:'ת', options:['ת','ד','ב','ה'] },
-  { emoji:'🐇', word:'אַרְנָב', display:'ארנב', lastLetter:'ב', options:['ב','פ','ד','ר'] },
-  { emoji:'🫑', word:'פִּלְפֵּל', display:'פלפל', lastLetter:'ל', options:['ל','ר','נ','ד'] },
-  { emoji:'⚙️', word:'גַּלְגַּל', display:'גלגל', lastLetter:'ל', options:['ל','ר','כ','ד'] },
   { emoji:'🍎', word:'תַּפּוּחַ', display:'תפוח', lastLetter:'ח', options:['ח','כ','ה','ת'] },
-  { emoji:'⭕', word:'עִגּוּל', display:'עיגול', lastLetter:'ל', options:['ל','ר','נ','ב'] },
   { emoji:'🌽', word:'תִּירָס', display:'תירס', lastLetter:'ס', options:['ס','ת','ז','ר'] },
 ];
 
@@ -945,7 +946,14 @@ function startGame(n) {
   if(n===2) { sylRoundIndex++; state[2].total = ([sylData,sylData2,sylData3][sylRoundIndex % 3]).length; }
   if(n===3) { firstSoundRoundIndex++; state[3].total = (firstSoundRoundIndex % 2 === 0 ? firstSoundData : firstSoundData2).length; }
   if(n===4) { letterRounds = []; letterRoundIndex++; state[4].total = 8; }
-  if(n===5) { lastSoundRoundIndex++; state[5].total = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length; }
+  if(n===5) {
+    lastSoundRoundIndex++;
+    state[5].total = (lastSoundRoundIndex % 2 === 0 ? lastSoundData : lastSoundData2).length;
+    document.getElementById('win5').style.display = 'none';
+    document.getElementById('lastCard').style.display = '';
+    document.getElementById('letterOptions').style.display = '';
+    document.getElementById('fb5').style.display = '';
+  }
   if(n===6) { renderSongQuestion(6); return; }
   if(n===7) { initWordSearch(); return; }
   if(n===8) { initMemory(); return; }
@@ -983,6 +991,25 @@ function nextQuestion(n) {
   renderQuestion(n);
 }
 
+function playSuccessSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.2);
+      osc.start(ctx.currentTime + i * 0.1);
+      osc.stop(ctx.currentTime + i * 0.1 + 0.2);
+    });
+  } catch(e) {}
+}
+
 function showFeedback(n, correct, extra) {
   const fb = document.getElementById('fb'+n);
   fb.classList.remove('good','bad');
@@ -990,6 +1017,7 @@ function showFeedback(n, correct, extra) {
   fb.classList.add(correct?'good':'bad','show');
   document.getElementById('next'+n).style.display = 'block';
   if(correct) {
+    playSuccessSound();
     showConfetti();
     state[n].score++;
     document.getElementById('score'+n).textContent = '⭐ '+state[n].score;
@@ -1011,6 +1039,16 @@ function showConfetti() {
 
 function showWin(n) {
   const s = state[n];
+  if(n === 5) {
+    // הסתר אלמנטי המשחק והצג מסך סיום
+    document.getElementById('lastCard').style.display = 'none';
+    document.getElementById('letterOptions').style.display = 'none';
+    document.getElementById('fb5').style.display = 'none';
+    document.getElementById('next5').style.display = 'none';
+    document.getElementById('win5score').textContent = 'קיבלתם ' + s.score + ' מתוך ' + s.total + ' ⭐';
+    document.getElementById('win5').style.display = 'block';
+    return;
+  }
   document.getElementById('game'+n).classList.remove('active');
   document.getElementById('homeScreen').classList.remove('hidden');
   setTimeout(()=>{
@@ -1300,8 +1338,8 @@ function renderSongQuestion(gameNum) {
 }
 
 // ============ GAME 7: WORD SEARCH ============
-const wsWords = ['מצה','סדר','יין','פסח','מרור','כרפס','הגדה','אביב','חרוסת','ברד'];
-const wsEmojis = {'מצה':'🫓','סדר':'🍽️','יין':'🍷','פסח':'🎉','מרור':'🥬','כרפס':'🥗','הגדה':'📖','אביב':'🌸','חרוסת':'🍯','ברד':'🌨️'};
+const wsWords = ['מצה','סדר','יין','פסח','מרור','כרפס','הגדה','אביב','כוכב','ברד'];
+const wsEmojis = {'מצה':'🫓','סדר':'🍽️','יין':'🍷','פסח':'🎉','מרור':'🥬','כרפס':'🥗','הגדה':'📖','אביב':'🌸','כוכב':'⭐','ברד':'🌨️'};
 const GRID_SIZE = 9;
 
 let wsGrid = [], wsPlaced = [], wsFound = [], wsSelecting = false, wsStart = null, wsCurrent = [];
