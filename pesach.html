@@ -524,52 +524,68 @@
 </div>
 
 <!-- GAME 8: 2-PLAYER MATCHING -->
-<div class="game-screen" id="game8">
-  <button class="back-btn" onclick="goHome()">← חזרה</button>
-  <div class="game-title" style="color:var(--purple)">🃏 משחק ההתאמה!</div>
+<div class="game-screen" id="game8" style="background:linear-gradient(135deg,#FF6B9D 0%,#FF9F43 25%,#FECA57 50%,#48DBFB 75%,#FF9FF3 100%);min-height:100vh;position:relative;overflow:hidden;">
+  <!-- רקע עם כוכבים ונקודות -->
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;">
+    <div style="position:absolute;top:8%;left:10%;font-size:1.8rem;animation:float1 3s ease-in-out infinite;">⭐</div>
+    <div style="position:absolute;top:15%;right:8%;font-size:1.4rem;animation:float2 4s ease-in-out infinite;">🌟</div>
+    <div style="position:absolute;top:5%;left:50%;font-size:1.2rem;animation:float1 5s ease-in-out infinite;">✨</div>
+    <div style="position:absolute;bottom:20%;left:5%;font-size:1.5rem;animation:float2 3.5s ease-in-out infinite;">🎉</div>
+    <div style="position:absolute;bottom:15%;right:6%;font-size:1.3rem;animation:float1 4s ease-in-out infinite;">🎊</div>
+  </div>
+  <style>
+    @keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+  </style>
+
+  <div style="position:relative;z-index:1;">
+  <button class="back-btn" onclick="goHome()" style="background:rgba(255,255,255,0.5);color:#444;border:2px solid rgba(255,255,255,0.8);font-weight:bold;">← חזרה</button>
+  <div style="font-family:'Fredoka One',cursive;font-size:2rem;text-align:center;margin:8px 0 4px;color:white;text-shadow:0 3px 10px rgba(0,0,0,0.2);">🃏 משחק ההתאמה!</div>
 
   <!-- INTRO SCREEN -->
   <div id="g8intro" style="text-align:center;padding:16px 0;">
-    <div style="font-size:3rem;margin-bottom:8px;">👫</div>
-    <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--blue);margin-bottom:20px;">שני שחקנים — כל אחד דקה אחת!</div>
-    <div style="background:white;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
-      <div style="font-size:1.5rem;">👤</div>
-      <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;margin:6px 0;">שם שחקן 1:</div>
-      <input id="p1name" type="text" placeholder="שם..." style="font-family:'Fredoka One',cursive;font-size:1.1rem;border:2px solid var(--blue);border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;" />
+    <div style="font-size:3.5rem;margin-bottom:8px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));">👫</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:white;text-shadow:0 2px 6px rgba(0,0,0,0.2);margin-bottom:6px;">שני שחקנים — כל אחד דקה אחת!</div>
+    <div style="font-family:'Rubik',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);margin-bottom:20px;">מצאו כמה שיותר זוגות של תמונה ואות שמתחילה אליה!</div>
+    <div style="background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);border-radius:20px;padding:16px;margin-bottom:12px;border:3px solid rgba(255,255,255,0.8);box-shadow:0 8px 25px rgba(0,0,0,0.1);">
+      <div style="font-size:1.8rem;">🌸</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;margin:6px 0;color:#333;">שם שחקן 1:</div>
+      <input id="p1name" type="text" placeholder="שם..." style="font-family:'Fredoka One',cursive;font-size:1.1rem;border:3px solid #FF6B9D;border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;background:white;color:#333;" />
     </div>
-    <div style="background:white;border-radius:20px;padding:16px;margin-bottom:20px;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
-      <div style="font-size:1.5rem;">👤</div>
-      <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;margin:6px 0;">שם שחקן 2:</div>
-      <input id="p2name" type="text" placeholder="שם..." style="font-family:'Fredoka One',cursive;font-size:1.1rem;border:2px solid var(--purple);border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;" />
+    <div style="background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);border-radius:20px;padding:16px;margin-bottom:20px;border:3px solid rgba(255,255,255,0.8);box-shadow:0 8px 25px rgba(0,0,0,0.1);">
+      <div style="font-size:1.8rem;">🌈</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;margin:6px 0;color:#333;">שם שחקן 2:</div>
+      <input id="p2name" type="text" placeholder="שם..." style="font-family:'Fredoka One',cursive;font-size:1.1rem;border:3px solid #48DBFB;border-radius:12px;padding:8px 14px;width:80%;text-align:center;outline:none;background:white;color:#333;" />
     </div>
-    <button class="next-btn" onclick="startG8Player(1)" style="display:inline-block;">התחילו! ▶</button>
+    <button onclick="startG8Player(1)" style="font-family:'Fredoka One',cursive;font-size:1.4rem;background:white;color:#FF6B9D;border:none;border-radius:50px;padding:14px 40px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.15);font-weight:bold;transition:transform 0.1s;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">🎮 התחילו!</button>
   </div>
 
-  <!-- READY SCREEN (between turns) -->
+  <!-- READY SCREEN -->
   <div id="g8ready" style="display:none;text-align:center;padding:20px 0;">
-    <div style="font-size:3rem;margin-bottom:12px;">⏳</div>
-    <div id="g8readyText" style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--blue);margin-bottom:20px;"></div>
-    <button class="next-btn" onclick="beginTurn()" style="display:inline-block;">התחל תור! ▶</button>
+    <div style="font-size:4rem;margin-bottom:12px;">⏳</div>
+    <div id="g8readyText" style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;text-shadow:0 2px 6px rgba(0,0,0,0.2);margin-bottom:20px;"></div>
+    <button onclick="beginTurn()" style="font-family:'Fredoka One',cursive;font-size:1.4rem;background:white;color:#FF9F43;border:none;border-radius:50px;padding:14px 40px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.15);">התחל תור! ▶</button>
   </div>
 
   <!-- GAME BOARD -->
   <div id="g8board" style="display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <div id="g8playerLabel" style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--purple);"></div>
-      <div id="g8timer" style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--red);min-width:48px;text-align:center;">60</div>
-      <div id="g8pairsLabel" style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--green);">✅ 0</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;background:rgba(255,255,255,0.4);border-radius:16px;padding:8px 14px;">
+      <div id="g8playerLabel" style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#333;"></div>
+      <div id="g8timer" style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:#e74c3c;min-width:48px;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,0.1);">60</div>
+      <div id="g8pairsLabel" style="font-family:'Fredoka One',cursive;font-size:1rem;color:#27ae60;">✅ 0</div>
     </div>
     <div id="memGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin:0 auto;"></div>
   </div>
 
   <!-- RESULT SCREEN -->
   <div id="g8result" style="display:none;text-align:center;padding:16px 0;">
-    <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
-    <div id="g8resultText" style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--blue);margin-bottom:16px;line-height:1.6;"></div>
-    <button class="next-btn" onclick="initMemory()" style="display:inline-block;">🔄 משחק חדש</button>
+    <div style="font-size:4rem;margin-bottom:8px;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.2));">🏆</div>
+    <div id="g8resultText" style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:white;text-shadow:0 2px 6px rgba(0,0,0,0.2);margin-bottom:16px;line-height:1.6;"></div>
+    <button onclick="initMemory()" style="font-family:'Fredoka One',cursive;font-size:1.3rem;background:white;color:#FF6B9D;border:none;border-radius:50px;padding:14px 36px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.15);">🔄 משחק חדש</button>
   </div>
 
   <div class="feedback-box" id="fb8"></div>
+  </div>
 </div>
 <div class="game-screen" id="game1">
   <button class="back-btn" onclick="goHome()">← חזרה</button>
@@ -1456,7 +1472,7 @@ function renderWordList() {
 
 function renderWordSearch() {
   const grid = document.getElementById('wsGrid');
-  const available = Math.min(window.innerWidth, 480) - 60;
+  const available = Math.min(window.innerWidth, 380) - 40;
   const cellSize = Math.floor(available / GRID_SIZE);
   grid.style.gridTemplateColumns = `repeat(${GRID_SIZE}, ${cellSize}px)`;
   grid.style.margin = '0 auto';
@@ -1470,7 +1486,7 @@ function renderWordSearch() {
       cell.textContent = wsGrid[r][c];
       cell.style.cssText = `
         width:${cellSize}px;height:${cellSize}px;display:flex;align-items:center;justify-content:center;
-        font-family:'Fredoka One',cursive;font-size:${cellSize*0.65}px;border-radius:6px;
+        font-family:'Fredoka One',cursive;font-size:${cellSize*0.85}px;border-radius:6px;
         background:#f5f5f5;cursor:pointer;user-select:none;transition:background 0.1s;
         border:1px solid #e8e8e8;
       `;
@@ -1603,6 +1619,36 @@ const doublePairsBoard2 = [
   {id:'א', a:'🌰', b:'א'},
 ];
 
+const doublePairsBoard3 = [
+  {id:'ר', a:'🚂', b:'ר'},
+  {id:'כ', a:'🐑', b:'כ'},
+  {id:'ל', a:'❤️', b:'ל'},
+  {id:'נ', a:'🐆', b:'נ'},
+  {id:'ט', a:'🦚', b:'ט'},
+  {id:'ו', a:'🌹', b:'ו'},
+  {id:'ז', a:'🫒', b:'ז'},
+  {id:'ד', a:'🐟', b:'ד'},
+  {id:'ג', a:'🐪', b:'ג'},
+  {id:'ב', a:'🏠', b:'ב'},
+  {id:'ש', a:'☀️', b:'ש'},
+];
+
+const doublePairsBoard4 = [
+  {id:'פ', a:'👄', b:'פ'},
+  {id:'ע', a:'🌳', b:'ע'},
+  {id:'ס', a:'🐴', b:'ס'},
+  {id:'צ', a:'🐢', b:'צ'},
+  {id:'ק', a:'🌈', b:'ק'},
+  {id:'י', a:'🕊️', b:'י'},
+  {id:'ח', a:'🐌', b:'ח'},
+  {id:'ה', a:'🏔️', b:'ה'},
+  {id:'א', a:'🐇', b:'א'},
+  {id:'מ', a:'🗺️', b:'מ'},
+  {id:'ת', a:'🥁', b:'ת'},
+];
+
+const allBoards = [doublePairs, doublePairsBoard2, doublePairsBoard3, doublePairsBoard4];
+
 let g8boardIndex = 0;
 let g8scores = [0, 0];
 let g8currentPlayer = 0;
@@ -1621,11 +1667,11 @@ function initMemory() {
   document.getElementById('p2name').value = '';
   g8scores = [0, 0];
   // Alternate board each new game
-  g8boardIndex = (g8boardIndex + 1) % 2;
+  g8boardIndex = (g8boardIndex + 1) % 4;
 }
 
 function buildDeck() {
-  const pool = g8boardIndex === 0 ? doublePairs : doublePairsBoard2;
+  const pool = allBoards[g8boardIndex];
   doubleRoundPairs = shuffle([...pool]).slice(0, 8);
   doubleDeck = shuffle(
     doubleRoundPairs.flatMap(p => [
