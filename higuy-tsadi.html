@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0111)file:///Users/lilachcaspary/Downloads/%D7%94%D7%99%D7%92%D7%95%D7%99_%D7%A6_%D7%9E%D7%A9%D7%97%D7%A7%20(2).html -->
-<html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>היגוי צ׳ – משחק לילך כספרי</title>
-<link href="./היגוי צ׳ – משחק לילך כספרי_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
   :root {
     --green: #2ecc71;
@@ -518,14 +518,14 @@
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="showScreen(&#39;start&#39;)">תחילת מילה</button>
-  <button class="tab-btn" onclick="showScreen(&#39;mid&#39;)">אמצע מילה</button>
-  <button class="tab-btn" onclick="showScreen(&#39;end&#39;)">סוף מילה</button>
-  <button class="tab-btn" onclick="showScreen(&#39;xo&#39;)">✖⭕ איקס-עיגול</button>
-  <button class="tab-btn" onclick="showScreen(&#39;sentence&#39;)">💬 בונים משפט</button>
-  <button class="tab-btn" onclick="showScreen(&#39;bingo&#39;)">🎯 בינגו</button>
-  <button class="tab-btn" onclick="showScreen(&#39;story&#39;)">📖 סיפור החידות</button>
-  <button class="tab-btn" onclick="showScreen(&#39;cert&#39;)">🏆 תעודה</button>
+  <button class="tab-btn active" onclick="showScreen('start')">תחילת מילה</button>
+  <button class="tab-btn" onclick="showScreen('mid')">אמצע מילה</button>
+  <button class="tab-btn" onclick="showScreen('end')">סוף מילה</button>
+  <button class="tab-btn" onclick="showScreen('xo')">✖⭕ איקס-עיגול</button>
+  <button class="tab-btn" onclick="showScreen('sentence')">💬 בונים משפט</button>
+  <button class="tab-btn" onclick="showScreen('bingo')">🎯 בינגו</button>
+  <button class="tab-btn" onclick="showScreen('story')">📖 סיפור החידות</button>
+  <button class="tab-btn" onclick="showScreen('cert')">🏆 תעודה</button>
 </div>
 
 <!-- ===== START WORDS SCREEN ===== -->
@@ -537,172 +537,7 @@
       חזרו על כל מילה <strong style="color:var(--dark-green);">3 פעמים</strong> – ריבוע אחד לכל חזרה 🟩🟩🟩
     </div>
   </div>
-  <div class="cards-grid" id="start-cards">
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🍽️</span>
-      <span class="word"><span class="highlight">צ</span>לחת</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🐸</span>
-      <span class="word"><span class="highlight">צ</span>פרדע</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🐦</span>
-      <span class="word"><span class="highlight">צ</span>יפור</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🐢</span>
-      <span class="word"><span class="highlight">צ</span>ב</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">📿</span>
-      <span class="word"><span class="highlight">צ</span>מיד</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🐚</span>
-      <span class="word"><span class="highlight">צ</span>דף</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🚢</span>
-      <span class="word"><span class="highlight">צ</span>וללת</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🧣</span>
-      <span class="word"><span class="highlight">צ</span>עיף</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🦺</span>
-      <span class="word"><span class="highlight">צ</span>ריח</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🤣</span>
-      <span class="word"><span class="highlight">צ</span>חוק</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🪂</span>
-      <span class="word"><span class="highlight">צ</span>נחן</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🎨</span>
-      <span class="word"><span class="highlight">צ</span>בעים</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🫙</span>
-      <span class="word"><span class="highlight">צ</span>נצנת</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">🦗</span>
-      <span class="word"><span class="highlight">צ</span>רצר</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">תחילה</span>
-      <span class="emoji">⚖️</span>
-      <span class="word"><span class="highlight">צ</span>דק</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div></div>
+  <div class="cards-grid" id="start-cards"></div>
 </div>
 
 <!-- ===== MID WORDS SCREEN ===== -->
@@ -714,139 +549,7 @@
       חזרו על כל מילה <strong style="color:var(--dark-green);">3 פעמים</strong> – ריבוע אחד לכל חזרה 🟩🟩🟩
     </div>
   </div>
-  <div class="cards-grid" id="mid-cards">
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">📷</span>
-      <span class="word">מ<span class="highlight">צ</span>למה</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🧅</span>
-      <span class="word">ב<span class="highlight">צ</span>ל</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🧑‍🎨</span>
-      <span class="word">מ<span class="highlight">צ</span>ייר</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🍕</span>
-      <span class="word">פי<span class="highlight">צ</span>ה</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🧭</span>
-      <span class="word">מ<span class="highlight">צ</span>פן</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🫓</span>
-      <span class="word">מ<span class="highlight">צ</span>ה</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🏃</span>
-      <span class="word">ר<span class="highlight">צ</span>ים</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🪴</span>
-      <span class="word">ע<span class="highlight">צ</span>יץ</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">💣</span>
-      <span class="word">פ<span class="highlight">צ</span>צה</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🦴</span>
-      <span class="word">ע<span class="highlight">צ</span>ם</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">😢</span>
-      <span class="word">ע<span class="highlight">צ</span>וב</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">אמצע</span>
-      <span class="emoji">🪂</span>
-      <span class="word">מ<span class="highlight">צ</span>נח</span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div></div>
+  <div class="cards-grid" id="mid-cards"></div>
 </div>
 
 <!-- ===== END WORDS SCREEN ===== -->
@@ -858,162 +561,25 @@
       חזרו על כל מילה <strong style="color:var(--dark-green);">3 פעמים</strong> – ריבוע אחד לכל חזרה 🟩🟩🟩
     </div>
   </div>
-  <div class="cards-grid" id="end-cards">
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🌳</span>
-      <span class="word">ע<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🏃</span>
-      <span class="word">ר<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🏹</span>
-      <span class="word">ח<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🦅</span>
-      <span class="word">נ<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🌵</span>
-      <span class="word">קו<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">✨</span>
-      <span class="word">נוצ<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🍹</span>
-      <span class="word">מי<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">☀️</span>
-      <span class="word">קי<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🌀</span>
-      <span class="word">קפי<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🌍</span>
-      <span class="word">אר<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">👕</span>
-      <span class="word">מגה<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div>
-    <div class="word-card" data-reps="0">
-      <span class="done-badge">✅</span>
-      <span class="position-badge">סוף</span>
-      <span class="emoji">🤸</span>
-      <span class="word">קופ<span class="highlight">ץ</span></span>
-      <div class="reps">
-        <div class="rep-box" data-rep="0" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="1" onclick="pressRep(this)"></div>
-        <div class="rep-box" data-rep="2" onclick="pressRep(this)"></div>
-      </div>
-    </div></div>
+  <div class="cards-grid" id="end-cards"></div>
 </div>
 
 <!-- ===== XO SCREEN ===== -->
 <div id="screen-xo" class="screen">
   <div class="section-title">✖⭕ איקס-עיגול – הצליל צ׳</div>
+
+  <!-- BOARD SELECTOR -->
+  <div style="text-align:center;margin-bottom:14px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;" id="xo-board-btns"></div>
+
   <div style="text-align:center;margin-bottom:14px;">
-    <span id="xo-turn-label" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.2rem;color:var(--dark-green);background:white;padding:8px 24px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">תור שחקן 1 ❌</span>
+    <span id="xo-turn-label" style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--dark-green);background:white;padding:8px 24px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">תור שחקן 1 ❌</span>
     &nbsp;
     <button class="btn-secondary" style="margin-top:0" onclick="resetXO()">↺ איפוס</button>
   </div>
+
   <div style="max-width:420px;margin:0 auto;">
     <div class="xo-board">
-      <div class="xo-grid" id="xo-grid-0">
-        <div class="xo-cell" data-word="צדף" onclick="xoClick(this)">צדף</div>
-        <div class="xo-cell" data-word="ציפור" onclick="xoClick(this)">ציפור</div>
-        <div class="xo-cell" data-word="צב" onclick="xoClick(this)">צב</div>
-        <div class="xo-cell" data-word="צבע" onclick="xoClick(this)">צבע</div>
-        <div class="xo-cell free" data-word="המצא מילה" onclick="xoClick(this)" title="המצא מילה עם צ׳!">💡 המצא<br>מילה!</div>
-        <div class="xo-cell" data-word="צחוק" onclick="xoClick(this)">צחוק</div>
-        <div class="xo-cell" data-word="צלחת" onclick="xoClick(this)">צלחת</div>
-        <div class="xo-cell" data-word="צפרדע" onclick="xoClick(this)">צפרדע</div>
-        <div class="xo-cell" data-word="צמיד" onclick="xoClick(this)">צמיד</div>
-      </div>
+      <div class="xo-grid" id="xo-grid-0"></div>
     </div>
   </div>
 
@@ -1021,120 +587,85 @@
   <div id="xo-free-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
     <div style="background:white;border-radius:24px;padding:32px 28px;text-align:center;max-width:340px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
       <div style="font-size:2.5rem;margin-bottom:10px;">💡</div>
-      <div id="xo-free-player-msg" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.4rem;color:var(--dark-green);margin-bottom:10px;"></div>
+      <div id="xo-free-player-msg" style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--dark-green);margin-bottom:10px;"></div>
       <div style="font-size:1rem;color:#555;margin-bottom:22px;line-height:1.7;">המצא מילה עם הצליל <strong style="color:var(--green);">צ׳</strong> ואמור אותה בקול!</div>
-      <button onclick="closeFreePopup()" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;border:none;border-radius:50px;padding:12px 32px;font-family:&#39;Heebo&#39;,sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 14px rgba(46,204,113,0.35);">
+      <button onclick="closeFreePopup()" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;border:none;border-radius:50px;padding:12px 32px;font-family:'Heebo',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 14px rgba(46,204,113,0.35);">
         ✅ אמרתי! סמן תור
       </button>
     </div>
   </div>
 
-  <div id="xo-win-banner" style="display:none;text-align:center;margin-top:16px;background:linear-gradient(135deg,#f9e04b,#f39c12);color:white;border-radius:20px;padding:16px;font-family:&#39;Fredoka One&#39;,cursive;font-size:1.8rem;box-shadow:0 6px 20px rgba(243,156,18,0.4);max-width:420px;margin:16px auto 0;"></div>
+  <!-- WIN BANNER -->
+  <div id="xo-win-banner" style="display:none;text-align:center;margin-top:16px;background:linear-gradient(135deg,#f9e04b,#f39c12);color:white;border-radius:20px;padding:20px 16px;font-family:'Fredoka One',cursive;box-shadow:0 6px 20px rgba(243,156,18,0.4);max-width:420px;margin:16px auto 0;">
+    <div id="xo-win-text" style="font-size:1.8rem;margin-bottom:12px;"></div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="resetXO()" style="background:white;color:var(--dark-green);border:none;border-radius:50px;padding:10px 22px;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+        🔄 לשחק שוב
+      </button>
+      <button onclick="nextXOBoard()" style="background:rgba(255,255,255,0.25);color:white;border:2px solid white;border-radius:50px;padding:10px 22px;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;">
+        🎲 לוח חדש
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- ===== STORY SCREEN ===== -->
 <div id="screen-story" class="screen">
   <div class="section-title">📖 סיפור ה-צ׳ והחידות</div>
-  <div class="story-box">
-    ביום שמש חם, הציפור <span class="צ-word" onclick="ping(this)">ציפי</span> ראתה
-    <span class="צ-word" onclick="ping(this)">צפרדע</span> ירוקה יושבת על
-    <span class="צ-word" onclick="ping(this)">צדף</span> גדול.
-    פתאום הגיע הכלב וביידו
-    <span class="צ-word" onclick="ping(this)">צבעים</span> מרהיבים.
-    הם החליטו <span class="צ-word" onclick="ping(this)">לציר</span> יחד
-    על <span class="צ-word" onclick="ping(this)">צלחת</span> ישנה ומצאו בתוכה
-    <span class="צ-word" onclick="ping(this)">צמיד</span> <span class="צ-word" onclick="ping(this)">מנצנץ</span>!
-    הם כל כך שמחו שהתפרצו ב<span class="צ-word" onclick="ping(this)">צחוק</span> חזק!
+
+  <!-- STORY NAVIGATION -->
+  <div style="text-align:center;margin-bottom:16px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+    <button onclick="loadStory(0)" id="story-btn-0" class="tab-btn active" style="font-size:0.9rem;padding:8px 18px;">סיפור 1</button>
+    <button onclick="loadStory(1)" id="story-btn-1" class="tab-btn" style="font-size:0.9rem;padding:8px 18px;">סיפור 2</button>
+    <button onclick="loadStory(2)" id="story-btn-2" class="tab-btn" style="font-size:0.9rem;padding:8px 18px;">סיפור 3</button>
   </div>
 
+  <!-- STORY BOX -->
+  <div class="story-box" id="story-text"></div>
+
+  <!-- BOTTOM BUTTONS -->
+  <div style="text-align:center;margin:16px 0;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+    <button onclick="rereadStory()" style="background:white;border:2px solid var(--green);color:var(--dark-green);border-radius:50px;padding:10px 22px;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;">
+      🔁 לקרוא שוב
+    </button>
+    <button onclick="nextStory()" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;border:none;border-radius:50px;padding:10px 22px;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;box-shadow:0 4px 14px rgba(46,204,113,0.3);">
+      📖 סיפור חדש
+    </button>
+  </div>
+
+  <!-- RIDDLES BOX -->
   <div class="riddles-box">
-    <div class="section-title" style="font-size:1.3rem;margin-bottom:16px;">🔍 חידות צדי – לחצו לגלות את התשובה!</div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">1</div>
-      <div class="riddle-text">
-        "אני הולך לאט מאוד ויש לי בית על הגב"
-        <div class="riddle-answer">🐢 צב</div>
-      </div>
-    </div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">2</div>
-      <div class="riddle-text">
-        "אני כלי עגול ששמים עליו את האוכל"
-        <div class="riddle-answer">🍽️ צלחת</div>
-      </div>
-    </div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">3</div>
-      <div class="riddle-text">
-        "אני חיה ירוקה שקופצת בביצה ואומרת קווא-קווא"
-        <div class="riddle-answer">🐸 צפרדע</div>
-      </div>
-    </div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">4</div>
-      <div class="riddle-text">
-        "אני כלי שיט שיודע לרדת עמוק מתחת למים"
-        <div class="riddle-answer">🚢 צוללת</div>
-      </div>
-    </div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">5</div>
-      <div class="riddle-text">
-        "בחורף, שמים אותי מסביב לצוואר כדי שיהיה חם"
-        <div class="riddle-answer">🧣 צעיף</div>
-      </div>
-    </div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">6</div>
-      <div class="riddle-text">
-        "אני קישוט שעונד על היד"
-        <div class="riddle-answer">📿 צמיד</div>
-      </div>
-    </div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">7</div>
-      <div class="riddle-text">
-        "יש לי כנפיים, אני מצייצת ופורחת בשמיים"
-        <div class="riddle-answer">🐦 ציפור</div>
-      </div>
-    </div>
-    <div class="riddle-item" onclick="revealRiddle(this)">
-      <div class="riddle-num">8</div>
-      <div class="riddle-text">
-        "עושים אותי לפסח – אני לחם שטוח"
-        <div class="riddle-answer">🫓 מצה</div>
-      </div>
-    </div>
+    <div class="section-title" style="font-size:1.3rem;margin-bottom:16px;" id="riddles-title">🔍 חידות צדי – לחצו לגלות את התשובה!</div>
+    <div id="riddles-list"></div>
   </div>
 </div>
 
 <!-- ===== BINGO SCREEN ===== -->
 <div id="screen-bingo" class="screen">
   <div class="section-title">🎯 בינגו – הצליל צ׳</div>
+  <div style="text-align:center;margin-bottom:10px;color:#666;font-size:0.9rem;" id="bingo-round-label">סבב 1 – לוחות 1 ו-2</div>
   <div class="bingo-container">
     <div class="bingo-caller">
       <h3>🎲 מילת הגרלה:</h3>
       <div class="caller-word" id="caller-word"></div>
       <div>
         <button class="btn-primary" onclick="drawBingo()">🎲 הגרל מילה</button>
-        <button class="btn-secondary" onclick="resetBingo()">↺ איפוס</button>
+        <button class="btn-secondary" onclick="resetBingo()">↺ איפוס סבב</button>
       </div>
     </div>
 
-    <div class="bingo-boards" id="bingo-boards">
-    <div class="bingo-board">
-      <h3>לוח 1</h3>
-      <div class="bingo-grid" id="bingo-grid-0">
-        <div class="bingo-cell" onclick="markBingo(this,0)" data-word="צדף">צדף</div><div class="bingo-cell" onclick="markBingo(this,0)" data-word="ציפור">ציפור</div><div class="bingo-cell" onclick="markBingo(this,0)" data-word="צב">צב</div><div class="bingo-cell" onclick="markBingo(this,0)" data-word="צבע">צבע</div><div class="bingo-cell free" onclick="markBingo(this,0)" data-word="FREE">המצא<br>מילה!</div><div class="bingo-cell" onclick="markBingo(this,0)" data-word="צחוק">צחוק</div><div class="bingo-cell" onclick="markBingo(this,0)" data-word="צלחת">צלחת</div><div class="bingo-cell" onclick="markBingo(this,0)" data-word="צפרדע">צפרדע</div><div class="bingo-cell" onclick="markBingo(this,0)" data-word="צמיד">צמיד</div>
+    <div class="bingo-boards" id="bingo-boards"></div>
+    <div class="bingo-win-banner" id="bingo-banner">
+      <div id="bingo-banner-text">🎉 בינגו! כל הכבוד! 🎉</div>
+      <div style="margin-top:14px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="nextBingoRound()" style="background:white;color:var(--dark-green);border:none;border-radius:50px;padding:10px 24px;font-family:'Heebo',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+          🔄 לשחק שוב עם מילים אחרות?
+        </button>
+        <button onclick="resetBingo()" style="background:rgba(255,255,255,0.3);color:white;border:2px solid white;border-radius:50px;padding:10px 24px;font-family:'Heebo',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;">
+          ↺ התחל מחדש
+        </button>
       </div>
     </div>
-    <div class="bingo-board">
-      <h3>לוח 2</h3>
-      <div class="bingo-grid" id="bingo-grid-1">
-        <div class="bingo-cell" onclick="markBingo(this,1)" data-word="ציפור">ציפור</div><div class="bingo-cell" onclick="markBingo(this,1)" data-word="צדף">צדף</div><div class="bingo-cell" onclick="markBingo(this,1)" data-word="צפרדע">צפרדע</div><div class="bingo-cell" onclick="markBingo(this,1)" data-word="צמיד">צמיד</div><div class="bingo-cell free" onclick="markBingo(this,1)" data-word="FREE">המצא<br>מילה!</div><div class="bingo-cell" onclick="markBingo(this,1)" data-word="צלחת">צלחת</div><div class="bingo-cell" onclick="markBingo(this,1)" data-word="צבע">צבע</div><div class="bingo-cell" onclick="markBingo(this,1)" data-word="צחוק">צחוק</div><div class="bingo-cell" onclick="markBingo(this,1)" data-word="צב">צב</div>
-      </div>
-    </div></div>
-    <div class="bingo-win-banner" id="bingo-banner">🎉 בינגו! כל הכבוד! 🎉</div>
   </div>
 </div>
 
@@ -1159,119 +690,43 @@
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
         <div id="sent-stars" style="font-size:1.6rem;min-width:50px;text-align:center;"></div>
-        <button id="sent-go-btn" onclick="confirmSentence()" disabled="" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;border:none;border-radius:50px;padding:10px 22px;font-family:&#39;Heebo&#39;,sans-serif;font-weight:700;font-size:1rem;cursor:pointer;opacity:0.4;transition:all 0.2s;">
+        <button id="sent-go-btn" onclick="confirmSentence()" disabled
+          style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;border:none;border-radius:50px;padding:10px 22px;font-family:'Heebo',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;opacity:0.4;transition:all 0.2s;">
           ✅ בנינו משפט!
         </button>
-        <button onclick="resetSentence()" style="background:white;border:2px solid var(--green);color:var(--dark-green);border-radius:50px;padding:9px 18px;font-family:&#39;Heebo&#39;,sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;">
+        <button onclick="resetSentence()"
+          style="background:white;border:2px solid var(--green);color:var(--dark-green);border-radius:50px;padding:9px 18px;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;">
           ↺ איפוס
         </button>
       </div>
     </div>
 
     <!-- ITEMS GRID -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="sent-items-grid">
-    <div onclick="toggleSentItem(&#39;frog&#39;)" id="si-frog" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🐸</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צפרדע</div>
-      <div id="si-num-frog" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;turtle&#39;)" id="si-turtle" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🐢</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צב</div>
-      <div id="si-num-turtle" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;bird&#39;)" id="si-bird" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🐦</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">ציפור</div>
-      <div id="si-num-bird" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;shell&#39;)" id="si-shell" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🐚</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צדף</div>
-      <div id="si-num-shell" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;plate&#39;)" id="si-plate" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🍽️</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צלחת</div>
-      <div id="si-num-plate" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;jar&#39;)" id="si-jar" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🫙</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צנצנת</div>
-      <div id="si-num-jar" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;submarine&#39;)" id="si-submarine" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🚢</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צוללת</div>
-      <div id="si-num-submarine" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;paint&#39;)" id="si-paint" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🎨</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צבעים</div>
-      <div id="si-num-paint" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;bracelet&#39;)" id="si-bracelet" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">📿</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צמיד</div>
-      <div id="si-num-bracelet" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;plant&#39;)" id="si-plant" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🌿</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צמח</div>
-      <div id="si-num-plant" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;shadow&#39;)" id="si-shadow" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🌳</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צל</div>
-      <div id="si-num-shadow" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  
-    <div onclick="toggleSentItem(&#39;parachute&#39;)" id="si-parachute" style="background:white;border-radius:20px;padding:16px 10px 12px;text-align:center;
-             box-shadow:0 4px 14px rgba(0,0,0,0.08);cursor:pointer;border:3px solid transparent;
-             transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
-      <div style="font-size:2.6rem;margin-bottom:6px;">🪂</div>
-      <div style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.1rem;color:var(--dark-green);">צנחן</div>
-      <div id="si-num-parachute" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
-    </div>
-  </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="sent-items-grid"></div>
 
     <!-- SCORE -->
     <div style="margin-top:20px;background:white;border-radius:20px;padding:16px 20px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
       <span style="font-weight:700;color:var(--dark-green);">ניקוד: </span>
-      <span id="sent-score-display" style="font-family:&#39;Fredoka One&#39;,cursive;font-size:1.2rem;color:var(--green);">⭐ 0</span>
+      <span id="sent-score-display" style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--green);">⭐ 0</span>
       <div id="sent-history" style="margin-top:10px;font-size:0.88rem;color:#555;line-height:2;max-height:120px;overflow-y:auto;"></div>
+    </div>
+  </div>
+
+  <!-- PLAY AGAIN POPUP -->
+  <div id="sent-again-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:24px;padding:32px 28px;text-align:center;max-width:360px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div id="sent-again-stars" style="font-size:2.5rem;margin-bottom:10px;"></div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--dark-green);margin-bottom:8px;">כל הכבוד! 🎉</div>
+      <div id="sent-again-names" style="background:var(--light-green);border-radius:12px;padding:10px;margin-bottom:18px;font-family:'Fredoka One',cursive;color:var(--dark-green);font-size:1.1rem;"></div>
+      <div style="font-size:1rem;color:#555;margin-bottom:22px;">רוצים לשחק שוב עם תמונות חדשות?</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="sentPlayAgain()" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;border:none;border-radius:50px;padding:12px 26px;font-family:'Heebo',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(46,204,113,0.35);">
+          🔄 כן! תמונות חדשות
+        </button>
+        <button onclick="closeSentAgain()" style="background:white;border:2px solid var(--green);color:var(--dark-green);border-radius:50px;padding:12px 22px;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;">
+          המשך עם אותן תמונות
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1414,47 +869,89 @@ function buildCards() {
 }
 
 // ===== XO =====
+const xoBoardSets = [
+  { label: 'לוח 1 – תחילת מילה', words: ['צדף','ציפור','צב','צבע','המצא מילה','צחוק','צלחת','צפרדע','צמיד'] },
+  { label: 'לוח 2 – תחילת מילה', words: ['צנחן','צוללת','צריח','צעיף','המצא מילה','צרצר','צנצנת','צבעים','צחוק'] },
+  { label: 'לוח 3 – אמצע מילה',  words: ['מצלמה','בצל','פיצה','מצפן','המצא מילה','עציץ','פצצה','מצה','מצייר'] },
+  { label: 'לוח 4 – אמצע מילה',  words: ['רצים','בצל','מצפן','מצה','המצא מילה','פיצה','מצלמה','עציץ','פצצה'] },
+  { label: 'לוח 5 – משפטים',      words: ['הצב צועד לאט','ציפור מצייצת','צבי צחק','צפרדע צועדת','המצא משפט','צמח ירוק','הצנחן צונח','צוק גבוה','צחוק גדול'] },
+  { label: 'לוח 6 – משפטים',      words: ['אכלתי צלחת','שמתי צעיף','ראיתי צב','צחקתי הרבה','המצא משפט','ציירתי ציור','מצאתי צמיד','הצפרדע קפצה','צנצנת מתוקה'] },
+];
+
+let currentXOBoard = 0;
 let xoCurrentPlayer = 1;
 let xoGameOver = false;
 let xoPendingEl = null;
+
+function buildXO() {
+  // build board selector buttons
+  const btns = document.getElementById('xo-board-btns');
+  btns.innerHTML = xoBoardSets.map((b,i) => `
+    <button onclick="selectXOBoard(${i})" id="xo-board-btn-${i}"
+      class="tab-btn${i===currentXOBoard?' active':''}"
+      style="font-size:0.82rem;padding:7px 14px;">${b.label}</button>
+  `).join('');
+
+  // build grid
+  const grid = document.getElementById('xo-grid-0');
+  grid.innerHTML = xoBoardSets[currentXOBoard].words.map(w => {
+    const isFree = w === 'המצא מילה' || w === 'המצא משפט';
+    const label = w === 'המצא מילה' ? '💡 המצא<br>מילה!' : w === 'המצא משפט' ? '💡 המצא<br>משפט!' : w;
+    return isFree
+      ? `<div class="xo-cell free" data-word="${w}" onclick="xoClick(this)">💡 ${w === 'המצא משפט' ? 'המצא<br>משפט!' : 'המצא<br>מילה!'}</div>`
+      : `<div class="xo-cell" data-word="${w}" onclick="xoClick(this)">${w}</div>`;
+  }).join('');
+}
+
+function selectXOBoard(idx) {
+  currentXOBoard = idx;
+  xoCurrentPlayer = 1;
+  xoGameOver = false;
+  document.getElementById('xo-turn-label').textContent = 'תור שחקן 1 ❌';
+  document.getElementById('xo-turn-label').style.background = '';
+  document.getElementById('xo-win-banner').style.display = 'none';
+  buildXO();
+}
 
 function xoClick(el) {
   if (xoGameOver) return;
   if (el.classList.contains('marked-x') || el.classList.contains('marked-o')) return;
 
-  // free cell – show popup first
-  if (el.dataset.word === 'המצא מילה') {
+  const isFree = el.dataset.word === 'המצא מילה' || el.dataset.word === 'המצא משפט';
+  if (isFree) {
     xoPendingEl = el;
     const playerText = xoCurrentPlayer === 1 ? 'שחקן 1 ❌' : 'שחקן 2 ⭕';
     document.getElementById('xo-free-player-msg').textContent = `${playerText} – התור שלך!`;
-    const popup = document.getElementById('xo-free-popup');
-    popup.style.display = 'flex';
+    const isPhrase = el.dataset.word === 'המצא משפט';
+    document.querySelector('#xo-free-popup div div:nth-child(3)').innerHTML =
+      isPhrase
+        ? `המצא <strong style="color:var(--green);">משפט</strong> עם הצליל צ׳ ואמור אותו בקול!`
+        : `המצא <strong style="color:var(--green);">מילה</strong> עם הצליל צ׳ ואמור אותה בקול!`;
+    document.getElementById('xo-free-popup').style.display = 'flex';
     return;
   }
-
   applyXOMark(el);
 }
 
 function closeFreePopup() {
   document.getElementById('xo-free-popup').style.display = 'none';
-  if (xoPendingEl) {
-    applyXOMark(xoPendingEl);
-    xoPendingEl = null;
-  }
+  if (xoPendingEl) { applyXOMark(xoPendingEl); xoPendingEl = null; }
 }
 
 function applyXOMark(el) {
   const word = el.dataset.word;
+  const isFree = word === 'המצא מילה' || word === 'המצא משפט';
+  const display = isFree ? '💡' : word;
 
   if (xoCurrentPlayer === 1) {
     el.classList.add('marked-x');
-    el.innerHTML = `<span class="mark">❌</span>${word === 'המצא מילה' ? '💡' : word}`;
+    el.innerHTML = `<span class="mark">❌</span>${display}`;
     if (checkXOWin('marked-x')) { announceWin('שחקן 1 ❌'); return; }
     xoCurrentPlayer = 2;
     document.getElementById('xo-turn-label').textContent = 'תור שחקן 2 ⭕';
   } else {
     el.classList.add('marked-o');
-    el.innerHTML = `<span class="mark">⭕</span>${word === 'המצא מילה' ? '💡' : word}`;
+    el.innerHTML = `<span class="mark">⭕</span>${display}`;
     if (checkXOWin('marked-o')) { announceWin('שחקן 2 ⭕'); return; }
     xoCurrentPlayer = 1;
     document.getElementById('xo-turn-label').textContent = 'תור שחקן 1 ❌';
@@ -1479,10 +976,14 @@ function announceWin(player) {
   const label = document.getElementById('xo-turn-label');
   label.textContent = `🏆 ${player} ניצח!`;
   label.style.background = 'var(--yellow)';
-  const banner = document.getElementById('xo-win-banner');
-  banner.textContent = `🏆 ${player} ניצח!`;
-  banner.style.display = 'block';
+  document.getElementById('xo-win-text').textContent = `🏆 ${player} ניצח!`;
+  document.getElementById('xo-win-banner').style.display = 'block';
   playWinSound();
+}
+
+function nextXOBoard() {
+  currentXOBoard = (currentXOBoard + 1) % xoBoardSets.length;
+  resetXO();
 }
 
 function resetXO() {
@@ -1492,15 +993,90 @@ function resetXO() {
   label.textContent = 'תור שחקן 1 ❌';
   label.style.background = '';
   document.getElementById('xo-win-banner').style.display = 'none';
-  document.querySelectorAll('#xo-grid-0 .xo-cell').forEach(el => {
-    el.classList.remove('marked-x','marked-o','xo-winner');
-    el.innerHTML = el.dataset.word === 'המצא מילה' ? 'המצא<br>מילה!' : el.dataset.word;
+  buildXO();
+}
+
+// ===== STORY =====
+const stories = [
+  {
+    title: 'סיפור 1 – ציפי והצפרדע',
+    text: (p) => `ביום שמש חם, הציפור ${p('ציפי')} ראתה ${p('צפרדע')} ירוקה יושבת על ${p('צדף')} גדול. פתאום הגיע הכלב וביידו ${p('צבעים')} מרהיבים. הם החליטו ${p('לצייר')} יחד על ${p('צלחת')} ישנה ומצאו בתוכה ${p('צמיד')} ${p('מנצנץ')}! הם כל כך שמחו שהתפרצו ב${p('צחוק')} חזק!`,
+    riddles: [
+      { q: 'אני הולך לאט מאוד ויש לי בית על הגב', a: '🐢 צב' },
+      { q: 'אני כלי עגול ששמים עליו את האוכל', a: '🍽️ צלחת' },
+      { q: 'אני חיה ירוקה שקופצת בביצה ואומרת קווא-קווא', a: '🐸 צפרדע' },
+      { q: 'אני כלי שיט שיודע לרדת עמוק מתחת למים', a: '🚢 צוללת' },
+      { q: 'בחורף שמים אותי מסביב לצוואר כדי שיהיה חם', a: '🧣 צעיף' },
+      { q: 'אני קישוט שעונד על היד', a: '📿 צמיד' },
+      { q: 'יש לי כנפיים, אני מצייצת ופורחת בשמיים', a: '🐦 ציפור' },
+      { q: 'עושים אותי לפסח – אני לחם שטוח', a: '🫓 מצה' },
+    ]
+  },
+  {
+    title: 'סיפור 2 – הצב והצנחן',
+    text: (p) => `${p('צבי')} ה${p('צב')} אהב לשבת ליד ${p('עץ')} גדול ולאכול ${p('צמחים')} ירוקים. יום אחד ראה ${p('צנחן')} יורד מהשמיים עם ${p('צבעים')} על חליפתו. ה${p('צנחן')} נחת על ${p('צוק')} גבוה וצרח ב${p('צחוק')}: "איזה ${p('צחוק')} גדול, ${p('צבי')} ה${p('צב')}!" ו${p('צבי')} פשוט ${p('צחק')} יחד איתו עד ש${p('צנצנת')} הדבש נפלה מהעץ.`,
+    riddles: [
+      { q: 'אני קופץ מהשמיים עם מצנח על הגב', a: '🪂 צנחן' },
+      { q: 'אני גדל בחוץ ויש לי גבעול ועלים ירוקים', a: '🌿 צמח' },
+      { q: 'אני אריזה זכוכית עגולה לשמירת אוכל', a: '🫙 צנצנת' },
+      { q: 'אני צליל שנוצר כשמשהו מצחיק', a: '😂 צחוק' },
+      { q: 'אני חיה איטית עם שריון על הגב', a: '🐢 צב' },
+      { q: 'אני גדל ביערות ויש לי גזע חום', a: '🌳 עץ' },
+    ]
+  },
+  {
+    title: 'סיפור 3 – הצפרדע והמצלמה',
+    text: (p) => `${p('צפירה')} ה${p('צפרדע')} מצאה ${p('מצלמה')} ישנה ליד ה${p('עציץ')}. היא ${p('צילמה')} את ה${p('ציפור')} שישבה על ה${p('צמח')}, את ה${p('מצנח')} שטס בשמיים, ואת ה${p('צב')} שאכל ${p('מצה')}. בסוף היא פתחה את ה${p('מצלמה')} ומצאה שם ${p('מצוין')} – ${p('תמונה')} של ${p('צחוק')} גדול! כל ${p('צבא')} ה${p('צפרדעים')} ${p('צחק')} כשראה אותה.`,
+    riddles: [
+      { q: 'אני מכשיר שמצלם תמונות', a: '📷 מצלמה' },
+      { q: 'אני כלי גידול לצמחים בתוך הבית', a: '🪴 עציץ' },
+      { q: 'אני לחם שטוח שאוכלים בפסח', a: '🫓 מצה' },
+      { q: 'אני חיה שקופצת ואוהבת מים', a: '🐸 צפרדע' },
+      { q: 'אני כלי תעופה עם כנפיים שמצייצת', a: '🐦 ציפור' },
+      { q: 'אני יורד מהשמיים עם מטרייה גדולה', a: '🪂 צנחן' },
+      { q: 'אני מה שגדל בגינה ויש לי עלים', a: '🌿 צמח' },
+    ]
+  }
+];
+
+let currentStory = 0;
+
+function p(word) {
+  return `<span class="צ-word" onclick="ping(this)">${word}</span>`;
+}
+
+function loadStory(idx) {
+  currentStory = idx;
+  const s = stories[idx];
+
+  // update story text
+  document.getElementById('story-text').innerHTML = s.text(p);
+
+  // update riddles
+  document.getElementById('riddles-list').innerHTML = s.riddles.map((r, i) => `
+    <div class="riddle-item" onclick="revealRiddle(this)">
+      <div class="riddle-num">${i+1}</div>
+      <div class="riddle-text">
+        "${r.q}"
+        <div class="riddle-answer">${r.a}</div>
+      </div>
+    </div>`).join('');
+
+  // update buttons
+  document.querySelectorAll('[id^="story-btn-"]').forEach((b,i) => {
+    b.classList.toggle('active', i === idx);
   });
 }
 
-function buildXO() {}
+function nextStory() {
+  loadStory((currentStory + 1) % stories.length);
+}
 
-// ===== STORY =====
+function rereadStory() {
+  // re-render to reset ping animations
+  loadStory(currentStory);
+}
+
 function ping(el) {
   el.style.transform = 'scale(1.2)';
   setTimeout(()=>el.style.transform='', 300);
@@ -1510,16 +1086,30 @@ function revealRiddle(el) {
 }
 
 // ===== BINGO =====
-const bingoWords = ['צלחת','צפרדע','ציפור','צב','צמיד','צדף','צוללת','צעיף','צחוק','צנחן','צבעים','צרצר','FREE'];
-const bingoBoards = [
-  { title: 'לוח 1', cells: ['צדף','ציפור','צב','צבע','FREE','צחוק','צלחת','צפרדע','צמיד'] },
-  { title: 'לוח 2', cells: ['ציפור','צדף','צפרדע','צמיד','FREE','צלחת','צבע','צחוק','צב'] },
+const allBingoRounds = [
+  [
+    { title: 'לוח 1', cells: ['צדף','ציפור','צב','צבע','FREE','צחוק','צלחת','צפרדע','צמיד'] },
+    { title: 'לוח 2', cells: ['ציפור','צדף','צפרדע','צמיד','FREE','צלחת','צבע','צחוק','צב'] },
+  ],
+  [
+    { title: 'לוח 3', cells: ['צוללת','צעיף','צנחן','צב','FREE','צרצר','צמיד','צריח','צלחת'] },
+    { title: 'לוח 4', cells: ['צנצנת','צחוק','צדף','FREE','צבעים','צעיף','צריח','צפרדע','צדק'] },
+  ],
+  [
+    { title: 'לוח 5', cells: ['מצלמה','בצל','פיצה','מצפן','FREE','עציץ','פצצה','מצה','רצים'] },
+    { title: 'לוח 6', cells: ['עץ','רץ','חץ','קוץ','FREE','מיץ','קיץ','ארץ','קפיץ'] },
+  ],
 ];
+
+const allBingoWords = ['צלחת','צפרדע','ציפור','צב','צמיד','צדף','צוללת','צעיף','צחוק','צנחן','צבעים','צרצר','צריח','צנצנת','צדק','מצלמה','בצל','פיצה','מצפן','עציץ','פצצה','מצה','רצים','עץ','רץ','חץ','קוץ','מיץ','קיץ','ארץ','קפיץ','FREE'];
+
+let currentBingoRound = 0;
 let drawnWords = [];
 
 function buildBingoBoards() {
+  const boards = allBingoRounds[currentBingoRound];
   const cont = document.getElementById('bingo-boards');
-  cont.innerHTML = bingoBoards.map((b,bi) => `
+  cont.innerHTML = boards.map((b,bi) => `
     <div class="bingo-board">
       <h3>${b.title}</h3>
       <div class="bingo-grid" id="bingo-grid-${bi}">
@@ -1529,10 +1119,14 @@ function buildBingoBoards() {
         ).join('')}
       </div>
     </div>`).join('');
+
+  const roundNum = currentBingoRound + 1;
+  const titles = allBingoRounds[currentBingoRound].map(b => b.title).join(' ו-');
+  document.getElementById('bingo-round-label').textContent = `סבב ${roundNum} – ${titles}`;
 }
 
 function drawBingo() {
-  const remaining = bingoWords.filter(w => !drawnWords.includes(w));
+  const remaining = allBingoWords.filter(w => !drawnWords.includes(w));
   if (!remaining.length) { document.getElementById('caller-word').textContent = 'כל המילים יצאו! 🎉'; return; }
   const word = remaining[Math.floor(Math.random() * remaining.length)];
   drawnWords.push(word);
@@ -1560,6 +1154,8 @@ function checkBingo(boardIdx) {
   ];
   const win = wins.some(combo => combo.every(i => marked[i]));
   if (win) {
+    const boardTitle = allBingoRounds[currentBingoRound][boardIdx].title;
+    document.getElementById('bingo-banner-text').textContent = `🎉 בינגו! ${boardTitle} ניצח! 🎉`;
     document.getElementById('bingo-banner').classList.add('show');
     wins.forEach(combo => {
       if (combo.every(i => marked[i])) combo.forEach(i => grid[i].classList.add('bingo-win'));
@@ -1568,7 +1164,16 @@ function checkBingo(boardIdx) {
   }
 }
 
+function nextBingoRound() {
+  currentBingoRound = (currentBingoRound + 1) % allBingoRounds.length;
+  drawnWords = [];
+  document.getElementById('caller-word').textContent = '';
+  document.getElementById('bingo-banner').classList.remove('show');
+  buildBingoBoards();
+}
+
 function resetBingo() {
+  currentBingoRound = 0;
   drawnWords = [];
   document.getElementById('caller-word').textContent = '';
   document.getElementById('bingo-banner').classList.remove('show');
@@ -1576,26 +1181,59 @@ function resetBingo() {
 }
 
 // ===== SENTENCE GAME =====
-const sentItems = [
-  { id: 'frog',      name: 'צפרדע', emoji: '🐸' },
-  { id: 'turtle',    name: 'צב',     emoji: '🐢' },
-  { id: 'bird',      name: 'ציפור',  emoji: '🐦' },
-  { id: 'shell',     name: 'צדף',    emoji: '🐚' },
-  { id: 'plate',     name: 'צלחת',   emoji: '🍽️' },
-  { id: 'jar',       name: 'צנצנת',  emoji: '🫙' },
-  { id: 'submarine', name: 'צוללת',  emoji: '🚢' },
-  { id: 'paint',     name: 'צבעים',  emoji: '🎨' },
-  { id: 'bracelet',  name: 'צמיד',   emoji: '📿' },
-  { id: 'plant',     name: 'צמח',    emoji: '🌿' },
-  { id: 'shadow',    name: 'צל',     emoji: '🌳' },
-  { id: 'parachute', name: 'צנחן',   emoji: '🪂' },
+const sentItemSets = [
+  [
+    { id: 's1_frog',      name: 'צפרדע', emoji: '🐸' },
+    { id: 's1_turtle',    name: 'צב',     emoji: '🐢' },
+    { id: 's1_bird',      name: 'ציפור',  emoji: '🐦' },
+    { id: 's1_shell',     name: 'צדף',    emoji: '🐚' },
+    { id: 's1_plate',     name: 'צלחת',   emoji: '🍽️' },
+    { id: 's1_jar',       name: 'צנצנת',  emoji: '🫙' },
+    { id: 's1_sub',       name: 'צוללת',  emoji: '🚢' },
+    { id: 's1_paint',     name: 'צבעים',  emoji: '🎨' },
+    { id: 's1_bracelet',  name: 'צמיד',   emoji: '📿' },
+    { id: 's1_plant',     name: 'צמח',    emoji: '🌿' },
+    { id: 's1_shadow',    name: 'צל',     emoji: '🌳' },
+    { id: 's1_para',      name: 'צנחן',   emoji: '🪂' },
+  ],
+  [
+    { id: 's2_scarf',     name: 'צעיף',   emoji: '🧣' },
+    { id: 's2_cricket',   name: 'צרצר',   emoji: '🦗' },
+    { id: 's2_tower',     name: 'צריח',   emoji: '🏰' },
+    { id: 's2_laugh',     name: 'צחוק',   emoji: '😂' },
+    { id: 's2_justice',   name: 'צדק',    emoji: '⚖️' },
+    { id: 's2_camera',    name: 'מצלמה',  emoji: '📷' },
+    { id: 's2_pizza',     name: 'פיצה',   emoji: '🍕' },
+    { id: 's2_onion',     name: 'בצל',    emoji: '🧅' },
+    { id: 's2_cactus',    name: 'קוץ',    emoji: '🌵' },
+    { id: 's2_juice',     name: 'מיץ',    emoji: '🍹' },
+    { id: 's2_tree',      name: 'עץ',     emoji: '🌲' },
+    { id: 's2_land',      name: 'ארץ',    emoji: '🌍' },
+  ],
+  [
+    { id: 's3_matzah',    name: 'מצה',    emoji: '🫓' },
+    { id: 's3_compass',   name: 'מצפן',   emoji: '🧭' },
+    { id: 's3_bomb',      name: 'פצצה',   emoji: '💣' },
+    { id: 's3_pot',       name: 'עציץ',   emoji: '🪴' },
+    { id: 's3_summer',    name: 'קיץ',    emoji: '☀️' },
+    { id: 's3_spring',    name: 'קפיץ',   emoji: '🌀' },
+    { id: 's3_runner',    name: 'רץ',     emoji: '🏃' },
+    { id: 's3_arrow',     name: 'חץ',     emoji: '🏹' },
+    { id: 's3_painter',   name: 'מצייר',  emoji: '🧑‍🎨' },
+    { id: 's3_nail',      name: 'צפורן',  emoji: '💅' },
+    { id: 's3_chick',     name: 'אפרוח',  emoji: '🐥' },
+    { id: 's3_whistle',   name: 'צפצוף',  emoji: '📯' },
+  ],
 ];
 
-let sentSelected = []; // up to 3 ids
+let currentSentSet = 0;
+let sentItems = sentItemSets[0];
+let sentSelected = [];
 let sentTotalStars = 0;
 let sentHistoryLog = [];
 
 function buildSentenceGame() {
+  sentItems = sentItemSets[currentSentSet];
   const grid = document.getElementById('sent-items-grid');
   grid.innerHTML = sentItems.map(item => `
     <div onclick="toggleSentItem('${item.id}')" id="si-${item.id}"
@@ -1604,7 +1242,7 @@ function buildSentenceGame() {
              transition:all 0.2s cubic-bezier(.34,1.56,.64,1);position:relative;">
       <div style="font-size:2.6rem;margin-bottom:6px;">${item.emoji}</div>
       <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--dark-green);">${item.name}</div>
-      <div id="si-num-${item.id}" style="display:none;position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
+      <div id="si-num-${item.id}" style="position:absolute;top:8px;right:8px;background:var(--green);color:white;border-radius:50%;width:24px;height:24px;font-weight:900;font-size:0.85rem;display:none;align-items:center;justify-content:center;"></div>
     </div>
   `).join('');
 }
@@ -1612,20 +1250,19 @@ function buildSentenceGame() {
 function toggleSentItem(id) {
   const idx = sentSelected.indexOf(id);
   if (idx !== -1) {
-    // deselect
     sentSelected.splice(idx, 1);
   } else {
-    if (sentSelected.length >= 3) return; // max 3
+    if (sentSelected.length >= 3) return;
     sentSelected.push(id);
   }
   updateSentUI();
 }
 
 function updateSentUI() {
-  // update cards
   sentItems.forEach(item => {
     const el = document.getElementById('si-' + item.id);
     const num = document.getElementById('si-num-' + item.id);
+    if (!el) return;
     const idx = sentSelected.indexOf(item.id);
     if (idx !== -1) {
       el.style.borderColor = 'var(--green)';
@@ -1641,7 +1278,6 @@ function updateSentUI() {
     }
   });
 
-  // update selected display
   const disp = document.getElementById('sent-selected-display');
   if (sentSelected.length === 0) {
     disp.innerHTML = '<span style="color:#aaa;font-size:0.95rem;">בחרו תמונות מהרשימה...</span>';
@@ -1652,13 +1288,11 @@ function updateSentUI() {
     }).join('<span style="color:#aaa;font-size:1.2rem;">+</span>');
   }
 
-  // stars preview
   const stars = document.getElementById('sent-stars');
   if (sentSelected.length === 2) stars.textContent = '⭐';
   else if (sentSelected.length === 3) stars.textContent = '⭐⭐';
   else stars.textContent = '';
 
-  // button
   const btn = document.getElementById('sent-go-btn');
   const ready = sentSelected.length >= 2;
   btn.disabled = !ready;
@@ -1676,8 +1310,24 @@ function confirmSentence() {
   document.getElementById('sent-history').innerHTML = sentHistoryLog.map(h=>`<div>${h}</div>`).join('');
   document.getElementById('sent-score-display').textContent = `${'⭐'.repeat(Math.min(sentTotalStars,10))} ${sentTotalStars}`;
 
+  // show play again popup
+  document.getElementById('sent-again-stars').textContent = '⭐'.repeat(stars);
+  document.getElementById('sent-again-names').textContent = names.join(' + ');
+  document.getElementById('sent-again-popup').style.display = 'flex';
+
   playWinSound();
-  resetSentence();
+  sentSelected = [];
+  updateSentUI();
+}
+
+function sentPlayAgain() {
+  currentSentSet = (currentSentSet + 1) % sentItemSets.length;
+  closeSentAgain();
+  buildSentenceGame();
+}
+
+function closeSentAgain() {
+  document.getElementById('sent-again-popup').style.display = 'none';
 }
 
 function resetSentence() {
@@ -1698,7 +1348,7 @@ buildCards();
 buildXO();
 buildBingoBoards();
 buildSentenceGame();
+loadStory(0);
 </script>
-
-
-</body></html>
+</body>
+</html>
